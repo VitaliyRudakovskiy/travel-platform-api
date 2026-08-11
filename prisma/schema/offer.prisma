@@ -1,0 +1,55 @@
+model Offer {
+  id                    String      @id @default(uuid())
+  type                  OfferType
+  destinationId         String      @map("destination_id")
+  ownerId               String      @map("owner_id")
+  title                 String      @db.VarChar(100)
+  description           String?     @db.Text
+  price                 Decimal     @db.Decimal(7, 2)
+  currency              Currency
+  maxGuests             Int         @default(1) @map("max_guests")
+  maxConcurrentBookings Int         @default(1) @map("max_concurrent_bookings")
+  availableFrom         DateTime    @map("available_from")
+  availableTo           DateTime    @map("available_to")
+  status                OfferStatus @default(active)
+  stars                 Int?
+  address               String?     @db.VarChar(100)
+  flightNumber          String?     @map("flight_number") @db.VarChar(25)
+  airline               String?     @db.VarChar(100)
+  durationDays          Int?        @map("duration_days")
+  includesMeals         Boolean?    @map("includes_meals")
+  createdAt             DateTime    @default(now()) @map("created_at")
+  updatedAt             DateTime    @updatedAt @map("updated_at")
+  deletedAt             DateTime?   @map("deleted_at")
+
+  // Связи
+  bookings    Booking[]
+  favorites   Favorite[]
+  user        User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Restrict)
+
+  // Индексы
+  @@index([destinationId])
+  @@index([ownerId])
+  @@index([type])
+  @@index([status])
+  @@index([availableFrom, availableTo])
+  @@map("offers")
+}
+
+enum OfferType {
+  hotel
+  flight
+  tour
+}
+
+enum Currency {
+  BYN
+  USD
+  EUR
+}
+
+enum OfferStatus {
+  active
+  archived
+}

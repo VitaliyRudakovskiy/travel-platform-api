@@ -1,0 +1,17 @@
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  offerId   String   @map("offer_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Связи
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+
+  // Уникальность пары
+  @@unique([userId, offerId])
+  // Индексы
+  @@index([userId])
+  @@index([offerId])
+  @@map("favorites")
+}

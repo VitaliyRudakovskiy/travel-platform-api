@@ -17,7 +17,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "migration": "npx prisma migrate dev --name ANY_NAME",
+    "prisma": "npx prisma studio"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

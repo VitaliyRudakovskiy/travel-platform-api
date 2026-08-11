@@ -1,0 +1,15 @@
+model Destination {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(50)
+  countryCode String   @map("country_code") @db.VarChar(2)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // связи
+  offers Offer[]
+
+  // Индексы
+  @@index([countryCode])
+  @@map("destinations")
+}
