@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": ["dist", "coverage", "node_modules"],
+  "plugins": ["unicorn", "typescript", "oxc", "import"],
+  "rules": {
+    "eslint/no-unused-vars": "error",
+    "eslint/no-console": "warn",
+    "eqeqeq": "error",
+    "curly": "error",
+    "eslint/no-shadow": "error",
+    "eslint/no-redeclare": "error",
+    "eslint/no-unreachable": "error",
+    "eslint/no-duplicate-imports": "error",
+    "eslint/prefer-const": "error",
+    "eslint/no-empty": "warn",
+    "typescript/no-explicit-any": "warn",
+    "import/no-duplicates": "error",
+    "unicorn/consistent-function-scoping": "warn",
+    "unicorn/prefer-optional-catch-binding": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/prefer-array-flat-map": "error",
+    "unicorn/prefer-ternary": "error",
+    "unicorn/no-array-for-each": "error",
+    "unicorn/throw-new-error": "error",
+    "unicorn/error-message": "error",
+    "no-alert": "error"
+  }
+}
