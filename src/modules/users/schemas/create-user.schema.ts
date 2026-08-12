@@ -8,8 +8,6 @@ const PASSWORD_MIN_LENGTH = 8;
 const PASSWORD_MAX_LENGTH = 32;
 
 export const createUserSchema = z.object({
-  id: z.uuid("Invalid UUID format"),
-
   username: z
     .string()
     .min(USERNAME_MIN_LENGTH, `Username must be at least ${USERNAME_MIN_LENGTH} characters`)
