@@ -1,8 +1,9 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import bcrypt from "bcrypt";
 import { CreateUserDto } from "./schemas/create-user.schema";
 import { UserResponseDto } from "./schemas/user-response.schema";
 import { PrismaService } from "@services/prisma.service";
+import { UpdateUserDto } from "./schemas/update-user.schema";
 
 @Injectable()
 export class UsersService {
@@ -24,11 +25,27 @@ export class UsersService {
     }));
   }
 
+  async getById(id: string): Promise<UserResponseDto> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+  }
+
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
     const existingUser = await this.prisma.user.findFirst({
-      where: {
-        OR: [{ email: createUserDto.email }, { username: createUserDto.username }],
-      },
+      where: { email: createUserDto.email },
     });
 
     if (existingUser) {
@@ -52,6 +69,39 @@ export class UsersService {
       email: user.email,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+    };
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+    const user = await this.prisma.user.findFirst({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    if (updateUserDto.email) {
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: updateUserDto.email },
+      });
+
+      if (existingUser) {
+        throw new ConflictException("Email is already taken");
+      }
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
+
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      createdAt: updatedUser.createdAt,
+      updatedAt: updatedUser.updatedAt,
     };
   }
 }
