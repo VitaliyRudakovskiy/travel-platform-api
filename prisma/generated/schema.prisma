@@ -18,12 +18,9 @@ model Booking {
   status      BookingStatus @default(draft)
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
+  offer       Offer         @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Связи
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
-
-  // Индексы
   @@index([userId])
   @@index([offerId])
   @@index([status])
@@ -41,14 +38,13 @@ model Destination {
   id          String   @id @default(uuid())
   name        String   @db.VarChar(50)
   countryCode String   @map("country_code") @db.VarChar(2)
-  description String?  @db.Text
+  description String?  @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-
-  // связи
-  offers Offer[]
+  offers      Offer[]
 
   // Индексы
+  @@index([name])
   @@index([countryCode])
   @@map("destinations")
 }
@@ -58,14 +54,10 @@ model Favorite {
   userId    String   @map("user_id")
   offerId   String   @map("offer_id")
   createdAt DateTime @default(now()) @map("created_at")
+  offer     Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Связи
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
-
-  // Уникальность пары
   @@unique([userId, offerId])
-  // Индексы
   @@index([userId])
   @@index([offerId])
   @@map("favorites")
@@ -77,7 +69,7 @@ model Offer {
   destinationId         String      @map("destination_id")
   ownerId               String      @map("owner_id")
   title                 String      @db.VarChar(100)
-  description           String?     @db.Text
+  description           String?
   price                 Decimal     @db.Decimal(7, 2)
   currency              Currency
   maxGuests             Int         @default(1) @map("max_guests")
@@ -94,14 +86,11 @@ model Offer {
   createdAt             DateTime    @default(now()) @map("created_at")
   updatedAt             DateTime    @updatedAt @map("updated_at")
   deletedAt             DateTime?   @map("deleted_at")
+  bookings              Booking[]
+  favorites             Favorite[]
+  destination           Destination @relation(fields: [destinationId], references: [id])
+  user                  User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  // Связи
-  bookings    Booking[]
-  favorites   Favorite[]
-  user        User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Restrict)
-
-  // Индексы
   @@index([destinationId])
   @@index([ownerId])
   @@index([type])
@@ -128,17 +117,15 @@ enum OfferStatus {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  username     String   @db.VarChar(50)
-  email        String   @unique @db.VarChar(70)
+  id           String     @id @default(uuid())
+  username     String     @db.VarChar(50)
+  email        String     @unique @db.VarChar(70)
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // связи
-  offers    Offer[]
-  bookings  Booking[]
-  favorites Favorite[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  bookings     Booking[]
+  favorites    Favorite[]
+  offers       Offer[]
 
   @@map("users")
 }

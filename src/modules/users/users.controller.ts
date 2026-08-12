@@ -22,13 +22,16 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  async get() {
+  async get(): Promise<UserResponseDto[]> {
     return this.usersService.getAll();
   }
 
   @Get(":userId")
   @UseGuards(AuthGuard)
-  async getOne(@Param("userId") userId: string, @CurrentUser() currentUser: UserResponseDto) {
+  async getOne(
+    @Param("userId") userId: string,
+    @CurrentUser() currentUser: UserResponseDto,
+  ): Promise<UserResponseDto> {
     if (userId !== currentUser.id) {
       throw new ForbiddenException("You can only access your own profile");
     }
@@ -38,7 +41,7 @@ export class UsersController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(createUserSchema))
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
     return this.usersService.create(createUserDto);
   }
 
@@ -48,7 +51,7 @@ export class UsersController {
     @Param("userId") userId: string,
     @Body(new ZodValidationPipe(updateUserSchema)) updateUserDto: UpdateUserDto,
     @CurrentUser() currentUser: UserResponseDto,
-  ) {
+  ): Promise<UserResponseDto> {
     if (userId !== currentUser.id) {
       throw new ForbiddenException("You can only update your own profile");
     }

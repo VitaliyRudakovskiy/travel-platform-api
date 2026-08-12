@@ -1428,17 +1428,17 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    offers: number;
     bookings: number;
     favorites: number;
+    offers: number;
   };
 
   export type UserCountOutputTypeSelect<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    offers?: boolean | UserCountOutputTypeCountOffersArgs;
     bookings?: boolean | UserCountOutputTypeCountBookingsArgs;
     favorites?: boolean | UserCountOutputTypeCountFavoritesArgs;
+    offers?: boolean | UserCountOutputTypeCountOffersArgs;
   };
 
   // Custom InputTypes
@@ -1457,15 +1457,6 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountOffersArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: OfferWhereInput;
-  };
-
-  /**
-   * UserCountOutputType without action
-   */
   export type UserCountOutputTypeCountBookingsArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -1479,6 +1470,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: FavoriteWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOffersArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: OfferWhereInput;
   };
 
   /**
@@ -1727,8 +1727,8 @@ export namespace Prisma {
         status?: boolean;
         createdAt?: boolean;
         updatedAt?: boolean;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
         offer?: boolean | OfferDefaultArgs<ExtArgs>;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
       },
       ExtArgs["result"]["booking"]
     >;
@@ -1747,8 +1747,8 @@ export namespace Prisma {
       status?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       offer?: boolean | OfferDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["booking"]
   >;
@@ -1767,8 +1767,8 @@ export namespace Prisma {
       status?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       offer?: boolean | OfferDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["booking"]
   >;
@@ -1801,28 +1801,28 @@ export namespace Prisma {
       ExtArgs["result"]["booking"]
     >;
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
   export type BookingIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
   export type BookingIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
 
   export type $BookingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     {
       name: "Booking";
       objects: {
-        user: Prisma.$UserPayload<ExtArgs>;
         offer: Prisma.$OfferPayload<ExtArgs>;
+        user: Prisma.$UserPayload<ExtArgs>;
       };
       scalars: $Extensions.GetPayloadResult<
         {
@@ -2322,19 +2322,19 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
-    ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+    offer<T extends OfferDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, OfferDefaultArgs<ExtArgs>>,
+    ): Prisma__OfferClient<
+      | $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
       | Null,
       Null,
       ExtArgs,
       GlobalOmitOptions
     >;
-    offer<T extends OfferDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, OfferDefaultArgs<ExtArgs>>,
-    ): Prisma__OfferClient<
-      | $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
       | Null,
       Null,
       ExtArgs,
@@ -4247,8 +4247,8 @@ export namespace Prisma {
         userId?: boolean;
         offerId?: boolean;
         createdAt?: boolean;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
         offer?: boolean | OfferDefaultArgs<ExtArgs>;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
       },
       ExtArgs["result"]["favorite"]
     >;
@@ -4261,8 +4261,8 @@ export namespace Prisma {
       userId?: boolean;
       offerId?: boolean;
       createdAt?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       offer?: boolean | OfferDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["favorite"]
   >;
@@ -4275,8 +4275,8 @@ export namespace Prisma {
       userId?: boolean;
       offerId?: boolean;
       createdAt?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       offer?: boolean | OfferDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["favorite"]
   >;
@@ -4292,28 +4292,28 @@ export namespace Prisma {
     $Extensions.GetOmit<"id" | "userId" | "offerId" | "createdAt", ExtArgs["result"]["favorite"]>;
   export type FavoriteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     {
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       offer?: boolean | OfferDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     };
   export type FavoriteIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
   export type FavoriteIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
 
   export type $FavoritePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     {
       name: "Favorite";
       objects: {
-        user: Prisma.$UserPayload<ExtArgs>;
         offer: Prisma.$OfferPayload<ExtArgs>;
+        user: Prisma.$UserPayload<ExtArgs>;
       };
       scalars: $Extensions.GetPayloadResult<
         {
@@ -4820,19 +4820,19 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
-    ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+    offer<T extends OfferDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, OfferDefaultArgs<ExtArgs>>,
+    ): Prisma__OfferClient<
+      | $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
       | Null,
       Null,
       ExtArgs,
       GlobalOmitOptions
     >;
-    offer<T extends OfferDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, OfferDefaultArgs<ExtArgs>>,
-    ): Prisma__OfferClient<
-      | $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
       | Null,
       Null,
       ExtArgs,
@@ -5671,8 +5671,8 @@ export namespace Prisma {
         deletedAt?: boolean;
         bookings?: boolean | Offer$bookingsArgs<ExtArgs>;
         favorites?: boolean | Offer$favoritesArgs<ExtArgs>;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
         destination?: boolean | DestinationDefaultArgs<ExtArgs>;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
         _count?: boolean | OfferCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs["result"]["offer"]
@@ -5704,8 +5704,8 @@ export namespace Prisma {
       createdAt?: boolean;
       updatedAt?: boolean;
       deletedAt?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       destination?: boolean | DestinationDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["offer"]
   >;
@@ -5736,8 +5736,8 @@ export namespace Prisma {
       createdAt?: boolean;
       updatedAt?: boolean;
       deletedAt?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
       destination?: boolean | DestinationDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["offer"]
   >;
@@ -5796,21 +5796,21 @@ export namespace Prisma {
   export type OfferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bookings?: boolean | Offer$bookingsArgs<ExtArgs>;
     favorites?: boolean | Offer$favoritesArgs<ExtArgs>;
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     destination?: boolean | DestinationDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
     _count?: boolean | OfferCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type OfferIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     destination?: boolean | DestinationDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
   export type OfferIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
     destination?: boolean | DestinationDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
   };
 
   export type $OfferPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5818,8 +5818,8 @@ export namespace Prisma {
     objects: {
       bookings: Prisma.$BookingPayload<ExtArgs>[];
       favorites: Prisma.$FavoritePayload<ExtArgs>[];
-      user: Prisma.$UserPayload<ExtArgs>;
       destination: Prisma.$DestinationPayload<ExtArgs>;
+      user: Prisma.$UserPayload<ExtArgs>;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -6333,15 +6333,6 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
     >;
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
-    ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
-      | Null,
-      Null,
-      ExtArgs,
-      GlobalOmitOptions
-    >;
     destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, DestinationDefaultArgs<ExtArgs>>,
     ): Prisma__DestinationClient<
@@ -6351,6 +6342,15 @@ export namespace Prisma {
           "findUniqueOrThrow",
           GlobalOmitOptions
         >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
       | Null,
       Null,
       ExtArgs,
@@ -7074,9 +7074,9 @@ export namespace Prisma {
         passwordHash?: boolean;
         createdAt?: boolean;
         updatedAt?: boolean;
-        offers?: boolean | User$offersArgs<ExtArgs>;
         bookings?: boolean | User$bookingsArgs<ExtArgs>;
         favorites?: boolean | User$favoritesArgs<ExtArgs>;
+        offers?: boolean | User$offersArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs["result"]["user"]
@@ -7125,9 +7125,9 @@ export namespace Prisma {
       ExtArgs["result"]["user"]
     >;
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    offers?: boolean | User$offersArgs<ExtArgs>;
     bookings?: boolean | User$bookingsArgs<ExtArgs>;
     favorites?: boolean | User$favoritesArgs<ExtArgs>;
+    offers?: boolean | User$offersArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -7140,9 +7140,9 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User";
     objects: {
-      offers: Prisma.$OfferPayload<ExtArgs>[];
       bookings: Prisma.$BookingPayload<ExtArgs>[];
       favorites: Prisma.$FavoritePayload<ExtArgs>[];
+      offers: Prisma.$OfferPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -7630,11 +7630,6 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
-    offers<T extends User$offersArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$offersArgs<ExtArgs>>,
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
-    >;
     bookings<T extends User$bookingsArgs<ExtArgs> = {}>(
       args?: Subset<T, User$bookingsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
@@ -7644,6 +7639,11 @@ export namespace Prisma {
       args?: Subset<T, User$favoritesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
+    >;
+    offers<T extends User$offersArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$offersArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8093,31 +8093,6 @@ export namespace Prisma {
   };
 
   /**
-   * User.offers
-   */
-  export type User$offersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    {
-      /**
-       * Select specific fields to fetch from the Offer
-       */
-      select?: OfferSelect<ExtArgs> | null;
-      /**
-       * Omit specific fields from the Offer
-       */
-      omit?: OfferOmit<ExtArgs> | null;
-      /**
-       * Choose, which related nodes to fetch as well
-       */
-      include?: OfferInclude<ExtArgs> | null;
-      where?: OfferWhereInput;
-      orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[];
-      cursor?: OfferWhereUniqueInput;
-      take?: number;
-      skip?: number;
-      distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[];
-    };
-
-  /**
    * User.bookings
    */
   export type User$bookingsArgs<
@@ -8168,6 +8143,31 @@ export namespace Prisma {
     skip?: number;
     distinct?: FavoriteScalarFieldEnum | FavoriteScalarFieldEnum[];
   };
+
+  /**
+   * User.offers
+   */
+  export type User$offersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the Offer
+       */
+      select?: OfferSelect<ExtArgs> | null;
+      /**
+       * Omit specific fields from the Offer
+       */
+      omit?: OfferOmit<ExtArgs> | null;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: OfferInclude<ExtArgs> | null;
+      where?: OfferWhereInput;
+      orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[];
+      cursor?: OfferWhereUniqueInput;
+      take?: number;
+      skip?: number;
+      distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[];
+    };
 
   /**
    * User without action
@@ -8441,8 +8441,8 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus;
     createdAt?: DateTimeFilter<"Booking"> | Date | string;
     updatedAt?: DateTimeFilter<"Booking"> | Date | string;
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
   };
 
   export type BookingOrderByWithRelationInput = {
@@ -8456,8 +8456,8 @@ export namespace Prisma {
     status?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
-    user?: UserOrderByWithRelationInput;
     offer?: OfferOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
   };
 
   export type BookingWhereUniqueInput = Prisma.AtLeast<
@@ -8475,8 +8475,8 @@ export namespace Prisma {
       status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus;
       createdAt?: DateTimeFilter<"Booking"> | Date | string;
       updatedAt?: DateTimeFilter<"Booking"> | Date | string;
-      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
       offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     },
     "id"
   >;
@@ -8586,8 +8586,8 @@ export namespace Prisma {
     userId?: StringFilter<"Favorite"> | string;
     offerId?: StringFilter<"Favorite"> | string;
     createdAt?: DateTimeFilter<"Favorite"> | Date | string;
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
   };
 
   export type FavoriteOrderByWithRelationInput = {
@@ -8595,8 +8595,8 @@ export namespace Prisma {
     userId?: SortOrder;
     offerId?: SortOrder;
     createdAt?: SortOrder;
-    user?: UserOrderByWithRelationInput;
     offer?: OfferOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
   };
 
   export type FavoriteWhereUniqueInput = Prisma.AtLeast<
@@ -8609,8 +8609,8 @@ export namespace Prisma {
       userId?: StringFilter<"Favorite"> | string;
       offerId?: StringFilter<"Favorite"> | string;
       createdAt?: DateTimeFilter<"Favorite"> | Date | string;
-      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
       offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     },
     "id" | "userId_offerId"
   >;
@@ -8663,8 +8663,8 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Offer"> | Date | string | null;
     bookings?: BookingListRelationFilter;
     favorites?: FavoriteListRelationFilter;
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
   };
 
   export type OfferOrderByWithRelationInput = {
@@ -8692,8 +8692,8 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder;
     bookings?: BookingOrderByRelationAggregateInput;
     favorites?: FavoriteOrderByRelationAggregateInput;
-    user?: UserOrderByWithRelationInput;
     destination?: DestinationOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
   };
 
   export type OfferWhereUniqueInput = Prisma.AtLeast<
@@ -8725,8 +8725,8 @@ export namespace Prisma {
       deletedAt?: DateTimeNullableFilter<"Offer"> | Date | string | null;
       bookings?: BookingListRelationFilter;
       favorites?: FavoriteListRelationFilter;
-      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
       destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     },
     "id"
   >;
@@ -8799,9 +8799,9 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string;
     createdAt?: DateTimeFilter<"User"> | Date | string;
     updatedAt?: DateTimeFilter<"User"> | Date | string;
-    offers?: OfferListRelationFilter;
     bookings?: BookingListRelationFilter;
     favorites?: FavoriteListRelationFilter;
+    offers?: OfferListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -8811,9 +8811,9 @@ export namespace Prisma {
     passwordHash?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
-    offers?: OfferOrderByRelationAggregateInput;
     bookings?: BookingOrderByRelationAggregateInput;
     favorites?: FavoriteOrderByRelationAggregateInput;
+    offers?: OfferOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -8827,9 +8827,9 @@ export namespace Prisma {
       passwordHash?: StringFilter<"User"> | string;
       createdAt?: DateTimeFilter<"User"> | Date | string;
       updatedAt?: DateTimeFilter<"User"> | Date | string;
-      offers?: OfferListRelationFilter;
       bookings?: BookingListRelationFilter;
       favorites?: FavoriteListRelationFilter;
+      offers?: OfferListRelationFilter;
     },
     "id" | "email"
   >;
@@ -8867,8 +8867,8 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    user: UserCreateNestedOneWithoutBookingsInput;
     offer: OfferCreateNestedOneWithoutBookingsInput;
+    user: UserCreateNestedOneWithoutBookingsInput;
   };
 
   export type BookingUncheckedCreateInput = {
@@ -8893,8 +8893,8 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
     offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
+    user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
   };
 
   export type BookingUncheckedUpdateInput = {
@@ -9017,8 +9017,8 @@ export namespace Prisma {
   export type FavoriteCreateInput = {
     id?: string;
     createdAt?: Date | string;
-    user: UserCreateNestedOneWithoutFavoritesInput;
     offer: OfferCreateNestedOneWithoutFavoritesInput;
+    user: UserCreateNestedOneWithoutFavoritesInput;
   };
 
   export type FavoriteUncheckedCreateInput = {
@@ -9031,8 +9031,8 @@ export namespace Prisma {
   export type FavoriteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    user?: UserUpdateOneRequiredWithoutFavoritesNestedInput;
     offer?: OfferUpdateOneRequiredWithoutFavoritesNestedInput;
+    user?: UserUpdateOneRequiredWithoutFavoritesNestedInput;
   };
 
   export type FavoriteUncheckedUpdateInput = {
@@ -9084,8 +9084,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null;
     bookings?: BookingCreateNestedManyWithoutOfferInput;
     favorites?: FavoriteCreateNestedManyWithoutOfferInput;
-    user: UserCreateNestedOneWithoutOffersInput;
     destination: DestinationCreateNestedOneWithoutOffersInput;
+    user: UserCreateNestedOneWithoutOffersInput;
   };
 
   export type OfferUncheckedCreateInput = {
@@ -9138,8 +9138,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     bookings?: BookingUpdateManyWithoutOfferNestedInput;
     favorites?: FavoriteUpdateManyWithoutOfferNestedInput;
-    user?: UserUpdateOneRequiredWithoutOffersNestedInput;
     destination?: DestinationUpdateOneRequiredWithoutOffersNestedInput;
+    user?: UserUpdateOneRequiredWithoutOffersNestedInput;
   };
 
   export type OfferUncheckedUpdateInput = {
@@ -9249,9 +9249,9 @@ export namespace Prisma {
     passwordHash: string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    offers?: OfferCreateNestedManyWithoutUserInput;
     bookings?: BookingCreateNestedManyWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -9261,9 +9261,9 @@ export namespace Prisma {
     passwordHash: string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserUpdateInput = {
@@ -9273,9 +9273,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offers?: OfferUpdateManyWithoutUserNestedInput;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -9285,9 +9285,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -9377,14 +9377,14 @@ export namespace Prisma {
     not?: NestedEnumBookingStatusFilter<$PrismaModel> | $Enums.BookingStatus;
   };
 
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput;
-    isNot?: UserWhereInput;
-  };
-
   export type OfferScalarRelationFilter = {
     is?: OfferWhereInput;
     isNot?: OfferWhereInput;
+  };
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput;
+    isNot?: UserWhereInput;
   };
 
   export type BookingCountOrderByAggregateInput = {
@@ -9880,16 +9880,16 @@ export namespace Prisma {
     updatedAt?: SortOrder;
   };
 
-  export type UserCreateNestedOneWithoutBookingsInput = {
-    create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutBookingsInput;
-    connect?: UserWhereUniqueInput;
-  };
-
   export type OfferCreateNestedOneWithoutBookingsInput = {
     create?: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutBookingsInput;
     connect?: OfferWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutBookingsInput = {
+    create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutBookingsInput;
+    connect?: UserWhereUniqueInput;
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -9920,17 +9920,6 @@ export namespace Prisma {
     set?: $Enums.BookingStatus;
   };
 
-  export type UserUpdateOneRequiredWithoutBookingsNestedInput = {
-    create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutBookingsInput;
-    upsert?: UserUpsertWithoutBookingsInput;
-    connect?: UserWhereUniqueInput;
-    update?: XOR<
-      XOR<UserUpdateToOneWithWhereWithoutBookingsInput, UserUpdateWithoutBookingsInput>,
-      UserUncheckedUpdateWithoutBookingsInput
-    >;
-  };
-
   export type OfferUpdateOneRequiredWithoutBookingsNestedInput = {
     create?: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutBookingsInput;
@@ -9939,6 +9928,17 @@ export namespace Prisma {
     update?: XOR<
       XOR<OfferUpdateToOneWithWhereWithoutBookingsInput, OfferUpdateWithoutBookingsInput>,
       OfferUncheckedUpdateWithoutBookingsInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutBookingsNestedInput = {
+    create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutBookingsInput;
+    upsert?: UserUpsertWithoutBookingsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutBookingsInput, UserUpdateWithoutBookingsInput>,
+      UserUncheckedUpdateWithoutBookingsInput
     >;
   };
 
@@ -10020,27 +10020,16 @@ export namespace Prisma {
     deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[];
   };
 
-  export type UserCreateNestedOneWithoutFavoritesInput = {
-    create?: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutFavoritesInput;
-    connect?: UserWhereUniqueInput;
-  };
-
   export type OfferCreateNestedOneWithoutFavoritesInput = {
     create?: XOR<OfferCreateWithoutFavoritesInput, OfferUncheckedCreateWithoutFavoritesInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutFavoritesInput;
     connect?: OfferWhereUniqueInput;
   };
 
-  export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
+  export type UserCreateNestedOneWithoutFavoritesInput = {
     create?: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>;
     connectOrCreate?: UserCreateOrConnectWithoutFavoritesInput;
-    upsert?: UserUpsertWithoutFavoritesInput;
     connect?: UserWhereUniqueInput;
-    update?: XOR<
-      XOR<UserUpdateToOneWithWhereWithoutFavoritesInput, UserUpdateWithoutFavoritesInput>,
-      UserUncheckedUpdateWithoutFavoritesInput
-    >;
   };
 
   export type OfferUpdateOneRequiredWithoutFavoritesNestedInput = {
@@ -10051,6 +10040,17 @@ export namespace Prisma {
     update?: XOR<
       XOR<OfferUpdateToOneWithWhereWithoutFavoritesInput, OfferUpdateWithoutFavoritesInput>,
       OfferUncheckedUpdateWithoutFavoritesInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
+    create?: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutFavoritesInput;
+    upsert?: UserUpsertWithoutFavoritesInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutFavoritesInput, UserUpdateWithoutFavoritesInput>,
+      UserUncheckedUpdateWithoutFavoritesInput
     >;
   };
 
@@ -10078,16 +10078,16 @@ export namespace Prisma {
     connect?: FavoriteWhereUniqueInput | FavoriteWhereUniqueInput[];
   };
 
-  export type UserCreateNestedOneWithoutOffersInput = {
-    create?: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutOffersInput;
-    connect?: UserWhereUniqueInput;
-  };
-
   export type DestinationCreateNestedOneWithoutOffersInput = {
     create?: XOR<DestinationCreateWithoutOffersInput, DestinationUncheckedCreateWithoutOffersInput>;
     connectOrCreate?: DestinationCreateOrConnectWithoutOffersInput;
     connect?: DestinationWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutOffersInput = {
+    create?: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutOffersInput;
+    connect?: UserWhereUniqueInput;
   };
 
   export type BookingUncheckedCreateNestedManyWithoutOfferInput = {
@@ -10192,17 +10192,6 @@ export namespace Prisma {
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
   };
 
-  export type UserUpdateOneRequiredWithoutOffersNestedInput = {
-    create?: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutOffersInput;
-    upsert?: UserUpsertWithoutOffersInput;
-    connect?: UserWhereUniqueInput;
-    update?: XOR<
-      XOR<UserUpdateToOneWithWhereWithoutOffersInput, UserUpdateWithoutOffersInput>,
-      UserUncheckedUpdateWithoutOffersInput
-    >;
-  };
-
   export type DestinationUpdateOneRequiredWithoutOffersNestedInput = {
     create?: XOR<DestinationCreateWithoutOffersInput, DestinationUncheckedCreateWithoutOffersInput>;
     connectOrCreate?: DestinationCreateOrConnectWithoutOffersInput;
@@ -10211,6 +10200,17 @@ export namespace Prisma {
     update?: XOR<
       XOR<DestinationUpdateToOneWithWhereWithoutOffersInput, DestinationUpdateWithoutOffersInput>,
       DestinationUncheckedUpdateWithoutOffersInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutOffersNestedInput = {
+    create?: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutOffersInput;
+    upsert?: UserUpsertWithoutOffersInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutOffersInput, UserUpdateWithoutOffersInput>,
+      UserUncheckedUpdateWithoutOffersInput
     >;
   };
 
@@ -10264,16 +10264,6 @@ export namespace Prisma {
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
   };
 
-  export type OfferCreateNestedManyWithoutUserInput = {
-    create?:
-      | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
-      | OfferCreateWithoutUserInput[]
-      | OfferUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: OfferCreateOrConnectWithoutUserInput | OfferCreateOrConnectWithoutUserInput[];
-    createMany?: OfferCreateManyUserInputEnvelope;
-    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
-  };
-
   export type BookingCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<BookingCreateWithoutUserInput, BookingUncheckedCreateWithoutUserInput>
@@ -10298,7 +10288,7 @@ export namespace Prisma {
     connect?: FavoriteWhereUniqueInput | FavoriteWhereUniqueInput[];
   };
 
-  export type OfferUncheckedCreateNestedManyWithoutUserInput = {
+  export type OfferCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
       | OfferCreateWithoutUserInput[]
@@ -10332,27 +10322,14 @@ export namespace Prisma {
     connect?: FavoriteWhereUniqueInput | FavoriteWhereUniqueInput[];
   };
 
-  export type OfferUpdateManyWithoutUserNestedInput = {
+  export type OfferUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
       | OfferCreateWithoutUserInput[]
       | OfferUncheckedCreateWithoutUserInput[];
     connectOrCreate?: OfferCreateOrConnectWithoutUserInput | OfferCreateOrConnectWithoutUserInput[];
-    upsert?:
-      | OfferUpsertWithWhereUniqueWithoutUserInput
-      | OfferUpsertWithWhereUniqueWithoutUserInput[];
     createMany?: OfferCreateManyUserInputEnvelope;
-    set?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
-    disconnect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
-    delete?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
     connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
-    update?:
-      | OfferUpdateWithWhereUniqueWithoutUserInput
-      | OfferUpdateWithWhereUniqueWithoutUserInput[];
-    updateMany?:
-      | OfferUpdateManyWithWhereWithoutUserInput
-      | OfferUpdateManyWithWhereWithoutUserInput[];
-    deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[];
   };
 
   export type BookingUpdateManyWithoutUserNestedInput = {
@@ -10405,7 +10382,7 @@ export namespace Prisma {
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
   };
 
-  export type OfferUncheckedUpdateManyWithoutUserNestedInput = {
+  export type OfferUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
       | OfferCreateWithoutUserInput[]
@@ -10476,6 +10453,29 @@ export namespace Prisma {
       | FavoriteUpdateManyWithWhereWithoutUserInput
       | FavoriteUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
+  };
+
+  export type OfferUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
+      | OfferCreateWithoutUserInput[]
+      | OfferUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: OfferCreateOrConnectWithoutUserInput | OfferCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | OfferUpsertWithWhereUniqueWithoutUserInput
+      | OfferUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: OfferCreateManyUserInputEnvelope;
+    set?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
+    disconnect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
+    delete?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
+    update?:
+      | OfferUpdateWithWhereUniqueWithoutUserInput
+      | OfferUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | OfferUpdateManyWithWhereWithoutUserInput
+      | OfferUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[];
   };
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10789,33 +10789,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>;
   };
 
-  export type UserCreateWithoutBookingsInput = {
-    id?: string;
-    username: string;
-    email: string;
-    passwordHash: string;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    offers?: OfferCreateNestedManyWithoutUserInput;
-    favorites?: FavoriteCreateNestedManyWithoutUserInput;
-  };
-
-  export type UserUncheckedCreateWithoutBookingsInput = {
-    id?: string;
-    username: string;
-    email: string;
-    passwordHash: string;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
-    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
-  };
-
-  export type UserCreateOrConnectWithoutBookingsInput = {
-    where: UserWhereUniqueInput;
-    create: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
-  };
-
   export type OfferCreateWithoutBookingsInput = {
     id?: string;
     type: $Enums.OfferType;
@@ -10838,8 +10811,8 @@ export namespace Prisma {
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
     favorites?: FavoriteCreateNestedManyWithoutOfferInput;
-    user: UserCreateNestedOneWithoutOffersInput;
     destination: DestinationCreateNestedOneWithoutOffersInput;
+    user: UserCreateNestedOneWithoutOffersInput;
   };
 
   export type OfferUncheckedCreateWithoutBookingsInput = {
@@ -10873,37 +10846,31 @@ export namespace Prisma {
     create: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
   };
 
-  export type UserUpsertWithoutBookingsInput = {
-    update: XOR<UserUpdateWithoutBookingsInput, UserUncheckedUpdateWithoutBookingsInput>;
+  export type UserCreateWithoutBookingsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutBookingsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutBookingsInput = {
+    where: UserWhereUniqueInput;
     create: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
-    where?: UserWhereInput;
-  };
-
-  export type UserUpdateToOneWithWhereWithoutBookingsInput = {
-    where?: UserWhereInput;
-    data: XOR<UserUpdateWithoutBookingsInput, UserUncheckedUpdateWithoutBookingsInput>;
-  };
-
-  export type UserUpdateWithoutBookingsInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    username?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    passwordHash?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offers?: OfferUpdateManyWithoutUserNestedInput;
-    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
-  };
-
-  export type UserUncheckedUpdateWithoutBookingsInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    username?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    passwordHash?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
-    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type OfferUpsertWithoutBookingsInput = {
@@ -10939,8 +10906,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     favorites?: FavoriteUpdateManyWithoutOfferNestedInput;
-    user?: UserUpdateOneRequiredWithoutOffersNestedInput;
     destination?: DestinationUpdateOneRequiredWithoutOffersNestedInput;
+    user?: UserUpdateOneRequiredWithoutOffersNestedInput;
   };
 
   export type OfferUncheckedUpdateWithoutBookingsInput = {
@@ -10967,6 +10934,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     favorites?: FavoriteUncheckedUpdateManyWithoutOfferNestedInput;
+  };
+
+  export type UserUpsertWithoutBookingsInput = {
+    update: XOR<UserUpdateWithoutBookingsInput, UserUncheckedUpdateWithoutBookingsInput>;
+    create: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutBookingsInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutBookingsInput, UserUncheckedUpdateWithoutBookingsInput>;
+  };
+
+  export type UserUpdateWithoutBookingsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutBookingsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type OfferCreateWithoutDestinationInput = {
@@ -11075,33 +11075,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Offer"> | Date | string | null;
   };
 
-  export type UserCreateWithoutFavoritesInput = {
-    id?: string;
-    username: string;
-    email: string;
-    passwordHash: string;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    offers?: OfferCreateNestedManyWithoutUserInput;
-    bookings?: BookingCreateNestedManyWithoutUserInput;
-  };
-
-  export type UserUncheckedCreateWithoutFavoritesInput = {
-    id?: string;
-    username: string;
-    email: string;
-    passwordHash: string;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
-    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
-  };
-
-  export type UserCreateOrConnectWithoutFavoritesInput = {
-    where: UserWhereUniqueInput;
-    create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>;
-  };
-
   export type OfferCreateWithoutFavoritesInput = {
     id?: string;
     type: $Enums.OfferType;
@@ -11124,8 +11097,8 @@ export namespace Prisma {
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
     bookings?: BookingCreateNestedManyWithoutOfferInput;
-    user: UserCreateNestedOneWithoutOffersInput;
     destination: DestinationCreateNestedOneWithoutOffersInput;
+    user: UserCreateNestedOneWithoutOffersInput;
   };
 
   export type OfferUncheckedCreateWithoutFavoritesInput = {
@@ -11159,37 +11132,31 @@ export namespace Prisma {
     create: XOR<OfferCreateWithoutFavoritesInput, OfferUncheckedCreateWithoutFavoritesInput>;
   };
 
-  export type UserUpsertWithoutFavoritesInput = {
-    update: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>;
+  export type UserCreateWithoutFavoritesInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutFavoritesInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutFavoritesInput = {
+    where: UserWhereUniqueInput;
     create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>;
-    where?: UserWhereInput;
-  };
-
-  export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
-    where?: UserWhereInput;
-    data: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>;
-  };
-
-  export type UserUpdateWithoutFavoritesInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    username?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    passwordHash?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offers?: OfferUpdateManyWithoutUserNestedInput;
-    bookings?: BookingUpdateManyWithoutUserNestedInput;
-  };
-
-  export type UserUncheckedUpdateWithoutFavoritesInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    username?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    passwordHash?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
-    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type OfferUpsertWithoutFavoritesInput = {
@@ -11225,8 +11192,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     bookings?: BookingUpdateManyWithoutOfferNestedInput;
-    user?: UserUpdateOneRequiredWithoutOffersNestedInput;
     destination?: DestinationUpdateOneRequiredWithoutOffersNestedInput;
+    user?: UserUpdateOneRequiredWithoutOffersNestedInput;
   };
 
   export type OfferUncheckedUpdateWithoutFavoritesInput = {
@@ -11253,6 +11220,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     bookings?: BookingUncheckedUpdateManyWithoutOfferNestedInput;
+  };
+
+  export type UserUpsertWithoutFavoritesInput = {
+    update: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>;
+    create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>;
+  };
+
+  export type UserUpdateWithoutFavoritesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutFavoritesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type BookingCreateWithoutOfferInput = {
@@ -11311,6 +11311,29 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type DestinationCreateWithoutOffersInput = {
+    id?: string;
+    name: string;
+    countryCode: string;
+    description?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DestinationUncheckedCreateWithoutOffersInput = {
+    id?: string;
+    name: string;
+    countryCode: string;
+    description?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DestinationCreateOrConnectWithoutOffersInput = {
+    where: DestinationWhereUniqueInput;
+    create: XOR<DestinationCreateWithoutOffersInput, DestinationUncheckedCreateWithoutOffersInput>;
+  };
+
   export type UserCreateWithoutOffersInput = {
     id?: string;
     username: string;
@@ -11336,29 +11359,6 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutOffersInput = {
     where: UserWhereUniqueInput;
     create: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>;
-  };
-
-  export type DestinationCreateWithoutOffersInput = {
-    id?: string;
-    name: string;
-    countryCode: string;
-    description?: string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-  };
-
-  export type DestinationUncheckedCreateWithoutOffersInput = {
-    id?: string;
-    name: string;
-    countryCode: string;
-    description?: string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-  };
-
-  export type DestinationCreateOrConnectWithoutOffersInput = {
-    where: DestinationWhereUniqueInput;
-    create: XOR<DestinationCreateWithoutOffersInput, DestinationUncheckedCreateWithoutOffersInput>;
   };
 
   export type BookingUpsertWithWhereUniqueWithoutOfferInput = {
@@ -11419,6 +11419,35 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Favorite"> | Date | string;
   };
 
+  export type DestinationUpsertWithoutOffersInput = {
+    update: XOR<DestinationUpdateWithoutOffersInput, DestinationUncheckedUpdateWithoutOffersInput>;
+    create: XOR<DestinationCreateWithoutOffersInput, DestinationUncheckedCreateWithoutOffersInput>;
+    where?: DestinationWhereInput;
+  };
+
+  export type DestinationUpdateToOneWithWhereWithoutOffersInput = {
+    where?: DestinationWhereInput;
+    data: XOR<DestinationUpdateWithoutOffersInput, DestinationUncheckedUpdateWithoutOffersInput>;
+  };
+
+  export type DestinationUpdateWithoutOffersInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    countryCode?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DestinationUncheckedUpdateWithoutOffersInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    countryCode?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type UserUpsertWithoutOffersInput = {
     update: XOR<UserUpdateWithoutOffersInput, UserUncheckedUpdateWithoutOffersInput>;
     create: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>;
@@ -11452,33 +11481,60 @@ export namespace Prisma {
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
   };
 
-  export type DestinationUpsertWithoutOffersInput = {
-    update: XOR<DestinationUpdateWithoutOffersInput, DestinationUncheckedUpdateWithoutOffersInput>;
-    create: XOR<DestinationCreateWithoutOffersInput, DestinationUncheckedCreateWithoutOffersInput>;
-    where?: DestinationWhereInput;
+  export type BookingCreateWithoutUserInput = {
+    id?: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    offer: OfferCreateNestedOneWithoutBookingsInput;
   };
 
-  export type DestinationUpdateToOneWithWhereWithoutOffersInput = {
-    where?: DestinationWhereInput;
-    data: XOR<DestinationUpdateWithoutOffersInput, DestinationUncheckedUpdateWithoutOffersInput>;
+  export type BookingUncheckedCreateWithoutUserInput = {
+    id?: string;
+    offerId: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
   };
 
-  export type DestinationUpdateWithoutOffersInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    name?: StringFieldUpdateOperationsInput | string;
-    countryCode?: StringFieldUpdateOperationsInput | string;
-    description?: NullableStringFieldUpdateOperationsInput | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  export type BookingCreateOrConnectWithoutUserInput = {
+    where: BookingWhereUniqueInput;
+    create: XOR<BookingCreateWithoutUserInput, BookingUncheckedCreateWithoutUserInput>;
   };
 
-  export type DestinationUncheckedUpdateWithoutOffersInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    name?: StringFieldUpdateOperationsInput | string;
-    countryCode?: StringFieldUpdateOperationsInput | string;
-    description?: NullableStringFieldUpdateOperationsInput | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  export type BookingCreateManyUserInputEnvelope = {
+    data: BookingCreateManyUserInput | BookingCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type FavoriteCreateWithoutUserInput = {
+    id?: string;
+    createdAt?: Date | string;
+    offer: OfferCreateNestedOneWithoutFavoritesInput;
+  };
+
+  export type FavoriteUncheckedCreateWithoutUserInput = {
+    id?: string;
+    offerId: string;
+    createdAt?: Date | string;
+  };
+
+  export type FavoriteCreateOrConnectWithoutUserInput = {
+    where: FavoriteWhereUniqueInput;
+    create: XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>;
+  };
+
+  export type FavoriteCreateManyUserInputEnvelope = {
+    data: FavoriteCreateManyUserInput | FavoriteCreateManyUserInput[];
+    skipDuplicates?: boolean;
   };
 
   export type OfferCreateWithoutUserInput = {
@@ -11543,78 +11599,6 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
-  export type BookingCreateWithoutUserInput = {
-    id?: string;
-    startDate: Date | string;
-    endDate: Date | string;
-    guestsCount: number;
-    totalPrice: Decimal | DecimalJsLike | number | string;
-    status?: $Enums.BookingStatus;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    offer: OfferCreateNestedOneWithoutBookingsInput;
-  };
-
-  export type BookingUncheckedCreateWithoutUserInput = {
-    id?: string;
-    offerId: string;
-    startDate: Date | string;
-    endDate: Date | string;
-    guestsCount: number;
-    totalPrice: Decimal | DecimalJsLike | number | string;
-    status?: $Enums.BookingStatus;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-  };
-
-  export type BookingCreateOrConnectWithoutUserInput = {
-    where: BookingWhereUniqueInput;
-    create: XOR<BookingCreateWithoutUserInput, BookingUncheckedCreateWithoutUserInput>;
-  };
-
-  export type BookingCreateManyUserInputEnvelope = {
-    data: BookingCreateManyUserInput | BookingCreateManyUserInput[];
-    skipDuplicates?: boolean;
-  };
-
-  export type FavoriteCreateWithoutUserInput = {
-    id?: string;
-    createdAt?: Date | string;
-    offer: OfferCreateNestedOneWithoutFavoritesInput;
-  };
-
-  export type FavoriteUncheckedCreateWithoutUserInput = {
-    id?: string;
-    offerId: string;
-    createdAt?: Date | string;
-  };
-
-  export type FavoriteCreateOrConnectWithoutUserInput = {
-    where: FavoriteWhereUniqueInput;
-    create: XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>;
-  };
-
-  export type FavoriteCreateManyUserInputEnvelope = {
-    data: FavoriteCreateManyUserInput | FavoriteCreateManyUserInput[];
-    skipDuplicates?: boolean;
-  };
-
-  export type OfferUpsertWithWhereUniqueWithoutUserInput = {
-    where: OfferWhereUniqueInput;
-    update: XOR<OfferUpdateWithoutUserInput, OfferUncheckedUpdateWithoutUserInput>;
-    create: XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>;
-  };
-
-  export type OfferUpdateWithWhereUniqueWithoutUserInput = {
-    where: OfferWhereUniqueInput;
-    data: XOR<OfferUpdateWithoutUserInput, OfferUncheckedUpdateWithoutUserInput>;
-  };
-
-  export type OfferUpdateManyWithWhereWithoutUserInput = {
-    where: OfferScalarWhereInput;
-    data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyWithoutUserInput>;
-  };
-
   export type BookingUpsertWithWhereUniqueWithoutUserInput = {
     where: BookingWhereUniqueInput;
     update: XOR<BookingUpdateWithoutUserInput, BookingUncheckedUpdateWithoutUserInput>;
@@ -11645,6 +11629,22 @@ export namespace Prisma {
   export type FavoriteUpdateManyWithWhereWithoutUserInput = {
     where: FavoriteScalarWhereInput;
     data: XOR<FavoriteUpdateManyMutationInput, FavoriteUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type OfferUpsertWithWhereUniqueWithoutUserInput = {
+    where: OfferWhereUniqueInput;
+    update: XOR<OfferUpdateWithoutUserInput, OfferUncheckedUpdateWithoutUserInput>;
+    create: XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>;
+  };
+
+  export type OfferUpdateWithWhereUniqueWithoutUserInput = {
+    where: OfferWhereUniqueInput;
+    data: XOR<OfferUpdateWithoutUserInput, OfferUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type OfferUpdateManyWithWhereWithoutUserInput = {
+    where: OfferScalarWhereInput;
+    data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyWithoutUserInput>;
   };
 
   export type OfferCreateManyDestinationInput = {
@@ -11819,6 +11819,24 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type BookingCreateManyUserInput = {
+    id?: string;
+    offerId: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type FavoriteCreateManyUserInput = {
+    id?: string;
+    offerId: string;
+    createdAt?: Date | string;
+  };
+
   export type OfferCreateManyUserInput = {
     id?: string;
     type: $Enums.OfferType;
@@ -11843,22 +11861,58 @@ export namespace Prisma {
     deletedAt?: Date | string | null;
   };
 
-  export type BookingCreateManyUserInput = {
-    id?: string;
-    offerId: string;
-    startDate: Date | string;
-    endDate: Date | string;
-    guestsCount: number;
-    totalPrice: Decimal | DecimalJsLike | number | string;
-    status?: $Enums.BookingStatus;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
+  export type BookingUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
   };
 
-  export type FavoriteCreateManyUserInput = {
-    id?: string;
-    offerId: string;
-    createdAt?: Date | string;
+  export type BookingUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    offerId?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type BookingUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    offerId?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type FavoriteUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    offer?: OfferUpdateOneRequiredWithoutFavoritesNestedInput;
+  };
+
+  export type FavoriteUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    offerId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type FavoriteUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    offerId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type OfferUpdateWithoutUserInput = {
@@ -11935,60 +11989,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-  };
-
-  export type BookingUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
-    guestsCount?: IntFieldUpdateOperationsInput | number;
-    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
-    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
-  };
-
-  export type BookingUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    offerId?: StringFieldUpdateOperationsInput | string;
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
-    guestsCount?: IntFieldUpdateOperationsInput | number;
-    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
-    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type BookingUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    offerId?: StringFieldUpdateOperationsInput | string;
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
-    guestsCount?: IntFieldUpdateOperationsInput | number;
-    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
-    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type FavoriteUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    offer?: OfferUpdateOneRequiredWithoutFavoritesNestedInput;
-  };
-
-  export type FavoriteUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    offerId?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type FavoriteUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    offerId?: StringFieldUpdateOperationsInput | string;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   /**
