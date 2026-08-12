@@ -9,12 +9,9 @@ model Booking {
   status      BookingStatus @default(draft)
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
+  offer       Offer         @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Связи
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
-
-  // Индексы
   @@index([userId])
   @@index([offerId])
   @@index([status])

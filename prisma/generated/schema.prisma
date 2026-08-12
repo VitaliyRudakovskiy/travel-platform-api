@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  userId      String        @map("user_id")
+  offerId     String        @map("offer_id")
+  startDate   DateTime      @map("start_date")
+  endDate     DateTime      @map("end_date")
+  guestsCount Int           @map("guests_count")
+  totalPrice  Decimal       @map("total_price") @db.Decimal(10, 2)
+  status      BookingStatus @default(draft)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  // Связи
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+
+  // Индексы
+  @@index([userId])
+  @@index([offerId])
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  draft
+  confirmed
+  cancelled
+}
+
+model Destination {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(50)
+  countryCode String   @map("country_code") @db.VarChar(2)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // связи
+  offers Offer[]
+
+  // Индексы
+  @@index([countryCode])
+  @@map("destinations")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  offerId   String   @map("offer_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Связи
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+
+  // Уникальность пары
+  @@unique([userId, offerId])
+  // Индексы
+  @@index([userId])
+  @@index([offerId])
+  @@map("favorites")
+}
+
+model Offer {
+  id                    String      @id @default(uuid())
+  type                  OfferType
+  destinationId         String      @map("destination_id")
+  ownerId               String      @map("owner_id")
+  title                 String      @db.VarChar(100)
+  description           String?     @db.Text
+  price                 Decimal     @db.Decimal(7, 2)
+  currency              Currency
+  maxGuests             Int         @default(1) @map("max_guests")
+  maxConcurrentBookings Int         @default(1) @map("max_concurrent_bookings")
+  availableFrom         DateTime    @map("available_from")
+  availableTo           DateTime    @map("available_to")
+  status                OfferStatus @default(active)
+  stars                 Int?
+  address               String?     @db.VarChar(100)
+  flightNumber          String?     @map("flight_number") @db.VarChar(25)
+  airline               String?     @db.VarChar(100)
+  durationDays          Int?        @map("duration_days")
+  includesMeals         Boolean?    @map("includes_meals")
+  createdAt             DateTime    @default(now()) @map("created_at")
+  updatedAt             DateTime    @updatedAt @map("updated_at")
+  deletedAt             DateTime?   @map("deleted_at")
+
+  // Связи
+  bookings    Booking[]
+  favorites   Favorite[]
+  user        User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Restrict)
+
+  // Индексы
+  @@index([destinationId])
+  @@index([ownerId])
+  @@index([type])
+  @@index([status])
+  @@index([availableFrom, availableTo])
+  @@map("offers")
+}
+
+enum OfferType {
+  hotel
+  flight
+  tour
+}
+
+enum Currency {
+  BYN
+  USD
+  EUR
+}
+
+enum OfferStatus {
+  active
+  archived
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @db.VarChar(50)
+  email        String   @unique @db.VarChar(70)
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // связи
+  offers    Offer[]
+  bookings  Booking[]
+  favorites Favorite[]
+
+  @@map("users")
+}

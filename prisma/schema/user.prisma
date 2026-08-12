@@ -1,15 +1,13 @@
 model User {
-  id           String   @id @default(uuid())
-  username     String   @db.VarChar(50)
-  email        String   @unique
+  id           String     @id @default(uuid())
+  username     String     @db.VarChar(50)
+  email        String     @unique @db.VarChar(70)
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // связи
-  offers    Offer[]
-  bookings  Booking[]
-  favorites Favorite[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  bookings     Booking[]
+  favorites    Favorite[]
+  offers       Offer[]
 
   @@map("users")
 }

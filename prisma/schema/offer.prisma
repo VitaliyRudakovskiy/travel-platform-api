@@ -4,7 +4,7 @@ model Offer {
   destinationId         String      @map("destination_id")
   ownerId               String      @map("owner_id")
   title                 String      @db.VarChar(100)
-  description           String?     @db.Text
+  description           String?
   price                 Decimal     @db.Decimal(7, 2)
   currency              Currency
   maxGuests             Int         @default(1) @map("max_guests")
@@ -21,14 +21,11 @@ model Offer {
   createdAt             DateTime    @default(now()) @map("created_at")
   updatedAt             DateTime    @updatedAt @map("updated_at")
   deletedAt             DateTime?   @map("deleted_at")
+  bookings              Booking[]
+  favorites             Favorite[]
+  destination           Destination @relation(fields: [destinationId], references: [id])
+  user                  User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  // Связи
-  bookings    Booking[]
-  favorites   Favorite[]
-  user        User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Restrict)
-
-  // Индексы
   @@index([destinationId])
   @@index([ownerId])
   @@index([type])

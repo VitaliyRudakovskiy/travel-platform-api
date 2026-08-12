@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": ["dist", "coverage", "node_modules"],
+  "ignorePatterns": ["dist", "coverage", "node_modules", "prisma"],
   "plugins": ["unicorn", "typescript", "oxc", "import"],
   "rules": {
     "eslint/no-unused-vars": "error",
