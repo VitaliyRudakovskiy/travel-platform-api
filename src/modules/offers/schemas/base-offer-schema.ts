@@ -62,3 +62,5 @@ export const baseOfferSchema = z.object({
 
   status: z.enum(["active", "archived"]).optional().default("active"),
 });
+
+export type BaseOfferDto = z.infer<typeof baseOfferSchema>;

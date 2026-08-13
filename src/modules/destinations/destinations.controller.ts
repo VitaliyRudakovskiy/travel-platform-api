@@ -26,7 +26,7 @@ import {
   type DestinationQueryDto,
   destinationQuerySchema,
 } from "./schemas/destination-query.schema";
-import { PaginatedResponseDto } from "./schemas/paginated-response.schema";
+import { PaginatedDestinationResponseDto } from "./schemas/paginated-destination-response.schema";
 
 @Controller("destinations")
 export class DestinationsController {
@@ -36,7 +36,7 @@ export class DestinationsController {
   async get(
     @Query(new ZodValidationPipe(destinationQuerySchema))
     query: DestinationQueryDto,
-  ): Promise<PaginatedResponseDto> {
+  ): Promise<PaginatedDestinationResponseDto> {
     return this.destinationsService.getAll(query);
   }
 

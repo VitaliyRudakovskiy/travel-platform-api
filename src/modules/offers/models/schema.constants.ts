@@ -21,3 +21,7 @@ export const AIRLINE_MAX_LENGTH = 100;
 
 export const DURATION_DAYS_MIN_VALUE = 1;
 export const DURATION_DAYS_MAX_VALUE = 365;
+
+export const PAGE_MIN_VALUE = 1;
+export const LIMIT_MIN_VALUE = 1;
+export const LIMIT_MAX_VALUE = 100;

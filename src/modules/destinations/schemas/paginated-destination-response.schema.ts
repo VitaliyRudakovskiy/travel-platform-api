@@ -1,7 +1,7 @@
 import z from "zod";
 import { destinationResponseSchema } from "./destination-response.schema";
 
-export const paginatedResponseSchema = z.object({
+export const paginatedDestinationResponseSchema = z.object({
   data: z.array(destinationResponseSchema),
   meta: z.object({
     total: z.number(),
@@ -13,4 +13,4 @@ export const paginatedResponseSchema = z.object({
   }),
 });
 
-export type PaginatedResponseDto = z.infer<typeof paginatedResponseSchema>;
+export type PaginatedDestinationResponseDto = z.infer<typeof paginatedDestinationResponseSchema>;

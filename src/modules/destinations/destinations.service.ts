@@ -3,14 +3,14 @@ import { PrismaService } from "@services/prisma.service";
 import { CreateDestinationDto } from "./schemas/create-destination.schema";
 import { DestinationResponseDto } from "./schemas/destination-response.schema";
 import { UpdateDestinationDto } from "./schemas/update-destination.schema";
-import { PaginatedResponseDto } from "./schemas/paginated-response.schema";
+import { PaginatedDestinationResponseDto } from "./schemas/paginated-destination-response.schema";
 import { DestinationQueryDto } from "./schemas/destination-query.schema";
 
 @Injectable()
 export class DestinationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAll(query: DestinationQueryDto): Promise<PaginatedResponseDto> {
+  async getAll(query: DestinationQueryDto): Promise<PaginatedDestinationResponseDto> {
     const { page, limit, name, countryCode } = query;
 
     const search: any = {};

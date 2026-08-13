@@ -61,6 +61,8 @@ const tourFields = z.object({
     .min(DURATION_DAYS_MIN_VALUE, `Duration must be at least ${DURATION_DAYS_MIN_VALUE} day`)
     .max(DURATION_DAYS_MAX_VALUE, `Duration must not exceed ${DURATION_DAYS_MAX_VALUE} days`),
 
+  includesMeals: z.boolean().optional().default(false),
+
   stars: z.undefined().optional(),
   address: z.undefined().optional(),
   airline: z.undefined().optional(),
