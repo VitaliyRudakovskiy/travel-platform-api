@@ -3,19 +3,41 @@ import { PrismaService } from "@services/prisma.service";
 import { CreateDestinationDto } from "./schemas/create-destination.schema";
 import { DestinationResponseDto } from "./schemas/destination-response.schema";
 import { UpdateDestinationDto } from "./schemas/update-destination.schema";
+import { PaginatedResponseDto } from "./schemas/paginated-response.schema";
+import { DestinationQueryDto } from "./schemas/destination-query.schema";
 
 @Injectable()
 export class DestinationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAll(): Promise<DestinationResponseDto[]> {
+  async getAll(query: DestinationQueryDto): Promise<PaginatedResponseDto> {
+    const { page, limit, name, countryCode } = query;
+
+    const search: any = {};
+
+    if (name) {
+      search.name = {
+        contains: name,
+        mode: "insensitive",
+      };
+    }
+
+    if (countryCode) {
+      search.countryCode = countryCode;
+    }
+
+    const total = await this.prisma.destination.count({ where: search });
+
     const destinations = await this.prisma.destination.findMany({
+      where: search,
+      skip: (page - 1) * limit,
+      take: limit,
       orderBy: {
         name: "asc",
       },
     });
 
-    return destinations.map((dest) => ({
+    const data = destinations.map((dest) => ({
       id: dest.id,
       name: dest.name,
       countryCode: dest.countryCode,
@@ -23,6 +45,22 @@ export class DestinationsService {
       createdAt: dest.createdAt,
       updatedAt: dest.updatedAt,
     }));
+
+    const totalPages = Math.ceil(total / limit);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
   }
 
   async getById(id: string): Promise<DestinationResponseDto> {

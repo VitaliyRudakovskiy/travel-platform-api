@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
 } from "@nestjs/common";
 import { DestinationsService } from "./destinations.service";
@@ -21,14 +22,22 @@ import {
   udpateDestinationSchema,
   type UpdateDestinationDto,
 } from "./schemas/update-destination.schema";
+import {
+  type DestinationQueryDto,
+  destinationQuerySchema,
+} from "./schemas/destination-query.schema";
+import { PaginatedResponseDto } from "./schemas/paginated-response.schema";
 
 @Controller("destinations")
 export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Get()
-  async get(): Promise<DestinationResponseDto[]> {
-    return this.destinationsService.getAll();
+  async get(
+    @Query(new ZodValidationPipe(destinationQuerySchema))
+    query: DestinationQueryDto,
+  ): Promise<PaginatedResponseDto> {
+    return this.destinationsService.getAll(query);
   }
 
   @Get(":destinationId")
