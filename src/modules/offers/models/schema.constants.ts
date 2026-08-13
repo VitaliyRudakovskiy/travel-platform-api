@@ -5,7 +5,7 @@ export const PRICE_MIN_VALUE = 0.01;
 export const PRICE_MAX_VALUE = 999999.99;
 
 export const MAX_GUESTS_MIN_VALUE = 1;
-export const MAX_GUESTS_MAX_VALUE = 50;
+export const MAX_GUESTS_MAX_VALUE = 250;
 
 export const MAX_CONCURRENT_BOOKINGS_MIN_VALUE = 1;
 export const MAX_CONCURRENT_BOOKINGS_MAX_VALUE = 999;

@@ -8,7 +8,7 @@ import {
   STARS_MAX_VALUE,
   STARS_MIN_VALUE,
 } from "../models/schema.constants";
-import { baseOfferSchema } from "./base-offer-schema";
+import { baseOfferSchema } from "./base-offer.schema";
 
 const hotelFields = z.object({
   type: z.literal("hotel"),

@@ -37,21 +37,12 @@ export class DestinationsService {
       },
     });
 
-    const data = destinations.map((dest) => ({
-      id: dest.id,
-      name: dest.name,
-      countryCode: dest.countryCode,
-      description: dest.description,
-      createdAt: dest.createdAt,
-      updatedAt: dest.updatedAt,
-    }));
-
     const totalPages = Math.ceil(total / limit);
     const hasNextPage = page < totalPages;
     const hasPreviousPage = page > 1;
 
     return {
-      data,
+      data: destinations,
       meta: {
         total,
         page,
@@ -72,14 +63,7 @@ export class DestinationsService {
       throw new NotFoundException("Destination not found");
     }
 
-    return {
-      id: destination.id,
-      name: destination.name,
-      countryCode: destination.countryCode,
-      description: destination.description,
-      createdAt: destination.createdAt,
-      updatedAt: destination.updatedAt,
-    };
+    return destination;
   }
 
   async create(createDestinationDto: CreateDestinationDto): Promise<DestinationResponseDto> {
@@ -104,14 +88,7 @@ export class DestinationsService {
       },
     });
 
-    return {
-      id: destination.id,
-      name: destination.name,
-      countryCode: destination.countryCode,
-      description: destination.description ?? null,
-      createdAt: destination.createdAt,
-      updatedAt: destination.updatedAt,
-    };
+    return destination;
   }
 
   async update(
@@ -151,23 +128,26 @@ export class DestinationsService {
       },
     });
 
-    return {
-      id: destination.id,
-      name: destination.name,
-      countryCode: destination.countryCode,
-      description: destination.description,
-      createdAt: destination.createdAt,
-      updatedAt: destination.updatedAt,
-    };
+    return destination;
   }
 
   async delete(id: string): Promise<void> {
     const existing = await this.prisma.destination.findUnique({
       where: { id },
+      include: {
+        _count: { select: { offers: true } },
+      },
     });
 
     if (!existing) {
       throw new NotFoundException(`Destination with id "${id}" not found`);
+    }
+
+    if (existing._count.offers > 0) {
+      throw new ConflictException(
+        `Cannot delete destination with ${existing._count.offers} existing offers. ` +
+          `Delete or archive the offers first.`,
+      );
     }
 
     await this.prisma.destination.delete({
