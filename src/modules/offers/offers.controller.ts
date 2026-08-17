@@ -21,7 +21,6 @@ import { AuthGuard } from "src/guards/auth.guard";
 import { type OfferQueryDto, offerQuerySchema } from "./schemas/offer-query.schema";
 import { PaginatedOfferResponseDto } from "./schemas/paginated-offer-response.schema";
 import { type UpdateOfferDto, updateOfferSchema } from "./schemas/update-offer.schema";
-import { UpdateUserDto } from "@modules/users/schemas/update-user.schema";
 
 @Controller("offers")
 export class OffersController {
