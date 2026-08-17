@@ -143,4 +143,17 @@ export class FavoritesService {
       where: { id: favorite.id },
     });
   }
+
+  async isFavorite(offerId: string, userId: string): Promise<boolean> {
+    const favorite = await this.prisma.favorite.findUnique({
+      where: {
+        userId_offerId: {
+          userId,
+          offerId,
+        },
+      },
+    });
+
+    return !!favorite;
+  }
 }

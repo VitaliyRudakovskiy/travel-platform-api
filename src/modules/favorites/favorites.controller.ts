@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Post, Query, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
 import { AuthGuard } from "src/guards/auth.guard";
 import { FavoritesService } from "./favorites.service";
 import { FavoritesResponseDto } from "./schemas/favorite-response.schema";
@@ -14,11 +25,20 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  async getAll(
+  async getFavorites(
     @Query(new ZodValidationPipe(favoriteQuerySchema)) query: FavoriteQueryDto,
     @CurrentUser() currentUser: UserResponseDto,
   ): Promise<PaginatedFavoritesResponseDto> {
     return this.favoritesService.getAll(currentUser.id, query);
+  }
+
+  @Get("check/:offerId")
+  async isFavorite(
+    @Param("offerId") offerId: string,
+    @CurrentUser() currentUser: UserResponseDto,
+  ): Promise<{ isFavorite: boolean }> {
+    const isFavorite = await this.favoritesService.isFavorite(offerId, currentUser.id);
+    return { isFavorite };
   }
 
   @Post()
@@ -29,9 +49,10 @@ export class FavoritesController {
     return this.favoritesService.addToFavorites(offerId, currentUser.id);
   }
 
-  @Delete()
+  @Delete(":offerId")
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteFromFavorites(
-    @Body("offerId") offerId: string,
+    @Param("offerId") offerId: string,
     @CurrentUser() currentUser: UserResponseDto,
   ): Promise<void> {
     return this.favoritesService.removeFromFavorites(offerId, currentUser.id);
