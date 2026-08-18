@@ -24,8 +24,8 @@
     "baseUrl": "./",
     "paths": {
       "@modules/*": ["src/modules/*"],
-      "@pipes/*": ["src/pipes/*"],
-      "@services/*": ["src/services/*"]
+      "@pipes/*": ["src/shared/pipes/*"],
+      "@services/*": ["src/shared/services/*"]
     }
   },
   "include": ["src/**/*"],
