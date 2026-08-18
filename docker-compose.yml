@@ -1,7 +1,8 @@
 services:
   postgres:
-    image: postgres:17
+    image: postgres:17-alpine
     container_name: travel-platform-db
+    restart: unless-stopped
 
     environment:
       POSTGRES_USER: postgres
