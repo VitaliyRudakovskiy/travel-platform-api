@@ -25,7 +25,8 @@
     "paths": {
       "@modules/*": ["src/modules/*"],
       "@pipes/*": ["src/shared/pipes/*"],
-      "@services/*": ["src/shared/services/*"]
+      "@services/*": ["src/shared/services/*"],
+      "@shared/*": ["src/shared/*"]
     }
   },
   "include": ["src/**/*"],

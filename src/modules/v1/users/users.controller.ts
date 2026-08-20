@@ -11,10 +11,10 @@ import {
   Version,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { ZodValidationPipe } from "src/shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type CreateUserDto, createUserSchema } from "./schemas/create-user.schema.js";
-import { AuthGuard } from "src/shared/guards/auth.guard";
-import { CurrentUser } from "src/shared/decorators/current-user.decorator";
+import { AuthGuard } from "@shared/guards/auth.guard";
+import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "./schemas/user-response.schema";
 import { type UpdateUserDto, updateUserSchema } from "./schemas/update-user.schema";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";

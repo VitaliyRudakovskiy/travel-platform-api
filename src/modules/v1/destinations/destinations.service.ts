@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "src/shared/services/prisma.service";
+import { PrismaService } from "@services/prisma.service";
 import { CreateDestinationDto } from "./schemas/create-destination.schema";
 import { DestinationResponseDto } from "./schemas/destination-response.schema";
 import { UpdateDestinationDto } from "./schemas/update-destination.schema";

@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { PrismaService } from "src/shared/services/prisma.service";
+import { PrismaService } from "@services/prisma.service";
 import { CreateBookingDto } from "./schemas/create-booking.schema";
 import { BookingResponseDto } from "./schemas/booking-response.schema";
 import { BookingStatus, OfferStatus } from "@prisma/client";

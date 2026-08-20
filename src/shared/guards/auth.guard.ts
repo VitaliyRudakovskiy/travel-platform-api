@@ -6,7 +6,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { PrismaService } from "src/shared/services/prisma.service";
+import { PrismaService } from "@services/prisma.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

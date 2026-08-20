@@ -1,6 +1,6 @@
 import { LoginDto } from "@modules/v1/users/schemas/login.schema";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { PrismaService } from "src/shared/services/prisma.service";
+import { PrismaService } from "@services/prisma.service";
 import { SessionResponseDto } from "./schemas/session-response.schema";
 import * as bcrypt from "bcrypt";
 

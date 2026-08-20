@@ -10,12 +10,12 @@ import {
   Version,
 } from "@nestjs/common";
 import { BookingsService } from "./bookings.service";
-import { AuthGuard } from "src/shared/guards/auth.guard";
+import { AuthGuard } from "@shared/guards/auth.guard";
 import { type CreateBookingDto, createBookingSchema } from "./schemas/create-booking.schema";
-import { CurrentUser } from "src/shared/decorators/current-user.decorator";
+import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { BookingResponseDto } from "./schemas/booking-response.schema";
-import { ZodValidationPipe } from "src/shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type PaginatedBookingResponseDto } from "./schemas/paginated-booking-response.schema";
 import { type BookingQueryDto, bookingQuerySchema } from "./schemas/booking-query.schema";
 import {

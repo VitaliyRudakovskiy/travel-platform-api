@@ -1,6 +1,6 @@
 import { type LoginDto, loginSchema } from "@modules/v1/users/schemas/login.schema";
 import { Body, Controller, Post, UsePipes, Version } from "@nestjs/common";
-import { ZodValidationPipe } from "src/shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { SessionsService } from "./sessions.service";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { SessionResponse } from "./schemas/swagger/session-response";

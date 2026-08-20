@@ -1,6 +1,6 @@
 import z from "zod";
 import { destinationResponseSchema } from "./destination-response.schema";
-import { paginatedSchema } from "src/shared/schemas/paginated-response.schema";
+import { paginatedSchema } from "@shared/schemas/paginated-response.schema";
 
 export const paginatedDestinationResponseSchema = paginatedSchema(destinationResponseSchema);
 

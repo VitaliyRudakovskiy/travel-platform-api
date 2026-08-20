@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "src/shared/services/prisma.service";
+import { PrismaService } from "@services/prisma.service";
 import { FavoritesResponseDto } from "./schemas/favorite-response.schema";
 import { PaginatedFavoritesResponseDto } from "./schemas/paginated-favorite-response.schema";
 import { FavoriteQueryDto } from "./schemas/favorite-query.schema";

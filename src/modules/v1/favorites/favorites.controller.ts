@@ -11,13 +11,13 @@ import {
   UseGuards,
   Version,
 } from "@nestjs/common";
-import { AuthGuard } from "src/shared/guards/auth.guard";
+import { AuthGuard } from "@shared/guards/auth.guard";
 import { FavoritesService } from "./favorites.service";
 import { FavoritesResponseDto } from "./schemas/favorite-response.schema";
-import { CurrentUser } from "src/shared/decorators/current-user.decorator";
+import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { PaginatedFavoritesResponseDto } from "./schemas/paginated-favorite-response.schema";
-import { ZodValidationPipe } from "src/shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type FavoriteQueryDto, favoriteQuerySchema } from "./schemas/favorite-query.schema";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PaginatedFavoritesResponse } from "./schemas/swagger/paginated-favorite-response";

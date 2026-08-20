@@ -15,10 +15,10 @@ import {
 import { OffersService } from "./offers.service";
 import { OfferResponseDto } from "./schemas/offer-response.schema";
 import { createOfferSchema, type CreateOfferDto } from "./schemas/create-offer.schema";
-import { ZodValidationPipe } from "src/shared/pipes/zod-validation.pipe";
-import { CurrentUser } from "src/shared/decorators/current-user.decorator";
+import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
-import { AuthGuard } from "src/shared/guards/auth.guard";
+import { AuthGuard } from "@shared/guards/auth.guard";
 import { type OfferQueryDto, offerQuerySchema } from "./schemas/offer-query.schema";
 import { PaginatedOfferResponseDto } from "./schemas/paginated-offer-response.schema";
 import { type UpdateOfferDto, updateOfferSchema } from "./schemas/update-offer.schema";
