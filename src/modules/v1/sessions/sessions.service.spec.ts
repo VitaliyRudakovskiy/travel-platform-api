@@ -1,20 +1,15 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { PrismaService } from "@services/prisma.service";
 import { UnauthorizedException } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 import { SessionsService } from "./sessions.service";
 import * as bcrypt from "bcrypt";
+import { providePrisma } from "@tests/providers/provide-prisma";
+import { PrismaService } from "@services/prisma.service";
 
 vi.mock("bcrypt", () => ({
   compare: vi.fn(),
 }));
-
-const prismaMock = {
-  user: {
-    findFirst: vi.fn(),
-  },
-};
 
 const loginDto = {
   email: faker.internet.email(),
@@ -31,12 +26,13 @@ const user = {
 
 describe("SessionsService", () => {
   let service: SessionsService;
+  let prisma: PrismaService;
 
   beforeEach(async () => {
     vi.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SessionsService, { provide: PrismaService, useValue: prismaMock }],
+      providers: [SessionsService, providePrisma()],
     }).compile();
 
     service = module.get<SessionsService>(SessionsService);

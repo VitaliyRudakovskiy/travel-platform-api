@@ -1,24 +1,14 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UsersService } from "./users.service";
-import { PrismaService } from "@services/prisma.service";
-import { describe, beforeEach, it, expect, vi } from "vitest";
-
-const prismaMock = {
-  user: {
-    findMany: vi.fn(),
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-  },
-};
+import { describe, beforeEach, it, expect } from "vitest";
+import { providePrisma } from "@tests/providers/provide-prisma";
 
 describe("UsersService", () => {
   let service: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, { provide: PrismaService, useValue: prismaMock }],
+      providers: [UsersService, providePrisma()],
     }).compile();
 
     service = module.get<UsersService>(UsersService);

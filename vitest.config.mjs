@@ -8,6 +8,7 @@ export default defineConfig({
       "@pipes": fileURLToPath(new URL("./src/shared/pipes", import.meta.url)),
       "@services": fileURLToPath(new URL("./src/shared/services", import.meta.url)),
       "@shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
+      "@tests": fileURLToPath(new URL("./src/tests", import.meta.url)),
     },
   },
   test: {
