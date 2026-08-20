@@ -5,7 +5,7 @@ import { describe, beforeEach, it, expect, vi } from "vitest";
 import { SessionsService } from "./sessions.service";
 import * as bcrypt from "bcrypt";
 import { providePrisma } from "@tests/providers/provide-prisma";
-import { PrismaService } from "@services/prisma.service";
+import { prismaServiceMock } from "@tests/mocks/prisma-service.mock";
 
 vi.mock("bcrypt", () => ({
   compare: vi.fn(),
@@ -26,7 +26,6 @@ const user = {
 
 describe("SessionsService", () => {
   let service: SessionsService;
-  let prisma: PrismaService;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -44,14 +43,15 @@ describe("SessionsService", () => {
 
   describe("login", () => {
     it("returns session response for valid credentials", async () => {
-      prismaMock.user.findFirst.mockResolvedValue(user);
+      prismaServiceMock.user.findFirst.mockResolvedValue(user);
       vi.mocked(bcrypt.compare).mockResolvedValue(true);
 
       const result = await service.login(loginDto);
 
-      expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
+      expect(prismaServiceMock.user.findFirst).toHaveBeenCalledWith({
         where: { email: loginDto.email },
       });
+
       expect(result).toEqual({
         userId: user.id,
         username: user.username,
@@ -61,14 +61,15 @@ describe("SessionsService", () => {
     });
 
     it("throws UnauthorizedException when user is not found", async () => {
-      prismaMock.user.findFirst.mockResolvedValue(null);
+      prismaServiceMock.user.findFirst.mockResolvedValue(null);
 
       await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
+
       expect(bcrypt.compare).not.toHaveBeenCalled();
     });
 
     it("throws UnauthorizedException when password is invalid", async () => {
-      prismaMock.user.findFirst.mockResolvedValue(user);
+      prismaServiceMock.user.findFirst.mockResolvedValue(user);
       vi.mocked(bcrypt.compare).mockResolvedValue(false);
 
       await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
