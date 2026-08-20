@@ -3,11 +3,7 @@ import { faker } from "@faker-js/faker";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 import { SessionsController } from "./sessions.controller";
 import { SessionsService } from "./sessions.service";
-
-const loginDto = {
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-};
+import { loginMock } from "@tests/mocks/login.mock";
 
 describe("SessionsController", () => {
   let controller: SessionsController;
@@ -32,14 +28,15 @@ describe("SessionsController", () => {
     const session = {
       userId: faker.string.uuid(),
       username: faker.internet.username(),
-      email: loginDto.email,
+      email: loginMock.email,
       createdAt: faker.date.past(),
     };
+
     sessionsService.login.mockResolvedValue(session);
 
-    const result = await controller.login(loginDto);
+    const result = await controller.login(loginMock);
 
-    expect(sessionsService.login).toHaveBeenCalledWith(loginDto);
+    expect(sessionsService.login).toHaveBeenCalledWith(loginMock);
     expect(result).toEqual(session);
   });
 });
