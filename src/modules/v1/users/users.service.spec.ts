@@ -144,6 +144,7 @@ describe("UsersService", () => {
       expect(prismaServiceMock.user.findFirst).toHaveBeenCalledWith({
         where: { id: userMock.id },
       });
+
       expect(prismaServiceMock.user.update).toHaveBeenCalledWith({
         where: { id: userMock.id },
         data: updateUserDto,
