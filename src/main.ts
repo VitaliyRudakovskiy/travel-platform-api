@@ -4,9 +4,12 @@ import { AppModule } from "./app.module";
 import { VersioningType } from "@nestjs/common";
 import { SwaggerModule } from "@nestjs/swagger";
 import { swaggerConfig } from "./swagger.config";
+import { GlobalExceptionFilter } from "@shared/filters/global-exception.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   const version = "1";
   app.enableVersioning({
