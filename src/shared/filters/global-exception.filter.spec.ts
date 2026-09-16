@@ -72,8 +72,12 @@ describe("GlobalExceptionFilter", () => {
 
   it("returns generic 500 for unknown exceptions", () => {
     const { host, response, json } = mockHost();
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     filter.catch(new Error("boom"), host);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+    consoleErrorSpy.mockRestore();
 
     expect(response.status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith(
