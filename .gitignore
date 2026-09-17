@@ -11,6 +11,9 @@ pnpm-debug.log*
 # Tests
 /coverage
 
+# Agents
+/.cursor
+
 # IDEs and editors
 .project
 *.launch
