@@ -116,16 +116,24 @@ enum OfferStatus {
   archived
 }
 
+enum UserRole {
+  Admin
+  Agent
+  User
+}
+
 model User {
-  id           String     @id @default(uuid())
-  username     String     @db.VarChar(50)
-  email        String     @unique @db.VarChar(70)
-  passwordHash String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  bookings     Booking[]
-  favorites    Favorite[]
-  offers       Offer[]
+  id              String     @id @default(uuid())
+  username        String     @db.VarChar(50)
+  email           String     @unique @db.VarChar(70)
+  passwordHash    String
+  role            UserRole   @default(User)
+  isEmailVerified Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  bookings        Booking[]
+  favorites       Favorite[]
+  offers          Offer[]
 
   @@map("users")
 }

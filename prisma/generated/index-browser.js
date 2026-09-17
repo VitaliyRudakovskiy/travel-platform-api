@@ -175,6 +175,8 @@ exports.Prisma.UserScalarFieldEnum = {
   username: "username",
   email: "email",
   passwordHash: "passwordHash",
+  role: "role",
+  isEmailVerified: "isEmailVerified",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
 };
@@ -214,6 +216,12 @@ exports.Currency = exports.$Enums.Currency = {
 exports.OfferStatus = exports.$Enums.OfferStatus = {
   active: "active",
   archived: "archived",
+};
+
+exports.UserRole = exports.$Enums.UserRole = {
+  Admin: "Admin",
+  Agent: "Agent",
+  User: "User",
 };
 
 exports.Prisma.ModelName = {
