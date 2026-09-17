@@ -129,6 +129,17 @@ exports.Prisma.BookingScalarFieldEnum = {
   updatedAt: "updatedAt",
 };
 
+exports.Prisma.ClientProfileScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  firstName: "firstName",
+  lastName: "lastName",
+  phone: "phone",
+  preferredCurrency: "preferredCurrency",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+};
+
 exports.Prisma.DestinationScalarFieldEnum = {
   id: "id",
   name: "name",
@@ -201,16 +212,16 @@ exports.BookingStatus = exports.$Enums.BookingStatus = {
   cancelled: "cancelled",
 };
 
-exports.OfferType = exports.$Enums.OfferType = {
-  hotel: "hotel",
-  flight: "flight",
-  tour: "tour",
-};
-
 exports.Currency = exports.$Enums.Currency = {
   BYN: "BYN",
   USD: "USD",
   EUR: "EUR",
+};
+
+exports.OfferType = exports.$Enums.OfferType = {
+  hotel: "hotel",
+  flight: "flight",
+  tour: "tour",
 };
 
 exports.OfferStatus = exports.$Enums.OfferStatus = {
@@ -226,6 +237,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 
 exports.Prisma.ModelName = {
   Booking: "Booking",
+  ClientProfile: "ClientProfile",
   Destination: "Destination",
   Favorite: "Favorite",
   Offer: "Offer",

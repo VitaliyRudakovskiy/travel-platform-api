@@ -17,6 +17,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>;
  */
 export type Booking = $Result.DefaultSelection<Prisma.$BookingPayload>;
 /**
+ * Model ClientProfile
+ *
+ */
+export type ClientProfile = $Result.DefaultSelection<Prisma.$ClientProfilePayload>;
+/**
  * Model Destination
  *
  */
@@ -265,6 +270,16 @@ export class PrismaClient<
    * ```
    */
   get booking(): Prisma.BookingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clientProfile`: Exposes CRUD operations for the **ClientProfile** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ClientProfiles
+   * const clientProfiles = await prisma.clientProfile.findMany()
+   * ```
+   */
+  get clientProfile(): Prisma.ClientProfileDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.destination`: Exposes CRUD operations for the **Destination** model.
@@ -750,6 +765,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Booking: "Booking";
+    ClientProfile: "ClientProfile";
     Destination: "Destination";
     Favorite: "Favorite";
     Offer: "Offer";
@@ -776,7 +792,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions;
     };
     meta: {
-      modelProps: "booking" | "destination" | "favorite" | "offer" | "user";
+      modelProps: "booking" | "clientProfile" | "destination" | "favorite" | "offer" | "user";
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -851,6 +867,80 @@ export namespace Prisma {
           count: {
             args: Prisma.BookingCountArgs<ExtArgs>;
             result: $Utils.Optional<BookingCountAggregateOutputType> | number;
+          };
+        };
+      };
+      ClientProfile: {
+        payload: Prisma.$ClientProfilePayload<ExtArgs>;
+        fields: Prisma.ClientProfileFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.ClientProfileFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.ClientProfileFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>;
+          };
+          findFirst: {
+            args: Prisma.ClientProfileFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.ClientProfileFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>;
+          };
+          findMany: {
+            args: Prisma.ClientProfileFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>[];
+          };
+          create: {
+            args: Prisma.ClientProfileCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>;
+          };
+          createMany: {
+            args: Prisma.ClientProfileCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.ClientProfileCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>[];
+          };
+          delete: {
+            args: Prisma.ClientProfileDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>;
+          };
+          update: {
+            args: Prisma.ClientProfileUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>;
+          };
+          deleteMany: {
+            args: Prisma.ClientProfileDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.ClientProfileUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.ClientProfileUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>[];
+          };
+          upsert: {
+            args: Prisma.ClientProfileUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ClientProfilePayload>;
+          };
+          aggregate: {
+            args: Prisma.ClientProfileAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateClientProfile>;
+          };
+          groupBy: {
+            args: Prisma.ClientProfileGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<ClientProfileGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.ClientProfileCountArgs<ExtArgs>;
+            result: $Utils.Optional<ClientProfileCountAggregateOutputType> | number;
           };
         };
       };
@@ -1278,6 +1368,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     booking?: BookingOmit;
+    clientProfile?: ClientProfileOmit;
     destination?: DestinationOmit;
     favorite?: FavoriteOmit;
     offer?: OfferOmit;
@@ -2838,6 +2929,1295 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: BookingInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model ClientProfile
+   */
+
+  export type AggregateClientProfile = {
+    _count: ClientProfileCountAggregateOutputType | null;
+    _min: ClientProfileMinAggregateOutputType | null;
+    _max: ClientProfileMaxAggregateOutputType | null;
+  };
+
+  export type ClientProfileMinAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    phone: string | null;
+    preferredCurrency: $Enums.Currency | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type ClientProfileMaxAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    phone: string | null;
+    preferredCurrency: $Enums.Currency | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type ClientProfileCountAggregateOutputType = {
+    id: number;
+    userId: number;
+    firstName: number;
+    lastName: number;
+    phone: number;
+    preferredCurrency: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type ClientProfileMinAggregateInputType = {
+    id?: true;
+    userId?: true;
+    firstName?: true;
+    lastName?: true;
+    phone?: true;
+    preferredCurrency?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type ClientProfileMaxAggregateInputType = {
+    id?: true;
+    userId?: true;
+    firstName?: true;
+    lastName?: true;
+    phone?: true;
+    preferredCurrency?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type ClientProfileCountAggregateInputType = {
+    id?: true;
+    userId?: true;
+    firstName?: true;
+    lastName?: true;
+    phone?: true;
+    preferredCurrency?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type ClientProfileAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ClientProfile to aggregate.
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ClientProfiles to fetch.
+     */
+    orderBy?: ClientProfileOrderByWithRelationInput | ClientProfileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ClientProfileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ClientProfiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ClientProfiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ClientProfiles
+     **/
+    _count?: true | ClientProfileCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ClientProfileMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ClientProfileMaxAggregateInputType;
+  };
+
+  export type GetClientProfileAggregateType<T extends ClientProfileAggregateArgs> = {
+    [P in keyof T & keyof AggregateClientProfile]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClientProfile[P]>
+      : GetScalarType<T[P], AggregateClientProfile[P]>;
+  };
+
+  export type ClientProfileGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ClientProfileWhereInput;
+    orderBy?: ClientProfileOrderByWithAggregationInput | ClientProfileOrderByWithAggregationInput[];
+    by: ClientProfileScalarFieldEnum[] | ClientProfileScalarFieldEnum;
+    having?: ClientProfileScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: ClientProfileCountAggregateInputType | true;
+    _min?: ClientProfileMinAggregateInputType;
+    _max?: ClientProfileMaxAggregateInputType;
+  };
+
+  export type ClientProfileGroupByOutputType = {
+    id: string;
+    userId: string;
+    firstName: string | null;
+    lastName: string | null;
+    phone: string | null;
+    preferredCurrency: $Enums.Currency;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: ClientProfileCountAggregateOutputType | null;
+    _min: ClientProfileMinAggregateOutputType | null;
+    _max: ClientProfileMaxAggregateOutputType | null;
+  };
+
+  type GetClientProfileGroupByPayload<T extends ClientProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClientProfileGroupByOutputType, T["by"]> & {
+        [P in keyof T & keyof ClientProfileGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], ClientProfileGroupByOutputType[P]>
+          : GetScalarType<T[P], ClientProfileGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type ClientProfileSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      firstName?: boolean;
+      lastName?: boolean;
+      phone?: boolean;
+      preferredCurrency?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["clientProfile"]
+  >;
+
+  export type ClientProfileSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      firstName?: boolean;
+      lastName?: boolean;
+      phone?: boolean;
+      preferredCurrency?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["clientProfile"]
+  >;
+
+  export type ClientProfileSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      firstName?: boolean;
+      lastName?: boolean;
+      phone?: boolean;
+      preferredCurrency?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["clientProfile"]
+  >;
+
+  export type ClientProfileSelectScalar = {
+    id?: boolean;
+    userId?: boolean;
+    firstName?: boolean;
+    lastName?: boolean;
+    phone?: boolean;
+    preferredCurrency?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type ClientProfileOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "userId"
+    | "firstName"
+    | "lastName"
+    | "phone"
+    | "preferredCurrency"
+    | "createdAt"
+    | "updatedAt",
+    ExtArgs["result"]["clientProfile"]
+  >;
+  export type ClientProfileInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type ClientProfileIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type ClientProfileIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $ClientProfilePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "ClientProfile";
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        userId: string;
+        firstName: string | null;
+        lastName: string | null;
+        phone: string | null;
+        preferredCurrency: $Enums.Currency;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs["result"]["clientProfile"]
+    >;
+    composites: {};
+  };
+
+  type ClientProfileGetPayload<S extends boolean | null | undefined | ClientProfileDefaultArgs> =
+    $Result.GetResult<Prisma.$ClientProfilePayload, S>;
+
+  type ClientProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClientProfileFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+      select?: ClientProfileCountAggregateInputType | true;
+    };
+
+  export interface ClientProfileDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["ClientProfile"];
+      meta: { name: "ClientProfile" };
+    };
+    /**
+     * Find zero or one ClientProfile that matches the filter.
+     * @param {ClientProfileFindUniqueArgs} args - Arguments to find a ClientProfile
+     * @example
+     * // Get one ClientProfile
+     * const clientProfile = await prisma.clientProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClientProfileFindUniqueArgs>(
+      args: SelectSubset<T, ClientProfileFindUniqueArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one ClientProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClientProfileFindUniqueOrThrowArgs} args - Arguments to find a ClientProfile
+     * @example
+     * // Get one ClientProfile
+     * const clientProfile = await prisma.clientProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClientProfileFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ClientProfileFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first ClientProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileFindFirstArgs} args - Arguments to find a ClientProfile
+     * @example
+     * // Get one ClientProfile
+     * const clientProfile = await prisma.clientProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClientProfileFindFirstArgs>(
+      args?: SelectSubset<T, ClientProfileFindFirstArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first ClientProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileFindFirstOrThrowArgs} args - Arguments to find a ClientProfile
+     * @example
+     * // Get one ClientProfile
+     * const clientProfile = await prisma.clientProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClientProfileFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ClientProfileFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more ClientProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClientProfiles
+     * const clientProfiles = await prisma.clientProfile.findMany()
+     *
+     * // Get first 10 ClientProfiles
+     * const clientProfiles = await prisma.clientProfile.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const clientProfileWithIdOnly = await prisma.clientProfile.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ClientProfileFindManyArgs>(
+      args?: SelectSubset<T, ClientProfileFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ClientProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+    >;
+
+    /**
+     * Create a ClientProfile.
+     * @param {ClientProfileCreateArgs} args - Arguments to create a ClientProfile.
+     * @example
+     * // Create one ClientProfile
+     * const ClientProfile = await prisma.clientProfile.create({
+     *   data: {
+     *     // ... data to create a ClientProfile
+     *   }
+     * })
+     *
+     */
+    create<T extends ClientProfileCreateArgs>(
+      args: SelectSubset<T, ClientProfileCreateArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<Prisma.$ClientProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many ClientProfiles.
+     * @param {ClientProfileCreateManyArgs} args - Arguments to create many ClientProfiles.
+     * @example
+     * // Create many ClientProfiles
+     * const clientProfile = await prisma.clientProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ClientProfileCreateManyArgs>(
+      args?: SelectSubset<T, ClientProfileCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many ClientProfiles and returns the data saved in the database.
+     * @param {ClientProfileCreateManyAndReturnArgs} args - Arguments to create many ClientProfiles.
+     * @example
+     * // Create many ClientProfiles
+     * const clientProfile = await prisma.clientProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ClientProfiles and only return the `id`
+     * const clientProfileWithIdOnly = await prisma.clientProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ClientProfileCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ClientProfileCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a ClientProfile.
+     * @param {ClientProfileDeleteArgs} args - Arguments to delete one ClientProfile.
+     * @example
+     * // Delete one ClientProfile
+     * const ClientProfile = await prisma.clientProfile.delete({
+     *   where: {
+     *     // ... filter to delete one ClientProfile
+     *   }
+     * })
+     *
+     */
+    delete<T extends ClientProfileDeleteArgs>(
+      args: SelectSubset<T, ClientProfileDeleteArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<Prisma.$ClientProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one ClientProfile.
+     * @param {ClientProfileUpdateArgs} args - Arguments to update one ClientProfile.
+     * @example
+     * // Update one ClientProfile
+     * const clientProfile = await prisma.clientProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ClientProfileUpdateArgs>(
+      args: SelectSubset<T, ClientProfileUpdateArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<Prisma.$ClientProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more ClientProfiles.
+     * @param {ClientProfileDeleteManyArgs} args - Arguments to filter ClientProfiles to delete.
+     * @example
+     * // Delete a few ClientProfiles
+     * const { count } = await prisma.clientProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ClientProfileDeleteManyArgs>(
+      args?: SelectSubset<T, ClientProfileDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more ClientProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClientProfiles
+     * const clientProfile = await prisma.clientProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ClientProfileUpdateManyArgs>(
+      args: SelectSubset<T, ClientProfileUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more ClientProfiles and returns the data updated in the database.
+     * @param {ClientProfileUpdateManyAndReturnArgs} args - Arguments to update many ClientProfiles.
+     * @example
+     * // Update many ClientProfiles
+     * const clientProfile = await prisma.clientProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ClientProfiles and only return the `id`
+     * const clientProfileWithIdOnly = await prisma.clientProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ClientProfileUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, ClientProfileUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one ClientProfile.
+     * @param {ClientProfileUpsertArgs} args - Arguments to update or create a ClientProfile.
+     * @example
+     * // Update or create a ClientProfile
+     * const clientProfile = await prisma.clientProfile.upsert({
+     *   create: {
+     *     // ... data to create a ClientProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClientProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClientProfileUpsertArgs>(
+      args: SelectSubset<T, ClientProfileUpsertArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<Prisma.$ClientProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of ClientProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileCountArgs} args - Arguments to filter ClientProfiles to count.
+     * @example
+     * // Count the number of ClientProfiles
+     * const count = await prisma.clientProfile.count({
+     *   where: {
+     *     // ... the filter for the ClientProfiles we want to count
+     *   }
+     * })
+     **/
+    count<T extends ClientProfileCountArgs>(
+      args?: Subset<T, ClientProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], ClientProfileCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a ClientProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ClientProfileAggregateArgs>(
+      args: Subset<T, ClientProfileAggregateArgs>,
+    ): Prisma.PrismaPromise<GetClientProfileAggregateType<T>>;
+
+    /**
+     * Group by ClientProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ClientProfileGroupByArgs,
+      HasSelectOrTake extends Or<Extends<"skip", Keys<T>>, Extends<"take", Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: ClientProfileGroupByArgs["orderBy"] }
+        : { orderBy?: ClientProfileGroupByArgs["orderBy"] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T["orderBy"]>>>,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T["by"] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, "Field ", P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, ClientProfileGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetClientProfileGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the ClientProfile model
+     */
+    readonly fields: ClientProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClientProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClientProfileClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the ClientProfile model
+   */
+  interface ClientProfileFieldRefs {
+    readonly id: FieldRef<"ClientProfile", "String">;
+    readonly userId: FieldRef<"ClientProfile", "String">;
+    readonly firstName: FieldRef<"ClientProfile", "String">;
+    readonly lastName: FieldRef<"ClientProfile", "String">;
+    readonly phone: FieldRef<"ClientProfile", "String">;
+    readonly preferredCurrency: FieldRef<"ClientProfile", "Currency">;
+    readonly createdAt: FieldRef<"ClientProfile", "DateTime">;
+    readonly updatedAt: FieldRef<"ClientProfile", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * ClientProfile findUnique
+   */
+  export type ClientProfileFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * Filter, which ClientProfile to fetch.
+     */
+    where: ClientProfileWhereUniqueInput;
+  };
+
+  /**
+   * ClientProfile findUniqueOrThrow
+   */
+  export type ClientProfileFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * Filter, which ClientProfile to fetch.
+     */
+    where: ClientProfileWhereUniqueInput;
+  };
+
+  /**
+   * ClientProfile findFirst
+   */
+  export type ClientProfileFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * Filter, which ClientProfile to fetch.
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ClientProfiles to fetch.
+     */
+    orderBy?: ClientProfileOrderByWithRelationInput | ClientProfileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ClientProfiles.
+     */
+    cursor?: ClientProfileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ClientProfiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ClientProfiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ClientProfiles.
+     */
+    distinct?: ClientProfileScalarFieldEnum | ClientProfileScalarFieldEnum[];
+  };
+
+  /**
+   * ClientProfile findFirstOrThrow
+   */
+  export type ClientProfileFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * Filter, which ClientProfile to fetch.
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ClientProfiles to fetch.
+     */
+    orderBy?: ClientProfileOrderByWithRelationInput | ClientProfileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ClientProfiles.
+     */
+    cursor?: ClientProfileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ClientProfiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ClientProfiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ClientProfiles.
+     */
+    distinct?: ClientProfileScalarFieldEnum | ClientProfileScalarFieldEnum[];
+  };
+
+  /**
+   * ClientProfile findMany
+   */
+  export type ClientProfileFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * Filter, which ClientProfiles to fetch.
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ClientProfiles to fetch.
+     */
+    orderBy?: ClientProfileOrderByWithRelationInput | ClientProfileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ClientProfiles.
+     */
+    cursor?: ClientProfileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ClientProfiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ClientProfiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ClientProfiles.
+     */
+    distinct?: ClientProfileScalarFieldEnum | ClientProfileScalarFieldEnum[];
+  };
+
+  /**
+   * ClientProfile create
+   */
+  export type ClientProfileCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a ClientProfile.
+     */
+    data: XOR<ClientProfileCreateInput, ClientProfileUncheckedCreateInput>;
+  };
+
+  /**
+   * ClientProfile createMany
+   */
+  export type ClientProfileCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ClientProfiles.
+     */
+    data: ClientProfileCreateManyInput | ClientProfileCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * ClientProfile createManyAndReturn
+   */
+  export type ClientProfileCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * The data used to create many ClientProfiles.
+     */
+    data: ClientProfileCreateManyInput | ClientProfileCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * ClientProfile update
+   */
+  export type ClientProfileUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a ClientProfile.
+     */
+    data: XOR<ClientProfileUpdateInput, ClientProfileUncheckedUpdateInput>;
+    /**
+     * Choose, which ClientProfile to update.
+     */
+    where: ClientProfileWhereUniqueInput;
+  };
+
+  /**
+   * ClientProfile updateMany
+   */
+  export type ClientProfileUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ClientProfiles.
+     */
+    data: XOR<ClientProfileUpdateManyMutationInput, ClientProfileUncheckedUpdateManyInput>;
+    /**
+     * Filter which ClientProfiles to update
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * Limit how many ClientProfiles to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * ClientProfile updateManyAndReturn
+   */
+  export type ClientProfileUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * The data used to update ClientProfiles.
+     */
+    data: XOR<ClientProfileUpdateManyMutationInput, ClientProfileUncheckedUpdateManyInput>;
+    /**
+     * Filter which ClientProfiles to update
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * Limit how many ClientProfiles to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * ClientProfile upsert
+   */
+  export type ClientProfileUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the ClientProfile to update in case it exists.
+     */
+    where: ClientProfileWhereUniqueInput;
+    /**
+     * In case the ClientProfile found by the `where` argument doesn't exist, create a new ClientProfile with this data.
+     */
+    create: XOR<ClientProfileCreateInput, ClientProfileUncheckedCreateInput>;
+    /**
+     * In case the ClientProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClientProfileUpdateInput, ClientProfileUncheckedUpdateInput>;
+  };
+
+  /**
+   * ClientProfile delete
+   */
+  export type ClientProfileDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    /**
+     * Filter which ClientProfile to delete.
+     */
+    where: ClientProfileWhereUniqueInput;
+  };
+
+  /**
+   * ClientProfile deleteMany
+   */
+  export type ClientProfileDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ClientProfiles to delete
+     */
+    where?: ClientProfileWhereInput;
+    /**
+     * Limit how many ClientProfiles to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * ClientProfile without action
+   */
+  export type ClientProfileDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
   };
 
   /**
@@ -7103,6 +8483,7 @@ export namespace Prisma {
         createdAt?: boolean;
         updatedAt?: boolean;
         bookings?: boolean | User$bookingsArgs<ExtArgs>;
+        clientProfile?: boolean | User$clientProfileArgs<ExtArgs>;
         favorites?: boolean | User$favoritesArgs<ExtArgs>;
         offers?: boolean | User$offersArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
@@ -7167,6 +8548,7 @@ export namespace Prisma {
     >;
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bookings?: boolean | User$bookingsArgs<ExtArgs>;
+    clientProfile?: boolean | User$clientProfileArgs<ExtArgs>;
     favorites?: boolean | User$favoritesArgs<ExtArgs>;
     offers?: boolean | User$offersArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
@@ -7182,6 +8564,7 @@ export namespace Prisma {
     name: "User";
     objects: {
       bookings: Prisma.$BookingPayload<ExtArgs>[];
+      clientProfile: Prisma.$ClientProfilePayload<ExtArgs> | null;
       favorites: Prisma.$FavoritePayload<ExtArgs>[];
       offers: Prisma.$OfferPayload<ExtArgs>[];
     };
@@ -7678,6 +9061,19 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
     >;
+    clientProfile<T extends User$clientProfileArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$clientProfileArgs<ExtArgs>>,
+    ): Prisma__ClientProfileClient<
+      $Result.GetResult<
+        Prisma.$ClientProfilePayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     favorites<T extends User$favoritesArgs<ExtArgs> = {}>(
       args?: Subset<T, User$favoritesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
@@ -8164,6 +9560,27 @@ export namespace Prisma {
   };
 
   /**
+   * User.clientProfile
+   */
+  export type User$clientProfileArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ClientProfile
+     */
+    select?: ClientProfileSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ClientProfile
+     */
+    omit?: ClientProfileOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientProfileInclude<ExtArgs> | null;
+    where?: ClientProfileWhereInput;
+  };
+
+  /**
    * User.favorites
    */
   export type User$favoritesArgs<
@@ -8262,6 +9679,20 @@ export namespace Prisma {
 
   export type BookingScalarFieldEnum =
     (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum];
+
+  export const ClientProfileScalarFieldEnum: {
+    id: "id";
+    userId: "userId";
+    firstName: "firstName";
+    lastName: "lastName";
+    phone: "phone";
+    preferredCurrency: "preferredCurrency";
+    createdAt: "createdAt";
+    updatedAt: "updatedAt";
+  };
+
+  export type ClientProfileScalarFieldEnum =
+    (typeof ClientProfileScalarFieldEnum)[keyof typeof ClientProfileScalarFieldEnum];
 
   export const DestinationScalarFieldEnum: {
     id: "id";
@@ -8411,6 +9842,19 @@ export namespace Prisma {
   >;
 
   /**
+   * Reference to a field of type 'Currency'
+   */
+  export type EnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, "Currency">;
+
+  /**
+   * Reference to a field of type 'Currency[]'
+   */
+  export type ListEnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "Currency[]"
+  >;
+
+  /**
    * Reference to a field of type 'OfferType'
    */
   export type EnumOfferTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -8424,19 +9868,6 @@ export namespace Prisma {
   export type ListEnumOfferTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
     "OfferType[]"
-  >;
-
-  /**
-   * Reference to a field of type 'Currency'
-   */
-  export type EnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, "Currency">;
-
-  /**
-   * Reference to a field of type 'Currency[]'
-   */
-  export type ListEnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    "Currency[]"
   >;
 
   /**
@@ -8573,6 +10004,83 @@ export namespace Prisma {
     status?: EnumBookingStatusWithAggregatesFilter<"Booking"> | $Enums.BookingStatus;
     createdAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string;
+  };
+
+  export type ClientProfileWhereInput = {
+    AND?: ClientProfileWhereInput | ClientProfileWhereInput[];
+    OR?: ClientProfileWhereInput[];
+    NOT?: ClientProfileWhereInput | ClientProfileWhereInput[];
+    id?: StringFilter<"ClientProfile"> | string;
+    userId?: StringFilter<"ClientProfile"> | string;
+    firstName?: StringNullableFilter<"ClientProfile"> | string | null;
+    lastName?: StringNullableFilter<"ClientProfile"> | string | null;
+    phone?: StringNullableFilter<"ClientProfile"> | string | null;
+    preferredCurrency?: EnumCurrencyFilter<"ClientProfile"> | $Enums.Currency;
+    createdAt?: DateTimeFilter<"ClientProfile"> | Date | string;
+    updatedAt?: DateTimeFilter<"ClientProfile"> | Date | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type ClientProfileOrderByWithRelationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    firstName?: SortOrderInput | SortOrder;
+    lastName?: SortOrderInput | SortOrder;
+    phone?: SortOrderInput | SortOrder;
+    preferredCurrency?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type ClientProfileWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      userId?: string;
+      AND?: ClientProfileWhereInput | ClientProfileWhereInput[];
+      OR?: ClientProfileWhereInput[];
+      NOT?: ClientProfileWhereInput | ClientProfileWhereInput[];
+      firstName?: StringNullableFilter<"ClientProfile"> | string | null;
+      lastName?: StringNullableFilter<"ClientProfile"> | string | null;
+      phone?: StringNullableFilter<"ClientProfile"> | string | null;
+      preferredCurrency?: EnumCurrencyFilter<"ClientProfile"> | $Enums.Currency;
+      createdAt?: DateTimeFilter<"ClientProfile"> | Date | string;
+      updatedAt?: DateTimeFilter<"ClientProfile"> | Date | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    "id" | "userId"
+  >;
+
+  export type ClientProfileOrderByWithAggregationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    firstName?: SortOrderInput | SortOrder;
+    lastName?: SortOrderInput | SortOrder;
+    phone?: SortOrderInput | SortOrder;
+    preferredCurrency?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: ClientProfileCountOrderByAggregateInput;
+    _max?: ClientProfileMaxOrderByAggregateInput;
+    _min?: ClientProfileMinOrderByAggregateInput;
+  };
+
+  export type ClientProfileScalarWhereWithAggregatesInput = {
+    AND?:
+      | ClientProfileScalarWhereWithAggregatesInput
+      | ClientProfileScalarWhereWithAggregatesInput[];
+    OR?: ClientProfileScalarWhereWithAggregatesInput[];
+    NOT?:
+      | ClientProfileScalarWhereWithAggregatesInput
+      | ClientProfileScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<"ClientProfile"> | string;
+    userId?: StringWithAggregatesFilter<"ClientProfile"> | string;
+    firstName?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null;
+    lastName?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null;
+    phone?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null;
+    preferredCurrency?: EnumCurrencyWithAggregatesFilter<"ClientProfile"> | $Enums.Currency;
+    createdAt?: DateTimeWithAggregatesFilter<"ClientProfile"> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<"ClientProfile"> | Date | string;
   };
 
   export type DestinationWhereInput = {
@@ -8862,6 +10370,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string;
     updatedAt?: DateTimeFilter<"User"> | Date | string;
     bookings?: BookingListRelationFilter;
+    clientProfile?: XOR<ClientProfileNullableScalarRelationFilter, ClientProfileWhereInput> | null;
     favorites?: FavoriteListRelationFilter;
     offers?: OfferListRelationFilter;
   };
@@ -8876,6 +10385,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     bookings?: BookingOrderByRelationAggregateInput;
+    clientProfile?: ClientProfileOrderByWithRelationInput;
     favorites?: FavoriteOrderByRelationAggregateInput;
     offers?: OfferOrderByRelationAggregateInput;
   };
@@ -8894,6 +10404,10 @@ export namespace Prisma {
       createdAt?: DateTimeFilter<"User"> | Date | string;
       updatedAt?: DateTimeFilter<"User"> | Date | string;
       bookings?: BookingListRelationFilter;
+      clientProfile?: XOR<
+        ClientProfileNullableScalarRelationFilter,
+        ClientProfileWhereInput
+      > | null;
       favorites?: FavoriteListRelationFilter;
       offers?: OfferListRelationFilter;
     },
@@ -9013,6 +10527,82 @@ export namespace Prisma {
     guestsCount?: IntFieldUpdateOperationsInput | number;
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ClientProfileCreateInput = {
+    id?: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    phone?: string | null;
+    preferredCurrency?: $Enums.Currency;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutClientProfileInput;
+  };
+
+  export type ClientProfileUncheckedCreateInput = {
+    id?: string;
+    userId: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    phone?: string | null;
+    preferredCurrency?: $Enums.Currency;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ClientProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    preferredCurrency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutClientProfileNestedInput;
+  };
+
+  export type ClientProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    preferredCurrency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ClientProfileCreateManyInput = {
+    id?: string;
+    userId: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    phone?: string | null;
+    preferredCurrency?: $Enums.Currency;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ClientProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    preferredCurrency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ClientProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    preferredCurrency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -9322,6 +10912,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
   };
@@ -9336,6 +10927,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
   };
@@ -9350,6 +10942,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
   };
@@ -9364,6 +10957,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
@@ -9619,15 +11213,83 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null;
   };
 
-  export type OfferListRelationFilter = {
-    every?: OfferWhereInput;
-    some?: OfferWhereInput;
-    none?: OfferWhereInput;
+  export type EnumCurrencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
+    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency;
   };
 
   export type SortOrderInput = {
     sort: SortOrder;
     nulls?: NullsOrder;
+  };
+
+  export type ClientProfileCountOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    firstName?: SortOrder;
+    lastName?: SortOrder;
+    phone?: SortOrder;
+    preferredCurrency?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type ClientProfileMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    firstName?: SortOrder;
+    lastName?: SortOrder;
+    phone?: SortOrder;
+    preferredCurrency?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type ClientProfileMinOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    firstName?: SortOrder;
+    lastName?: SortOrder;
+    phone?: SortOrder;
+    preferredCurrency?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null;
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
+    lt?: string | StringFieldRefInput<$PrismaModel>;
+    lte?: string | StringFieldRefInput<$PrismaModel>;
+    gt?: string | StringFieldRefInput<$PrismaModel>;
+    gte?: string | StringFieldRefInput<$PrismaModel>;
+    contains?: string | StringFieldRefInput<$PrismaModel>;
+    startsWith?: string | StringFieldRefInput<$PrismaModel>;
+    endsWith?: string | StringFieldRefInput<$PrismaModel>;
+    mode?: QueryMode;
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedStringNullableFilter<$PrismaModel>;
+    _max?: NestedStringNullableFilter<$PrismaModel>;
+  };
+
+  export type EnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
+    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    not?: NestedEnumCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.Currency;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumCurrencyFilter<$PrismaModel>;
+    _max?: NestedEnumCurrencyFilter<$PrismaModel>;
+  };
+
+  export type OfferListRelationFilter = {
+    every?: OfferWhereInput;
+    some?: OfferWhereInput;
+    none?: OfferWhereInput;
   };
 
   export type OfferOrderByRelationAggregateInput = {
@@ -9661,24 +11323,6 @@ export namespace Prisma {
     updatedAt?: SortOrder;
   };
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null;
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
-    lt?: string | StringFieldRefInput<$PrismaModel>;
-    lte?: string | StringFieldRefInput<$PrismaModel>;
-    gt?: string | StringFieldRefInput<$PrismaModel>;
-    gte?: string | StringFieldRefInput<$PrismaModel>;
-    contains?: string | StringFieldRefInput<$PrismaModel>;
-    startsWith?: string | StringFieldRefInput<$PrismaModel>;
-    endsWith?: string | StringFieldRefInput<$PrismaModel>;
-    mode?: QueryMode;
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _min?: NestedStringNullableFilter<$PrismaModel>;
-    _max?: NestedStringNullableFilter<$PrismaModel>;
-  };
-
   export type FavoriteUserIdOfferIdCompoundUniqueInput = {
     userId: string;
     offerId: string;
@@ -9710,13 +11354,6 @@ export namespace Prisma {
     in?: $Enums.OfferType[] | ListEnumOfferTypeFieldRefInput<$PrismaModel>;
     notIn?: $Enums.OfferType[] | ListEnumOfferTypeFieldRefInput<$PrismaModel>;
     not?: NestedEnumOfferTypeFilter<$PrismaModel> | $Enums.OfferType;
-  };
-
-  export type EnumCurrencyFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency;
   };
 
   export type EnumOfferStatusFilter<$PrismaModel = never> = {
@@ -9879,16 +11516,6 @@ export namespace Prisma {
     _max?: NestedEnumOfferTypeFilter<$PrismaModel>;
   };
 
-  export type EnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    not?: NestedEnumCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.Currency;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedEnumCurrencyFilter<$PrismaModel>;
-    _max?: NestedEnumCurrencyFilter<$PrismaModel>;
-  };
-
   export type EnumOfferStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>;
     in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>;
@@ -9947,6 +11574,11 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
     not?: NestedBoolFilter<$PrismaModel> | boolean;
+  };
+
+  export type ClientProfileNullableScalarRelationFilter = {
+    is?: ClientProfileWhereInput | null;
+    isNot?: ClientProfileWhereInput | null;
   };
 
   export type UserCountOrderByAggregateInput = {
@@ -10062,6 +11694,31 @@ export namespace Prisma {
     >;
   };
 
+  export type UserCreateNestedOneWithoutClientProfileInput = {
+    create?: XOR<UserCreateWithoutClientProfileInput, UserUncheckedCreateWithoutClientProfileInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutClientProfileInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null;
+  };
+
+  export type EnumCurrencyFieldUpdateOperationsInput = {
+    set?: $Enums.Currency;
+  };
+
+  export type UserUpdateOneRequiredWithoutClientProfileNestedInput = {
+    create?: XOR<UserCreateWithoutClientProfileInput, UserUncheckedCreateWithoutClientProfileInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutClientProfileInput;
+    upsert?: UserUpsertWithoutClientProfileInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutClientProfileInput, UserUpdateWithoutClientProfileInput>,
+      UserUncheckedUpdateWithoutClientProfileInput
+    >;
+  };
+
   export type OfferCreateNestedManyWithoutDestinationInput = {
     create?:
       | XOR<OfferCreateWithoutDestinationInput, OfferUncheckedCreateWithoutDestinationInput>
@@ -10084,10 +11741,6 @@ export namespace Prisma {
       | OfferCreateOrConnectWithoutDestinationInput[];
     createMany?: OfferCreateManyDestinationInputEnvelope;
     connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
-  };
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null;
   };
 
   export type OfferUpdateManyWithoutDestinationNestedInput = {
@@ -10236,10 +11889,6 @@ export namespace Prisma {
 
   export type EnumOfferTypeFieldUpdateOperationsInput = {
     set?: $Enums.OfferType;
-  };
-
-  export type EnumCurrencyFieldUpdateOperationsInput = {
-    set?: $Enums.Currency;
   };
 
   export type EnumOfferStatusFieldUpdateOperationsInput = {
@@ -10396,6 +12045,12 @@ export namespace Prisma {
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[];
   };
 
+  export type ClientProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: ClientProfileCreateOrConnectWithoutUserInput;
+    connect?: ClientProfileWhereUniqueInput;
+  };
+
   export type FavoriteCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>
@@ -10428,6 +12083,12 @@ export namespace Prisma {
       | BookingCreateOrConnectWithoutUserInput[];
     createMany?: BookingCreateManyUserInputEnvelope;
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[];
+  };
+
+  export type ClientProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: ClientProfileCreateOrConnectWithoutUserInput;
+    connect?: ClientProfileWhereUniqueInput;
   };
 
   export type FavoriteUncheckedCreateNestedManyWithoutUserInput = {
@@ -10483,6 +12144,19 @@ export namespace Prisma {
       | BookingUpdateManyWithWhereWithoutUserInput
       | BookingUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[];
+  };
+
+  export type ClientProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: ClientProfileCreateOrConnectWithoutUserInput;
+    upsert?: ClientProfileUpsertWithoutUserInput;
+    disconnect?: ClientProfileWhereInput | boolean;
+    delete?: ClientProfileWhereInput | boolean;
+    connect?: ClientProfileWhereUniqueInput;
+    update?: XOR<
+      XOR<ClientProfileUpdateToOneWithWhereWithoutUserInput, ClientProfileUpdateWithoutUserInput>,
+      ClientProfileUncheckedUpdateWithoutUserInput
+    >;
   };
 
   export type FavoriteUpdateManyWithoutUserNestedInput = {
@@ -10556,6 +12230,19 @@ export namespace Prisma {
       | BookingUpdateManyWithWhereWithoutUserInput
       | BookingUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[];
+  };
+
+  export type ClientProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: ClientProfileCreateOrConnectWithoutUserInput;
+    upsert?: ClientProfileUpsertWithoutUserInput;
+    disconnect?: ClientProfileWhereInput | boolean;
+    delete?: ClientProfileWhereInput | boolean;
+    connect?: ClientProfileWhereUniqueInput;
+    update?: XOR<
+      XOR<ClientProfileUpdateToOneWithWhereWithoutUserInput, ClientProfileUpdateWithoutUserInput>,
+      ClientProfileUncheckedUpdateWithoutUserInput
+    >;
   };
 
   export type FavoriteUncheckedUpdateManyWithoutUserNestedInput = {
@@ -10773,6 +12460,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null;
   };
 
+  export type NestedEnumCurrencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
+    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency;
+  };
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null;
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
@@ -10801,18 +12495,21 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null;
   };
 
+  export type NestedEnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
+    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
+    not?: NestedEnumCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.Currency;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumCurrencyFilter<$PrismaModel>;
+    _max?: NestedEnumCurrencyFilter<$PrismaModel>;
+  };
+
   export type NestedEnumOfferTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.OfferType | EnumOfferTypeFieldRefInput<$PrismaModel>;
     in?: $Enums.OfferType[] | ListEnumOfferTypeFieldRefInput<$PrismaModel>;
     notIn?: $Enums.OfferType[] | ListEnumOfferTypeFieldRefInput<$PrismaModel>;
     not?: NestedEnumOfferTypeFilter<$PrismaModel> | $Enums.OfferType;
-  };
-
-  export type NestedEnumCurrencyFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency;
   };
 
   export type NestedEnumOfferStatusFilter<$PrismaModel = never> = {
@@ -10846,16 +12543,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumOfferTypeFilter<$PrismaModel>;
     _max?: NestedEnumOfferTypeFilter<$PrismaModel>;
-  };
-
-  export type NestedEnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>;
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>;
-    not?: NestedEnumCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.Currency;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedEnumCurrencyFilter<$PrismaModel>;
-    _max?: NestedEnumCurrencyFilter<$PrismaModel>;
   };
 
   export type NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -11013,6 +12700,7 @@ export namespace Prisma {
     isEmailVerified?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
   };
@@ -11026,6 +12714,7 @@ export namespace Prisma {
     isEmailVerified?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
   };
@@ -11118,6 +12807,7 @@ export namespace Prisma {
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
   };
@@ -11131,6 +12821,79 @@ export namespace Prisma {
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserCreateWithoutClientProfileInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutClientProfileInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutClientProfileInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutClientProfileInput, UserUncheckedCreateWithoutClientProfileInput>;
+  };
+
+  export type UserUpsertWithoutClientProfileInput = {
+    update: XOR<UserUpdateWithoutClientProfileInput, UserUncheckedUpdateWithoutClientProfileInput>;
+    create: XOR<UserCreateWithoutClientProfileInput, UserUncheckedCreateWithoutClientProfileInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutClientProfileInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutClientProfileInput, UserUncheckedUpdateWithoutClientProfileInput>;
+  };
+
+  export type UserUpdateWithoutClientProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutClientProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
@@ -11308,6 +13071,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
   };
 
@@ -11321,6 +13085,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
   };
 
@@ -11413,6 +13178,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
   };
 
@@ -11426,6 +13192,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
 
@@ -11518,6 +13285,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
   };
 
@@ -11531,6 +13299,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
   };
 
@@ -11647,6 +13416,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
   };
 
@@ -11660,6 +13430,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
   };
 
@@ -11695,6 +13466,31 @@ export namespace Prisma {
   export type BookingCreateManyUserInputEnvelope = {
     data: BookingCreateManyUserInput | BookingCreateManyUserInput[];
     skipDuplicates?: boolean;
+  };
+
+  export type ClientProfileCreateWithoutUserInput = {
+    id?: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    phone?: string | null;
+    preferredCurrency?: $Enums.Currency;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ClientProfileUncheckedCreateWithoutUserInput = {
+    id?: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    phone?: string | null;
+    preferredCurrency?: $Enums.Currency;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ClientProfileCreateOrConnectWithoutUserInput = {
+    where: ClientProfileWhereUniqueInput;
+    create: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
   };
 
   export type FavoriteCreateWithoutUserInput = {
@@ -11795,6 +13591,37 @@ export namespace Prisma {
   export type BookingUpdateManyWithWhereWithoutUserInput = {
     where: BookingScalarWhereInput;
     data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type ClientProfileUpsertWithoutUserInput = {
+    update: XOR<ClientProfileUpdateWithoutUserInput, ClientProfileUncheckedUpdateWithoutUserInput>;
+    create: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
+    where?: ClientProfileWhereInput;
+  };
+
+  export type ClientProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: ClientProfileWhereInput;
+    data: XOR<ClientProfileUpdateWithoutUserInput, ClientProfileUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type ClientProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    preferredCurrency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ClientProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    preferredCurrency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type FavoriteUpsertWithWhereUniqueWithoutUserInput = {

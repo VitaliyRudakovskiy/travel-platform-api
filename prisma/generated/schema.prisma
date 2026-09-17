@@ -34,6 +34,20 @@ enum BookingStatus {
   cancelled
 }
 
+model ClientProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique @map("user_id")
+  firstName         String?  @map("first_name") @db.VarChar(50)
+  lastName          String?  @map("last_name") @db.VarChar(50)
+  phone             String?  @db.VarChar(30)
+  preferredCurrency Currency @default(BYN) @map("preferred_currency")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("client_profiles")
+}
+
 model Destination {
   id          String   @id @default(uuid())
   name        String   @db.VarChar(50)
@@ -123,15 +137,16 @@ enum UserRole {
 }
 
 model User {
-  id              String     @id @default(uuid())
-  username        String     @db.VarChar(50)
-  email           String     @unique @db.VarChar(70)
+  id              String         @id @default(uuid())
+  username        String         @db.VarChar(50)
+  email           String         @unique @db.VarChar(70)
   passwordHash    String
-  role            UserRole   @default(User)
-  isEmailVerified Boolean    @default(false)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  role            UserRole       @default(User)
+  isEmailVerified Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   bookings        Booking[]
+  clientProfile   ClientProfile?
   favorites       Favorite[]
   offers          Offer[]
 
