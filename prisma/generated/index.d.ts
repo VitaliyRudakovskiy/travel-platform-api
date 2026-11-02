@@ -27,15 +27,35 @@ export type ClientProfile = $Result.DefaultSelection<Prisma.$ClientProfilePayloa
  */
 export type Destination = $Result.DefaultSelection<Prisma.$DestinationPayload>;
 /**
+ * Model EmailVerification
+ *
+ */
+export type EmailVerification = $Result.DefaultSelection<Prisma.$EmailVerificationPayload>;
+/**
  * Model Favorite
  *
  */
 export type Favorite = $Result.DefaultSelection<Prisma.$FavoritePayload>;
 /**
+ * Model IdempotencyKey
+ *
+ */
+export type IdempotencyKey = $Result.DefaultSelection<Prisma.$IdempotencyKeyPayload>;
+/**
+ * Model Notification
+ *
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>;
+/**
  * Model Offer
  *
  */
 export type Offer = $Result.DefaultSelection<Prisma.$OfferPayload>;
+/**
+ * Model UserSession
+ *
+ */
+export type UserSession = $Result.DefaultSelection<Prisma.$UserSessionPayload>;
 /**
  * Model User
  *
@@ -47,12 +67,37 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>;
  */
 export namespace $Enums {
   export const BookingStatus: {
-    draft: "draft";
+    pending: "pending";
     confirmed: "confirmed";
+    completed: "completed";
     cancelled: "cancelled";
   };
 
   export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus];
+
+  export const NotificationType: {
+    booking_confirmed: "booking_confirmed";
+    booking_cancelled: "booking_cancelled";
+    booking_completed: "booking_completed";
+    email_verification: "email_verification";
+  };
+
+  export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
+  export const NotificationChannel: {
+    email: "email";
+    in_app: "in_app";
+  };
+
+  export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel];
+
+  export const NotificationStatus: {
+    pending: "pending";
+    sent: "sent";
+    failed: "failed";
+  };
+
+  export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus];
 
   export const OfferType: {
     hotel: "hotel";
@@ -89,6 +134,18 @@ export namespace $Enums {
 export type BookingStatus = $Enums.BookingStatus;
 
 export const BookingStatus: typeof $Enums.BookingStatus;
+
+export type NotificationType = $Enums.NotificationType;
+
+export const NotificationType: typeof $Enums.NotificationType;
+
+export type NotificationChannel = $Enums.NotificationChannel;
+
+export const NotificationChannel: typeof $Enums.NotificationChannel;
+
+export type NotificationStatus = $Enums.NotificationStatus;
+
+export const NotificationStatus: typeof $Enums.NotificationStatus;
 
 export type OfferType = $Enums.OfferType;
 
@@ -292,6 +349,16 @@ export class PrismaClient<
   get destination(): Prisma.DestinationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.emailVerification`: Exposes CRUD operations for the **EmailVerification** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more EmailVerifications
+   * const emailVerifications = await prisma.emailVerification.findMany()
+   * ```
+   */
+  get emailVerification(): Prisma.EmailVerificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.favorite`: Exposes CRUD operations for the **Favorite** model.
    * Example usage:
    * ```ts
@@ -302,6 +369,26 @@ export class PrismaClient<
   get favorite(): Prisma.FavoriteDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.idempotencyKey`: Exposes CRUD operations for the **IdempotencyKey** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more IdempotencyKeys
+   * const idempotencyKeys = await prisma.idempotencyKey.findMany()
+   * ```
+   */
+  get idempotencyKey(): Prisma.IdempotencyKeyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more Notifications
+   * const notifications = await prisma.notification.findMany()
+   * ```
+   */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.offer`: Exposes CRUD operations for the **Offer** model.
    * Example usage:
    * ```ts
@@ -310,6 +397,16 @@ export class PrismaClient<
    * ```
    */
   get offer(): Prisma.OfferDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userSession`: Exposes CRUD operations for the **UserSession** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more UserSessions
+   * const userSessions = await prisma.userSession.findMany()
+   * ```
+   */
+  get userSession(): Prisma.UserSessionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -767,8 +864,12 @@ export namespace Prisma {
     Booking: "Booking";
     ClientProfile: "ClientProfile";
     Destination: "Destination";
+    EmailVerification: "EmailVerification";
     Favorite: "Favorite";
+    IdempotencyKey: "IdempotencyKey";
+    Notification: "Notification";
     Offer: "Offer";
+    UserSession: "UserSession";
     User: "User";
   };
 
@@ -792,7 +893,17 @@ export namespace Prisma {
       omit: GlobalOmitOptions;
     };
     meta: {
-      modelProps: "booking" | "clientProfile" | "destination" | "favorite" | "offer" | "user";
+      modelProps:
+        | "booking"
+        | "clientProfile"
+        | "destination"
+        | "emailVerification"
+        | "favorite"
+        | "idempotencyKey"
+        | "notification"
+        | "offer"
+        | "userSession"
+        | "user";
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -1018,6 +1129,80 @@ export namespace Prisma {
           };
         };
       };
+      EmailVerification: {
+        payload: Prisma.$EmailVerificationPayload<ExtArgs>;
+        fields: Prisma.EmailVerificationFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.EmailVerificationFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.EmailVerificationFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+          };
+          findFirst: {
+            args: Prisma.EmailVerificationFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.EmailVerificationFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+          };
+          findMany: {
+            args: Prisma.EmailVerificationFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>[];
+          };
+          create: {
+            args: Prisma.EmailVerificationCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+          };
+          createMany: {
+            args: Prisma.EmailVerificationCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.EmailVerificationCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>[];
+          };
+          delete: {
+            args: Prisma.EmailVerificationDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+          };
+          update: {
+            args: Prisma.EmailVerificationUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+          };
+          deleteMany: {
+            args: Prisma.EmailVerificationDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.EmailVerificationUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.EmailVerificationUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>[];
+          };
+          upsert: {
+            args: Prisma.EmailVerificationUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EmailVerificationPayload>;
+          };
+          aggregate: {
+            args: Prisma.EmailVerificationAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateEmailVerification>;
+          };
+          groupBy: {
+            args: Prisma.EmailVerificationGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<EmailVerificationGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.EmailVerificationCountArgs<ExtArgs>;
+            result: $Utils.Optional<EmailVerificationCountAggregateOutputType> | number;
+          };
+        };
+      };
       Favorite: {
         payload: Prisma.$FavoritePayload<ExtArgs>;
         fields: Prisma.FavoriteFieldRefs;
@@ -1092,6 +1277,154 @@ export namespace Prisma {
           };
         };
       };
+      IdempotencyKey: {
+        payload: Prisma.$IdempotencyKeyPayload<ExtArgs>;
+        fields: Prisma.IdempotencyKeyFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.IdempotencyKeyFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.IdempotencyKeyFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>;
+          };
+          findFirst: {
+            args: Prisma.IdempotencyKeyFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.IdempotencyKeyFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>;
+          };
+          findMany: {
+            args: Prisma.IdempotencyKeyFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>[];
+          };
+          create: {
+            args: Prisma.IdempotencyKeyCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>;
+          };
+          createMany: {
+            args: Prisma.IdempotencyKeyCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.IdempotencyKeyCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>[];
+          };
+          delete: {
+            args: Prisma.IdempotencyKeyDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>;
+          };
+          update: {
+            args: Prisma.IdempotencyKeyUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>;
+          };
+          deleteMany: {
+            args: Prisma.IdempotencyKeyDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.IdempotencyKeyUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.IdempotencyKeyUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>[];
+          };
+          upsert: {
+            args: Prisma.IdempotencyKeyUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$IdempotencyKeyPayload>;
+          };
+          aggregate: {
+            args: Prisma.IdempotencyKeyAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateIdempotencyKey>;
+          };
+          groupBy: {
+            args: Prisma.IdempotencyKeyGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<IdempotencyKeyGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.IdempotencyKeyCountArgs<ExtArgs>;
+            result: $Utils.Optional<IdempotencyKeyCountAggregateOutputType> | number;
+          };
+        };
+      };
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>;
+        fields: Prisma.NotificationFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+          };
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+          };
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+          };
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateNotification>;
+          };
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<NotificationGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>;
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number;
+          };
+        };
+      };
       Offer: {
         payload: Prisma.$OfferPayload<ExtArgs>;
         fields: Prisma.OfferFieldRefs;
@@ -1163,6 +1496,80 @@ export namespace Prisma {
           count: {
             args: Prisma.OfferCountArgs<ExtArgs>;
             result: $Utils.Optional<OfferCountAggregateOutputType> | number;
+          };
+        };
+      };
+      UserSession: {
+        payload: Prisma.$UserSessionPayload<ExtArgs>;
+        fields: Prisma.UserSessionFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.UserSessionFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.UserSessionFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>;
+          };
+          findFirst: {
+            args: Prisma.UserSessionFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.UserSessionFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>;
+          };
+          findMany: {
+            args: Prisma.UserSessionFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>[];
+          };
+          create: {
+            args: Prisma.UserSessionCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>;
+          };
+          createMany: {
+            args: Prisma.UserSessionCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.UserSessionCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>[];
+          };
+          delete: {
+            args: Prisma.UserSessionDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>;
+          };
+          update: {
+            args: Prisma.UserSessionUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>;
+          };
+          deleteMany: {
+            args: Prisma.UserSessionDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.UserSessionUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.UserSessionUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>[];
+          };
+          upsert: {
+            args: Prisma.UserSessionUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>;
+          };
+          aggregate: {
+            args: Prisma.UserSessionAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateUserSession>;
+          };
+          groupBy: {
+            args: Prisma.UserSessionGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<UserSessionGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.UserSessionCountArgs<ExtArgs>;
+            result: $Utils.Optional<UserSessionCountAggregateOutputType> | number;
           };
         };
       };
@@ -1370,8 +1777,12 @@ export namespace Prisma {
     booking?: BookingOmit;
     clientProfile?: ClientProfileOmit;
     destination?: DestinationOmit;
+    emailVerification?: EmailVerificationOmit;
     favorite?: FavoriteOmit;
+    idempotencyKey?: IdempotencyKeyOmit;
+    notification?: NotificationOmit;
     offer?: OfferOmit;
+    userSession?: UserSessionOmit;
     user?: UserOmit;
   };
 
@@ -1442,6 +1853,42 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+  /**
+   * Count Type BookingCountOutputType
+   */
+
+  export type BookingCountOutputType = {
+    idempotencyKeys: number;
+  };
+
+  export type BookingCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    idempotencyKeys?: boolean | BookingCountOutputTypeCountIdempotencyKeysArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * BookingCountOutputType without action
+   */
+  export type BookingCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BookingCountOutputType
+     */
+    select?: BookingCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * BookingCountOutputType without action
+   */
+  export type BookingCountOutputTypeCountIdempotencyKeysArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: IdempotencyKeyWhereInput;
+  };
 
   /**
    * Count Type DestinationCountOutputType
@@ -1532,16 +1979,24 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     bookings: number;
+    emailVerifications: number;
     favorites: number;
+    idempotencyKeys: number;
+    notifications: number;
     offers: number;
+    sessions: number;
   };
 
   export type UserCountOutputTypeSelect<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     bookings?: boolean | UserCountOutputTypeCountBookingsArgs;
+    emailVerifications?: boolean | UserCountOutputTypeCountEmailVerificationsArgs;
     favorites?: boolean | UserCountOutputTypeCountFavoritesArgs;
+    idempotencyKeys?: boolean | UserCountOutputTypeCountIdempotencyKeysArgs;
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
     offers?: boolean | UserCountOutputTypeCountOffersArgs;
+    sessions?: boolean | UserCountOutputTypeCountSessionsArgs;
   };
 
   // Custom InputTypes
@@ -1569,6 +2024,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountEmailVerificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EmailVerificationWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountFavoritesArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -1578,10 +2042,37 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountIdempotencyKeysArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: IdempotencyKeyWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: NotificationWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountOffersArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: OfferWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSessionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: UserSessionWhereInput;
   };
 
   /**
@@ -1830,8 +2321,10 @@ export namespace Prisma {
         status?: boolean;
         createdAt?: boolean;
         updatedAt?: boolean;
+        idempotencyKeys?: boolean | Booking$idempotencyKeysArgs<ExtArgs>;
         offer?: boolean | OfferDefaultArgs<ExtArgs>;
         user?: boolean | UserDefaultArgs<ExtArgs>;
+        _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs["result"]["booking"]
     >;
@@ -1904,8 +2397,10 @@ export namespace Prisma {
       ExtArgs["result"]["booking"]
     >;
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    idempotencyKeys?: boolean | Booking$idempotencyKeysArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
     user?: boolean | UserDefaultArgs<ExtArgs>;
+    _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type BookingIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -1924,6 +2419,7 @@ export namespace Prisma {
     {
       name: "Booking";
       objects: {
+        idempotencyKeys: Prisma.$IdempotencyKeyPayload<ExtArgs>[];
         offer: Prisma.$OfferPayload<ExtArgs>;
         user: Prisma.$UserPayload<ExtArgs>;
       };
@@ -2425,6 +2921,12 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
+    idempotencyKeys<T extends Booking$idempotencyKeysArgs<ExtArgs> = {}>(
+      args?: Subset<T, Booking$idempotencyKeysArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+      | Null
+    >;
     offer<T extends OfferDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, OfferDefaultArgs<ExtArgs>>,
     ): Prisma__OfferClient<
@@ -2909,6 +3411,32 @@ export namespace Prisma {
      * Limit how many Bookings to delete.
      */
     limit?: number;
+  };
+
+  /**
+   * Booking.idempotencyKeys
+   */
+  export type Booking$idempotencyKeysArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    where?: IdempotencyKeyWhereInput;
+    orderBy?: IdempotencyKeyOrderByWithRelationInput | IdempotencyKeyOrderByWithRelationInput[];
+    cursor?: IdempotencyKeyWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: IdempotencyKeyScalarFieldEnum | IdempotencyKeyScalarFieldEnum[];
   };
 
   /**
@@ -5484,6 +6012,1262 @@ export namespace Prisma {
   };
 
   /**
+   * Model EmailVerification
+   */
+
+  export type AggregateEmailVerification = {
+    _count: EmailVerificationCountAggregateOutputType | null;
+    _min: EmailVerificationMinAggregateOutputType | null;
+    _max: EmailVerificationMaxAggregateOutputType | null;
+  };
+
+  export type EmailVerificationMinAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    tokenHash: string | null;
+    expiresAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type EmailVerificationMaxAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    tokenHash: string | null;
+    expiresAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type EmailVerificationCountAggregateOutputType = {
+    id: number;
+    userId: number;
+    tokenHash: number;
+    expiresAt: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type EmailVerificationMinAggregateInputType = {
+    id?: true;
+    userId?: true;
+    tokenHash?: true;
+    expiresAt?: true;
+    createdAt?: true;
+  };
+
+  export type EmailVerificationMaxAggregateInputType = {
+    id?: true;
+    userId?: true;
+    tokenHash?: true;
+    expiresAt?: true;
+    createdAt?: true;
+  };
+
+  export type EmailVerificationCountAggregateInputType = {
+    id?: true;
+    userId?: true;
+    tokenHash?: true;
+    expiresAt?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type EmailVerificationAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EmailVerification to aggregate.
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EmailVerifications to fetch.
+     */
+    orderBy?:
+      | EmailVerificationOrderByWithRelationInput
+      | EmailVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: EmailVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EmailVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EmailVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned EmailVerifications
+     **/
+    _count?: true | EmailVerificationCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: EmailVerificationMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: EmailVerificationMaxAggregateInputType;
+  };
+
+  export type GetEmailVerificationAggregateType<T extends EmailVerificationAggregateArgs> = {
+    [P in keyof T & keyof AggregateEmailVerification]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmailVerification[P]>
+      : GetScalarType<T[P], AggregateEmailVerification[P]>;
+  };
+
+  export type EmailVerificationGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EmailVerificationWhereInput;
+    orderBy?:
+      | EmailVerificationOrderByWithAggregationInput
+      | EmailVerificationOrderByWithAggregationInput[];
+    by: EmailVerificationScalarFieldEnum[] | EmailVerificationScalarFieldEnum;
+    having?: EmailVerificationScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: EmailVerificationCountAggregateInputType | true;
+    _min?: EmailVerificationMinAggregateInputType;
+    _max?: EmailVerificationMaxAggregateInputType;
+  };
+
+  export type EmailVerificationGroupByOutputType = {
+    id: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date;
+    createdAt: Date;
+    _count: EmailVerificationCountAggregateOutputType | null;
+    _min: EmailVerificationMinAggregateOutputType | null;
+    _max: EmailVerificationMaxAggregateOutputType | null;
+  };
+
+  type GetEmailVerificationGroupByPayload<T extends EmailVerificationGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<EmailVerificationGroupByOutputType, T["by"]> & {
+          [P in keyof T & keyof EmailVerificationGroupByOutputType]: P extends "_count"
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailVerificationGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailVerificationGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type EmailVerificationSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      tokenHash?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["emailVerification"]
+  >;
+
+  export type EmailVerificationSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      tokenHash?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["emailVerification"]
+  >;
+
+  export type EmailVerificationSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      tokenHash?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["emailVerification"]
+  >;
+
+  export type EmailVerificationSelectScalar = {
+    id?: boolean;
+    userId?: boolean;
+    tokenHash?: boolean;
+    expiresAt?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type EmailVerificationOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "userId" | "tokenHash" | "expiresAt" | "createdAt",
+    ExtArgs["result"]["emailVerification"]
+  >;
+  export type EmailVerificationInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type EmailVerificationIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type EmailVerificationIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $EmailVerificationPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "EmailVerification";
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        userId: string;
+        tokenHash: string;
+        expiresAt: Date;
+        createdAt: Date;
+      },
+      ExtArgs["result"]["emailVerification"]
+    >;
+    composites: {};
+  };
+
+  type EmailVerificationGetPayload<
+    S extends boolean | null | undefined | EmailVerificationDefaultArgs,
+  > = $Result.GetResult<Prisma.$EmailVerificationPayload, S>;
+
+  type EmailVerificationCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<EmailVerificationFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+    select?: EmailVerificationCountAggregateInputType | true;
+  };
+
+  export interface EmailVerificationDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["EmailVerification"];
+      meta: { name: "EmailVerification" };
+    };
+    /**
+     * Find zero or one EmailVerification that matches the filter.
+     * @param {EmailVerificationFindUniqueArgs} args - Arguments to find a EmailVerification
+     * @example
+     * // Get one EmailVerification
+     * const emailVerification = await prisma.emailVerification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailVerificationFindUniqueArgs>(
+      args: SelectSubset<T, EmailVerificationFindUniqueArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<
+        Prisma.$EmailVerificationPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one EmailVerification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailVerificationFindUniqueOrThrowArgs} args - Arguments to find a EmailVerification
+     * @example
+     * // Get one EmailVerification
+     * const emailVerification = await prisma.emailVerification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailVerificationFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, EmailVerificationFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<
+        Prisma.$EmailVerificationPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first EmailVerification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationFindFirstArgs} args - Arguments to find a EmailVerification
+     * @example
+     * // Get one EmailVerification
+     * const emailVerification = await prisma.emailVerification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailVerificationFindFirstArgs>(
+      args?: SelectSubset<T, EmailVerificationFindFirstArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<
+        Prisma.$EmailVerificationPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first EmailVerification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationFindFirstOrThrowArgs} args - Arguments to find a EmailVerification
+     * @example
+     * // Get one EmailVerification
+     * const emailVerification = await prisma.emailVerification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailVerificationFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, EmailVerificationFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<
+        Prisma.$EmailVerificationPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more EmailVerifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmailVerifications
+     * const emailVerifications = await prisma.emailVerification.findMany()
+     *
+     * // Get first 10 EmailVerifications
+     * const emailVerifications = await prisma.emailVerification.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const emailVerificationWithIdOnly = await prisma.emailVerification.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends EmailVerificationFindManyArgs>(
+      args?: SelectSubset<T, EmailVerificationFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+    >;
+
+    /**
+     * Create a EmailVerification.
+     * @param {EmailVerificationCreateArgs} args - Arguments to create a EmailVerification.
+     * @example
+     * // Create one EmailVerification
+     * const EmailVerification = await prisma.emailVerification.create({
+     *   data: {
+     *     // ... data to create a EmailVerification
+     *   }
+     * })
+     *
+     */
+    create<T extends EmailVerificationCreateArgs>(
+      args: SelectSubset<T, EmailVerificationCreateArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many EmailVerifications.
+     * @param {EmailVerificationCreateManyArgs} args - Arguments to create many EmailVerifications.
+     * @example
+     * // Create many EmailVerifications
+     * const emailVerification = await prisma.emailVerification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends EmailVerificationCreateManyArgs>(
+      args?: SelectSubset<T, EmailVerificationCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many EmailVerifications and returns the data saved in the database.
+     * @param {EmailVerificationCreateManyAndReturnArgs} args - Arguments to create many EmailVerifications.
+     * @example
+     * // Create many EmailVerifications
+     * const emailVerification = await prisma.emailVerification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many EmailVerifications and only return the `id`
+     * const emailVerificationWithIdOnly = await prisma.emailVerification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends EmailVerificationCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, EmailVerificationCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$EmailVerificationPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a EmailVerification.
+     * @param {EmailVerificationDeleteArgs} args - Arguments to delete one EmailVerification.
+     * @example
+     * // Delete one EmailVerification
+     * const EmailVerification = await prisma.emailVerification.delete({
+     *   where: {
+     *     // ... filter to delete one EmailVerification
+     *   }
+     * })
+     *
+     */
+    delete<T extends EmailVerificationDeleteArgs>(
+      args: SelectSubset<T, EmailVerificationDeleteArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one EmailVerification.
+     * @param {EmailVerificationUpdateArgs} args - Arguments to update one EmailVerification.
+     * @example
+     * // Update one EmailVerification
+     * const emailVerification = await prisma.emailVerification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends EmailVerificationUpdateArgs>(
+      args: SelectSubset<T, EmailVerificationUpdateArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more EmailVerifications.
+     * @param {EmailVerificationDeleteManyArgs} args - Arguments to filter EmailVerifications to delete.
+     * @example
+     * // Delete a few EmailVerifications
+     * const { count } = await prisma.emailVerification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends EmailVerificationDeleteManyArgs>(
+      args?: SelectSubset<T, EmailVerificationDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more EmailVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmailVerifications
+     * const emailVerification = await prisma.emailVerification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends EmailVerificationUpdateManyArgs>(
+      args: SelectSubset<T, EmailVerificationUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more EmailVerifications and returns the data updated in the database.
+     * @param {EmailVerificationUpdateManyAndReturnArgs} args - Arguments to update many EmailVerifications.
+     * @example
+     * // Update many EmailVerifications
+     * const emailVerification = await prisma.emailVerification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more EmailVerifications and only return the `id`
+     * const emailVerificationWithIdOnly = await prisma.emailVerification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends EmailVerificationUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, EmailVerificationUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$EmailVerificationPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one EmailVerification.
+     * @param {EmailVerificationUpsertArgs} args - Arguments to update or create a EmailVerification.
+     * @example
+     * // Update or create a EmailVerification
+     * const emailVerification = await prisma.emailVerification.upsert({
+     *   create: {
+     *     // ... data to create a EmailVerification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmailVerification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailVerificationUpsertArgs>(
+      args: SelectSubset<T, EmailVerificationUpsertArgs<ExtArgs>>,
+    ): Prisma__EmailVerificationClient<
+      $Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of EmailVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationCountArgs} args - Arguments to filter EmailVerifications to count.
+     * @example
+     * // Count the number of EmailVerifications
+     * const count = await prisma.emailVerification.count({
+     *   where: {
+     *     // ... the filter for the EmailVerifications we want to count
+     *   }
+     * })
+     **/
+    count<T extends EmailVerificationCountArgs>(
+      args?: Subset<T, EmailVerificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], EmailVerificationCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a EmailVerification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends EmailVerificationAggregateArgs>(
+      args: Subset<T, EmailVerificationAggregateArgs>,
+    ): Prisma.PrismaPromise<GetEmailVerificationAggregateType<T>>;
+
+    /**
+     * Group by EmailVerification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailVerificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends EmailVerificationGroupByArgs,
+      HasSelectOrTake extends Or<Extends<"skip", Keys<T>>, Extends<"take", Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: EmailVerificationGroupByArgs["orderBy"] }
+        : { orderBy?: EmailVerificationGroupByArgs["orderBy"] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T["orderBy"]>>>,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T["by"] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, "Field ", P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, EmailVerificationGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetEmailVerificationGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the EmailVerification model
+     */
+    readonly fields: EmailVerificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmailVerification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailVerificationClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the EmailVerification model
+   */
+  interface EmailVerificationFieldRefs {
+    readonly id: FieldRef<"EmailVerification", "String">;
+    readonly userId: FieldRef<"EmailVerification", "String">;
+    readonly tokenHash: FieldRef<"EmailVerification", "String">;
+    readonly expiresAt: FieldRef<"EmailVerification", "DateTime">;
+    readonly createdAt: FieldRef<"EmailVerification", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * EmailVerification findUnique
+   */
+  export type EmailVerificationFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which EmailVerification to fetch.
+     */
+    where: EmailVerificationWhereUniqueInput;
+  };
+
+  /**
+   * EmailVerification findUniqueOrThrow
+   */
+  export type EmailVerificationFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which EmailVerification to fetch.
+     */
+    where: EmailVerificationWhereUniqueInput;
+  };
+
+  /**
+   * EmailVerification findFirst
+   */
+  export type EmailVerificationFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which EmailVerification to fetch.
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EmailVerifications to fetch.
+     */
+    orderBy?:
+      | EmailVerificationOrderByWithRelationInput
+      | EmailVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EmailVerifications.
+     */
+    cursor?: EmailVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EmailVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EmailVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EmailVerifications.
+     */
+    distinct?: EmailVerificationScalarFieldEnum | EmailVerificationScalarFieldEnum[];
+  };
+
+  /**
+   * EmailVerification findFirstOrThrow
+   */
+  export type EmailVerificationFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which EmailVerification to fetch.
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EmailVerifications to fetch.
+     */
+    orderBy?:
+      | EmailVerificationOrderByWithRelationInput
+      | EmailVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EmailVerifications.
+     */
+    cursor?: EmailVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EmailVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EmailVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EmailVerifications.
+     */
+    distinct?: EmailVerificationScalarFieldEnum | EmailVerificationScalarFieldEnum[];
+  };
+
+  /**
+   * EmailVerification findMany
+   */
+  export type EmailVerificationFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which EmailVerifications to fetch.
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EmailVerifications to fetch.
+     */
+    orderBy?:
+      | EmailVerificationOrderByWithRelationInput
+      | EmailVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing EmailVerifications.
+     */
+    cursor?: EmailVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EmailVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EmailVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EmailVerifications.
+     */
+    distinct?: EmailVerificationScalarFieldEnum | EmailVerificationScalarFieldEnum[];
+  };
+
+  /**
+   * EmailVerification create
+   */
+  export type EmailVerificationCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a EmailVerification.
+     */
+    data: XOR<EmailVerificationCreateInput, EmailVerificationUncheckedCreateInput>;
+  };
+
+  /**
+   * EmailVerification createMany
+   */
+  export type EmailVerificationCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many EmailVerifications.
+     */
+    data: EmailVerificationCreateManyInput | EmailVerificationCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * EmailVerification createManyAndReturn
+   */
+  export type EmailVerificationCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * The data used to create many EmailVerifications.
+     */
+    data: EmailVerificationCreateManyInput | EmailVerificationCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * EmailVerification update
+   */
+  export type EmailVerificationUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a EmailVerification.
+     */
+    data: XOR<EmailVerificationUpdateInput, EmailVerificationUncheckedUpdateInput>;
+    /**
+     * Choose, which EmailVerification to update.
+     */
+    where: EmailVerificationWhereUniqueInput;
+  };
+
+  /**
+   * EmailVerification updateMany
+   */
+  export type EmailVerificationUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update EmailVerifications.
+     */
+    data: XOR<EmailVerificationUpdateManyMutationInput, EmailVerificationUncheckedUpdateManyInput>;
+    /**
+     * Filter which EmailVerifications to update
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * Limit how many EmailVerifications to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * EmailVerification updateManyAndReturn
+   */
+  export type EmailVerificationUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * The data used to update EmailVerifications.
+     */
+    data: XOR<EmailVerificationUpdateManyMutationInput, EmailVerificationUncheckedUpdateManyInput>;
+    /**
+     * Filter which EmailVerifications to update
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * Limit how many EmailVerifications to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * EmailVerification upsert
+   */
+  export type EmailVerificationUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the EmailVerification to update in case it exists.
+     */
+    where: EmailVerificationWhereUniqueInput;
+    /**
+     * In case the EmailVerification found by the `where` argument doesn't exist, create a new EmailVerification with this data.
+     */
+    create: XOR<EmailVerificationCreateInput, EmailVerificationUncheckedCreateInput>;
+    /**
+     * In case the EmailVerification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailVerificationUpdateInput, EmailVerificationUncheckedUpdateInput>;
+  };
+
+  /**
+   * EmailVerification delete
+   */
+  export type EmailVerificationDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter which EmailVerification to delete.
+     */
+    where: EmailVerificationWhereUniqueInput;
+  };
+
+  /**
+   * EmailVerification deleteMany
+   */
+  export type EmailVerificationDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EmailVerifications to delete
+     */
+    where?: EmailVerificationWhereInput;
+    /**
+     * Limit how many EmailVerifications to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * EmailVerification without action
+   */
+  export type EmailVerificationDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+  };
+
+  /**
    * Model Favorite
    */
 
@@ -6710,6 +8494,2616 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FavoriteInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model IdempotencyKey
+   */
+
+  export type AggregateIdempotencyKey = {
+    _count: IdempotencyKeyCountAggregateOutputType | null;
+    _min: IdempotencyKeyMinAggregateOutputType | null;
+    _max: IdempotencyKeyMaxAggregateOutputType | null;
+  };
+
+  export type IdempotencyKeyMinAggregateOutputType = {
+    id: string | null;
+    key: string | null;
+    requestHash: string | null;
+    userId: string | null;
+    bookingId: string | null;
+    expiresAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type IdempotencyKeyMaxAggregateOutputType = {
+    id: string | null;
+    key: string | null;
+    requestHash: string | null;
+    userId: string | null;
+    bookingId: string | null;
+    expiresAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type IdempotencyKeyCountAggregateOutputType = {
+    id: number;
+    key: number;
+    requestHash: number;
+    userId: number;
+    bookingId: number;
+    expiresAt: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type IdempotencyKeyMinAggregateInputType = {
+    id?: true;
+    key?: true;
+    requestHash?: true;
+    userId?: true;
+    bookingId?: true;
+    expiresAt?: true;
+    createdAt?: true;
+  };
+
+  export type IdempotencyKeyMaxAggregateInputType = {
+    id?: true;
+    key?: true;
+    requestHash?: true;
+    userId?: true;
+    bookingId?: true;
+    expiresAt?: true;
+    createdAt?: true;
+  };
+
+  export type IdempotencyKeyCountAggregateInputType = {
+    id?: true;
+    key?: true;
+    requestHash?: true;
+    userId?: true;
+    bookingId?: true;
+    expiresAt?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type IdempotencyKeyAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which IdempotencyKey to aggregate.
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of IdempotencyKeys to fetch.
+     */
+    orderBy?: IdempotencyKeyOrderByWithRelationInput | IdempotencyKeyOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: IdempotencyKeyWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` IdempotencyKeys from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` IdempotencyKeys.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned IdempotencyKeys
+     **/
+    _count?: true | IdempotencyKeyCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: IdempotencyKeyMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: IdempotencyKeyMaxAggregateInputType;
+  };
+
+  export type GetIdempotencyKeyAggregateType<T extends IdempotencyKeyAggregateArgs> = {
+    [P in keyof T & keyof AggregateIdempotencyKey]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIdempotencyKey[P]>
+      : GetScalarType<T[P], AggregateIdempotencyKey[P]>;
+  };
+
+  export type IdempotencyKeyGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: IdempotencyKeyWhereInput;
+    orderBy?:
+      | IdempotencyKeyOrderByWithAggregationInput
+      | IdempotencyKeyOrderByWithAggregationInput[];
+    by: IdempotencyKeyScalarFieldEnum[] | IdempotencyKeyScalarFieldEnum;
+    having?: IdempotencyKeyScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: IdempotencyKeyCountAggregateInputType | true;
+    _min?: IdempotencyKeyMinAggregateInputType;
+    _max?: IdempotencyKeyMaxAggregateInputType;
+  };
+
+  export type IdempotencyKeyGroupByOutputType = {
+    id: string;
+    key: string;
+    requestHash: string;
+    userId: string;
+    bookingId: string | null;
+    expiresAt: Date;
+    createdAt: Date;
+    _count: IdempotencyKeyCountAggregateOutputType | null;
+    _min: IdempotencyKeyMinAggregateOutputType | null;
+    _max: IdempotencyKeyMaxAggregateOutputType | null;
+  };
+
+  type GetIdempotencyKeyGroupByPayload<T extends IdempotencyKeyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IdempotencyKeyGroupByOutputType, T["by"]> & {
+        [P in keyof T & keyof IdempotencyKeyGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], IdempotencyKeyGroupByOutputType[P]>
+          : GetScalarType<T[P], IdempotencyKeyGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type IdempotencyKeySelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      key?: boolean;
+      requestHash?: boolean;
+      userId?: boolean;
+      bookingId?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      booking?: boolean | IdempotencyKey$bookingArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["idempotencyKey"]
+  >;
+
+  export type IdempotencyKeySelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      key?: boolean;
+      requestHash?: boolean;
+      userId?: boolean;
+      bookingId?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      booking?: boolean | IdempotencyKey$bookingArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["idempotencyKey"]
+  >;
+
+  export type IdempotencyKeySelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      key?: boolean;
+      requestHash?: boolean;
+      userId?: boolean;
+      bookingId?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      booking?: boolean | IdempotencyKey$bookingArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["idempotencyKey"]
+  >;
+
+  export type IdempotencyKeySelectScalar = {
+    id?: boolean;
+    key?: boolean;
+    requestHash?: boolean;
+    userId?: boolean;
+    bookingId?: boolean;
+    expiresAt?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type IdempotencyKeyOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "key" | "requestHash" | "userId" | "bookingId" | "expiresAt" | "createdAt",
+    ExtArgs["result"]["idempotencyKey"]
+  >;
+  export type IdempotencyKeyInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    booking?: boolean | IdempotencyKey$bookingArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type IdempotencyKeyIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    booking?: boolean | IdempotencyKey$bookingArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type IdempotencyKeyIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    booking?: boolean | IdempotencyKey$bookingArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $IdempotencyKeyPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "IdempotencyKey";
+    objects: {
+      booking: Prisma.$BookingPayload<ExtArgs> | null;
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        key: string;
+        requestHash: string;
+        userId: string;
+        bookingId: string | null;
+        expiresAt: Date;
+        createdAt: Date;
+      },
+      ExtArgs["result"]["idempotencyKey"]
+    >;
+    composites: {};
+  };
+
+  type IdempotencyKeyGetPayload<S extends boolean | null | undefined | IdempotencyKeyDefaultArgs> =
+    $Result.GetResult<Prisma.$IdempotencyKeyPayload, S>;
+
+  type IdempotencyKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<IdempotencyKeyFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+      select?: IdempotencyKeyCountAggregateInputType | true;
+    };
+
+  export interface IdempotencyKeyDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["IdempotencyKey"];
+      meta: { name: "IdempotencyKey" };
+    };
+    /**
+     * Find zero or one IdempotencyKey that matches the filter.
+     * @param {IdempotencyKeyFindUniqueArgs} args - Arguments to find a IdempotencyKey
+     * @example
+     * // Get one IdempotencyKey
+     * const idempotencyKey = await prisma.idempotencyKey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IdempotencyKeyFindUniqueArgs>(
+      args: SelectSubset<T, IdempotencyKeyFindUniqueArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<
+        Prisma.$IdempotencyKeyPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one IdempotencyKey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {IdempotencyKeyFindUniqueOrThrowArgs} args - Arguments to find a IdempotencyKey
+     * @example
+     * // Get one IdempotencyKey
+     * const idempotencyKey = await prisma.idempotencyKey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IdempotencyKeyFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, IdempotencyKeyFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<
+        Prisma.$IdempotencyKeyPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first IdempotencyKey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyFindFirstArgs} args - Arguments to find a IdempotencyKey
+     * @example
+     * // Get one IdempotencyKey
+     * const idempotencyKey = await prisma.idempotencyKey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IdempotencyKeyFindFirstArgs>(
+      args?: SelectSubset<T, IdempotencyKeyFindFirstArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<
+        Prisma.$IdempotencyKeyPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first IdempotencyKey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyFindFirstOrThrowArgs} args - Arguments to find a IdempotencyKey
+     * @example
+     * // Get one IdempotencyKey
+     * const idempotencyKey = await prisma.idempotencyKey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IdempotencyKeyFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, IdempotencyKeyFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<
+        Prisma.$IdempotencyKeyPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more IdempotencyKeys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IdempotencyKeys
+     * const idempotencyKeys = await prisma.idempotencyKey.findMany()
+     *
+     * // Get first 10 IdempotencyKeys
+     * const idempotencyKeys = await prisma.idempotencyKey.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const idempotencyKeyWithIdOnly = await prisma.idempotencyKey.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends IdempotencyKeyFindManyArgs>(
+      args?: SelectSubset<T, IdempotencyKeyFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+    >;
+
+    /**
+     * Create a IdempotencyKey.
+     * @param {IdempotencyKeyCreateArgs} args - Arguments to create a IdempotencyKey.
+     * @example
+     * // Create one IdempotencyKey
+     * const IdempotencyKey = await prisma.idempotencyKey.create({
+     *   data: {
+     *     // ... data to create a IdempotencyKey
+     *   }
+     * })
+     *
+     */
+    create<T extends IdempotencyKeyCreateArgs>(
+      args: SelectSubset<T, IdempotencyKeyCreateArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many IdempotencyKeys.
+     * @param {IdempotencyKeyCreateManyArgs} args - Arguments to create many IdempotencyKeys.
+     * @example
+     * // Create many IdempotencyKeys
+     * const idempotencyKey = await prisma.idempotencyKey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends IdempotencyKeyCreateManyArgs>(
+      args?: SelectSubset<T, IdempotencyKeyCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many IdempotencyKeys and returns the data saved in the database.
+     * @param {IdempotencyKeyCreateManyAndReturnArgs} args - Arguments to create many IdempotencyKeys.
+     * @example
+     * // Create many IdempotencyKeys
+     * const idempotencyKey = await prisma.idempotencyKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many IdempotencyKeys and only return the `id`
+     * const idempotencyKeyWithIdOnly = await prisma.idempotencyKey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends IdempotencyKeyCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, IdempotencyKeyCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$IdempotencyKeyPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a IdempotencyKey.
+     * @param {IdempotencyKeyDeleteArgs} args - Arguments to delete one IdempotencyKey.
+     * @example
+     * // Delete one IdempotencyKey
+     * const IdempotencyKey = await prisma.idempotencyKey.delete({
+     *   where: {
+     *     // ... filter to delete one IdempotencyKey
+     *   }
+     * })
+     *
+     */
+    delete<T extends IdempotencyKeyDeleteArgs>(
+      args: SelectSubset<T, IdempotencyKeyDeleteArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one IdempotencyKey.
+     * @param {IdempotencyKeyUpdateArgs} args - Arguments to update one IdempotencyKey.
+     * @example
+     * // Update one IdempotencyKey
+     * const idempotencyKey = await prisma.idempotencyKey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends IdempotencyKeyUpdateArgs>(
+      args: SelectSubset<T, IdempotencyKeyUpdateArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more IdempotencyKeys.
+     * @param {IdempotencyKeyDeleteManyArgs} args - Arguments to filter IdempotencyKeys to delete.
+     * @example
+     * // Delete a few IdempotencyKeys
+     * const { count } = await prisma.idempotencyKey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends IdempotencyKeyDeleteManyArgs>(
+      args?: SelectSubset<T, IdempotencyKeyDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more IdempotencyKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IdempotencyKeys
+     * const idempotencyKey = await prisma.idempotencyKey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends IdempotencyKeyUpdateManyArgs>(
+      args: SelectSubset<T, IdempotencyKeyUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more IdempotencyKeys and returns the data updated in the database.
+     * @param {IdempotencyKeyUpdateManyAndReturnArgs} args - Arguments to update many IdempotencyKeys.
+     * @example
+     * // Update many IdempotencyKeys
+     * const idempotencyKey = await prisma.idempotencyKey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more IdempotencyKeys and only return the `id`
+     * const idempotencyKeyWithIdOnly = await prisma.idempotencyKey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends IdempotencyKeyUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, IdempotencyKeyUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$IdempotencyKeyPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one IdempotencyKey.
+     * @param {IdempotencyKeyUpsertArgs} args - Arguments to update or create a IdempotencyKey.
+     * @example
+     * // Update or create a IdempotencyKey
+     * const idempotencyKey = await prisma.idempotencyKey.upsert({
+     *   create: {
+     *     // ... data to create a IdempotencyKey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IdempotencyKey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IdempotencyKeyUpsertArgs>(
+      args: SelectSubset<T, IdempotencyKeyUpsertArgs<ExtArgs>>,
+    ): Prisma__IdempotencyKeyClient<
+      $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of IdempotencyKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyCountArgs} args - Arguments to filter IdempotencyKeys to count.
+     * @example
+     * // Count the number of IdempotencyKeys
+     * const count = await prisma.idempotencyKey.count({
+     *   where: {
+     *     // ... the filter for the IdempotencyKeys we want to count
+     *   }
+     * })
+     **/
+    count<T extends IdempotencyKeyCountArgs>(
+      args?: Subset<T, IdempotencyKeyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], IdempotencyKeyCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a IdempotencyKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends IdempotencyKeyAggregateArgs>(
+      args: Subset<T, IdempotencyKeyAggregateArgs>,
+    ): Prisma.PrismaPromise<GetIdempotencyKeyAggregateType<T>>;
+
+    /**
+     * Group by IdempotencyKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IdempotencyKeyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends IdempotencyKeyGroupByArgs,
+      HasSelectOrTake extends Or<Extends<"skip", Keys<T>>, Extends<"take", Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: IdempotencyKeyGroupByArgs["orderBy"] }
+        : { orderBy?: IdempotencyKeyGroupByArgs["orderBy"] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T["orderBy"]>>>,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T["by"] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, "Field ", P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, IdempotencyKeyGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetIdempotencyKeyGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the IdempotencyKey model
+     */
+    readonly fields: IdempotencyKeyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IdempotencyKey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IdempotencyKeyClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    booking<T extends IdempotencyKey$bookingArgs<ExtArgs> = {}>(
+      args?: Subset<T, IdempotencyKey$bookingArgs<ExtArgs>>,
+    ): Prisma__BookingClient<
+      $Result.GetResult<
+        Prisma.$BookingPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the IdempotencyKey model
+   */
+  interface IdempotencyKeyFieldRefs {
+    readonly id: FieldRef<"IdempotencyKey", "String">;
+    readonly key: FieldRef<"IdempotencyKey", "String">;
+    readonly requestHash: FieldRef<"IdempotencyKey", "String">;
+    readonly userId: FieldRef<"IdempotencyKey", "String">;
+    readonly bookingId: FieldRef<"IdempotencyKey", "String">;
+    readonly expiresAt: FieldRef<"IdempotencyKey", "DateTime">;
+    readonly createdAt: FieldRef<"IdempotencyKey", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * IdempotencyKey findUnique
+   */
+  export type IdempotencyKeyFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * Filter, which IdempotencyKey to fetch.
+     */
+    where: IdempotencyKeyWhereUniqueInput;
+  };
+
+  /**
+   * IdempotencyKey findUniqueOrThrow
+   */
+  export type IdempotencyKeyFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * Filter, which IdempotencyKey to fetch.
+     */
+    where: IdempotencyKeyWhereUniqueInput;
+  };
+
+  /**
+   * IdempotencyKey findFirst
+   */
+  export type IdempotencyKeyFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * Filter, which IdempotencyKey to fetch.
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of IdempotencyKeys to fetch.
+     */
+    orderBy?: IdempotencyKeyOrderByWithRelationInput | IdempotencyKeyOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for IdempotencyKeys.
+     */
+    cursor?: IdempotencyKeyWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` IdempotencyKeys from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` IdempotencyKeys.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of IdempotencyKeys.
+     */
+    distinct?: IdempotencyKeyScalarFieldEnum | IdempotencyKeyScalarFieldEnum[];
+  };
+
+  /**
+   * IdempotencyKey findFirstOrThrow
+   */
+  export type IdempotencyKeyFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * Filter, which IdempotencyKey to fetch.
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of IdempotencyKeys to fetch.
+     */
+    orderBy?: IdempotencyKeyOrderByWithRelationInput | IdempotencyKeyOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for IdempotencyKeys.
+     */
+    cursor?: IdempotencyKeyWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` IdempotencyKeys from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` IdempotencyKeys.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of IdempotencyKeys.
+     */
+    distinct?: IdempotencyKeyScalarFieldEnum | IdempotencyKeyScalarFieldEnum[];
+  };
+
+  /**
+   * IdempotencyKey findMany
+   */
+  export type IdempotencyKeyFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * Filter, which IdempotencyKeys to fetch.
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of IdempotencyKeys to fetch.
+     */
+    orderBy?: IdempotencyKeyOrderByWithRelationInput | IdempotencyKeyOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing IdempotencyKeys.
+     */
+    cursor?: IdempotencyKeyWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` IdempotencyKeys from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` IdempotencyKeys.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of IdempotencyKeys.
+     */
+    distinct?: IdempotencyKeyScalarFieldEnum | IdempotencyKeyScalarFieldEnum[];
+  };
+
+  /**
+   * IdempotencyKey create
+   */
+  export type IdempotencyKeyCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a IdempotencyKey.
+     */
+    data: XOR<IdempotencyKeyCreateInput, IdempotencyKeyUncheckedCreateInput>;
+  };
+
+  /**
+   * IdempotencyKey createMany
+   */
+  export type IdempotencyKeyCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many IdempotencyKeys.
+     */
+    data: IdempotencyKeyCreateManyInput | IdempotencyKeyCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * IdempotencyKey createManyAndReturn
+   */
+  export type IdempotencyKeyCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * The data used to create many IdempotencyKeys.
+     */
+    data: IdempotencyKeyCreateManyInput | IdempotencyKeyCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * IdempotencyKey update
+   */
+  export type IdempotencyKeyUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a IdempotencyKey.
+     */
+    data: XOR<IdempotencyKeyUpdateInput, IdempotencyKeyUncheckedUpdateInput>;
+    /**
+     * Choose, which IdempotencyKey to update.
+     */
+    where: IdempotencyKeyWhereUniqueInput;
+  };
+
+  /**
+   * IdempotencyKey updateMany
+   */
+  export type IdempotencyKeyUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update IdempotencyKeys.
+     */
+    data: XOR<IdempotencyKeyUpdateManyMutationInput, IdempotencyKeyUncheckedUpdateManyInput>;
+    /**
+     * Filter which IdempotencyKeys to update
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * Limit how many IdempotencyKeys to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * IdempotencyKey updateManyAndReturn
+   */
+  export type IdempotencyKeyUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * The data used to update IdempotencyKeys.
+     */
+    data: XOR<IdempotencyKeyUpdateManyMutationInput, IdempotencyKeyUncheckedUpdateManyInput>;
+    /**
+     * Filter which IdempotencyKeys to update
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * Limit how many IdempotencyKeys to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * IdempotencyKey upsert
+   */
+  export type IdempotencyKeyUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the IdempotencyKey to update in case it exists.
+     */
+    where: IdempotencyKeyWhereUniqueInput;
+    /**
+     * In case the IdempotencyKey found by the `where` argument doesn't exist, create a new IdempotencyKey with this data.
+     */
+    create: XOR<IdempotencyKeyCreateInput, IdempotencyKeyUncheckedCreateInput>;
+    /**
+     * In case the IdempotencyKey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IdempotencyKeyUpdateInput, IdempotencyKeyUncheckedUpdateInput>;
+  };
+
+  /**
+   * IdempotencyKey delete
+   */
+  export type IdempotencyKeyDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    /**
+     * Filter which IdempotencyKey to delete.
+     */
+    where: IdempotencyKeyWhereUniqueInput;
+  };
+
+  /**
+   * IdempotencyKey deleteMany
+   */
+  export type IdempotencyKeyDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which IdempotencyKeys to delete
+     */
+    where?: IdempotencyKeyWhereInput;
+    /**
+     * Limit how many IdempotencyKeys to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * IdempotencyKey.booking
+   */
+  export type IdempotencyKey$bookingArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Booking
+     */
+    select?: BookingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Booking
+     */
+    omit?: BookingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInclude<ExtArgs> | null;
+    where?: BookingWhereInput;
+  };
+
+  /**
+   * IdempotencyKey without action
+   */
+  export type IdempotencyKeyDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null;
+    _min: NotificationMinAggregateOutputType | null;
+    _max: NotificationMaxAggregateOutputType | null;
+  };
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    type: $Enums.NotificationType | null;
+    channel: $Enums.NotificationChannel | null;
+    status: $Enums.NotificationStatus | null;
+    errorMessage: string | null;
+    createdAt: Date | null;
+    sentAt: Date | null;
+  };
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    type: $Enums.NotificationType | null;
+    channel: $Enums.NotificationChannel | null;
+    status: $Enums.NotificationStatus | null;
+    errorMessage: string | null;
+    createdAt: Date | null;
+    sentAt: Date | null;
+  };
+
+  export type NotificationCountAggregateOutputType = {
+    id: number;
+    userId: number;
+    type: number;
+    channel: number;
+    payload: number;
+    status: number;
+    errorMessage: number;
+    createdAt: number;
+    sentAt: number;
+    _all: number;
+  };
+
+  export type NotificationMinAggregateInputType = {
+    id?: true;
+    userId?: true;
+    type?: true;
+    channel?: true;
+    status?: true;
+    errorMessage?: true;
+    createdAt?: true;
+    sentAt?: true;
+  };
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true;
+    userId?: true;
+    type?: true;
+    channel?: true;
+    status?: true;
+    errorMessage?: true;
+    createdAt?: true;
+    sentAt?: true;
+  };
+
+  export type NotificationCountAggregateInputType = {
+    id?: true;
+    userId?: true;
+    type?: true;
+    channel?: true;
+    payload?: true;
+    status?: true;
+    errorMessage?: true;
+    createdAt?: true;
+    sentAt?: true;
+    _all?: true;
+  };
+
+  export type NotificationAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Notifications
+     **/
+    _count?: true | NotificationCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: NotificationMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: NotificationMaxAggregateInputType;
+  };
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+    [P in keyof T & keyof AggregateNotification]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>;
+  };
+
+  export type NotificationGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: NotificationWhereInput;
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[];
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum;
+    having?: NotificationScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: NotificationCountAggregateInputType | true;
+    _min?: NotificationMinAggregateInputType;
+    _max?: NotificationMaxAggregateInputType;
+  };
+
+  export type NotificationGroupByOutputType = {
+    id: string;
+    userId: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonValue;
+    status: $Enums.NotificationStatus;
+    errorMessage: string | null;
+    createdAt: Date;
+    sentAt: Date | null;
+    _count: NotificationCountAggregateOutputType | null;
+    _min: NotificationMinAggregateOutputType | null;
+    _max: NotificationMaxAggregateOutputType | null;
+  };
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T["by"]> & {
+        [P in keyof T & keyof NotificationGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+          : GetScalarType<T[P], NotificationGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type NotificationSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      type?: boolean;
+      channel?: boolean;
+      payload?: boolean;
+      status?: boolean;
+      errorMessage?: boolean;
+      createdAt?: boolean;
+      sentAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["notification"]
+  >;
+
+  export type NotificationSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      type?: boolean;
+      channel?: boolean;
+      payload?: boolean;
+      status?: boolean;
+      errorMessage?: boolean;
+      createdAt?: boolean;
+      sentAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["notification"]
+  >;
+
+  export type NotificationSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      type?: boolean;
+      channel?: boolean;
+      payload?: boolean;
+      status?: boolean;
+      errorMessage?: boolean;
+      createdAt?: boolean;
+      sentAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["notification"]
+  >;
+
+  export type NotificationSelectScalar = {
+    id?: boolean;
+    userId?: boolean;
+    type?: boolean;
+    channel?: boolean;
+    payload?: boolean;
+    status?: boolean;
+    errorMessage?: boolean;
+    createdAt?: boolean;
+    sentAt?: boolean;
+  };
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      | "id"
+      | "userId"
+      | "type"
+      | "channel"
+      | "payload"
+      | "status"
+      | "errorMessage"
+      | "createdAt"
+      | "sentAt",
+      ExtArgs["result"]["notification"]
+    >;
+  export type NotificationInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type NotificationIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type NotificationIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $NotificationPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "Notification";
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        userId: string;
+        type: $Enums.NotificationType;
+        channel: $Enums.NotificationChannel;
+        payload: Prisma.JsonValue;
+        status: $Enums.NotificationStatus;
+        errorMessage: string | null;
+        createdAt: Date;
+        sentAt: Date | null;
+      },
+      ExtArgs["result"]["notification"]
+    >;
+    composites: {};
+  };
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> =
+    $Result.GetResult<Prisma.$NotificationPayload, S>;
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+      select?: NotificationCountAggregateInputType | true;
+    };
+
+  export interface NotificationDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["Notification"];
+      meta: { name: "Notification" };
+    };
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(
+      args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<
+        Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<
+        Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(
+      args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<
+        Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<
+        Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     *
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends NotificationFindManyArgs>(
+      args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+    >;
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     *
+     */
+    create<T extends NotificationCreateArgs>(
+      args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends NotificationCreateManyArgs>(
+      args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     *
+     */
+    delete<T extends NotificationDeleteArgs>(
+      args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends NotificationUpdateArgs>(
+      args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(
+      args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(
+      args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more Notifications and returns the data updated in the database.
+     * @param {NotificationUpdateManyAndReturnArgs} args - Arguments to update many Notifications.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends NotificationUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, NotificationUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$NotificationPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(
+      args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+     **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], NotificationCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends NotificationAggregateArgs>(
+      args: Subset<T, NotificationAggregateArgs>,
+    ): Prisma.PrismaPromise<GetNotificationAggregateType<T>>;
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<Extends<"skip", Keys<T>>, Extends<"take", Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs["orderBy"] }
+        : { orderBy?: NotificationGroupByArgs["orderBy"] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T["orderBy"]>>>,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T["by"] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, "Field ", P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetNotificationGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the Notification model
+     */
+    readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", "String">;
+    readonly userId: FieldRef<"Notification", "String">;
+    readonly type: FieldRef<"Notification", "NotificationType">;
+    readonly channel: FieldRef<"Notification", "NotificationChannel">;
+    readonly payload: FieldRef<"Notification", "Json">;
+    readonly status: FieldRef<"Notification", "NotificationStatus">;
+    readonly errorMessage: FieldRef<"Notification", "String">;
+    readonly createdAt: FieldRef<"Notification", "DateTime">;
+    readonly sentAt: FieldRef<"Notification", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>;
+  };
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>;
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>;
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput;
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * Notification updateManyAndReturn
+   */
+  export type NotificationUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>;
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput;
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput;
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>;
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>;
+  };
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput;
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
   };
 
   /**
@@ -8296,6 +12690,1246 @@ export namespace Prisma {
     };
 
   /**
+   * Model UserSession
+   */
+
+  export type AggregateUserSession = {
+    _count: UserSessionCountAggregateOutputType | null;
+    _min: UserSessionMinAggregateOutputType | null;
+    _max: UserSessionMaxAggregateOutputType | null;
+  };
+
+  export type UserSessionMinAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    refreshTokenHash: string | null;
+    expiresAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type UserSessionMaxAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    refreshTokenHash: string | null;
+    expiresAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type UserSessionCountAggregateOutputType = {
+    id: number;
+    userId: number;
+    refreshTokenHash: number;
+    expiresAt: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type UserSessionMinAggregateInputType = {
+    id?: true;
+    userId?: true;
+    refreshTokenHash?: true;
+    expiresAt?: true;
+    createdAt?: true;
+  };
+
+  export type UserSessionMaxAggregateInputType = {
+    id?: true;
+    userId?: true;
+    refreshTokenHash?: true;
+    expiresAt?: true;
+    createdAt?: true;
+  };
+
+  export type UserSessionCountAggregateInputType = {
+    id?: true;
+    userId?: true;
+    refreshTokenHash?: true;
+    expiresAt?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type UserSessionAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which UserSession to aggregate.
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: UserSessionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned UserSessions
+     **/
+    _count?: true | UserSessionCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: UserSessionMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: UserSessionMaxAggregateInputType;
+  };
+
+  export type GetUserSessionAggregateType<T extends UserSessionAggregateArgs> = {
+    [P in keyof T & keyof AggregateUserSession]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserSession[P]>
+      : GetScalarType<T[P], AggregateUserSession[P]>;
+  };
+
+  export type UserSessionGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: UserSessionWhereInput;
+    orderBy?: UserSessionOrderByWithAggregationInput | UserSessionOrderByWithAggregationInput[];
+    by: UserSessionScalarFieldEnum[] | UserSessionScalarFieldEnum;
+    having?: UserSessionScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: UserSessionCountAggregateInputType | true;
+    _min?: UserSessionMinAggregateInputType;
+    _max?: UserSessionMaxAggregateInputType;
+  };
+
+  export type UserSessionGroupByOutputType = {
+    id: string;
+    userId: string;
+    refreshTokenHash: string;
+    expiresAt: Date;
+    createdAt: Date;
+    _count: UserSessionCountAggregateOutputType | null;
+    _min: UserSessionMinAggregateOutputType | null;
+    _max: UserSessionMaxAggregateOutputType | null;
+  };
+
+  type GetUserSessionGroupByPayload<T extends UserSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserSessionGroupByOutputType, T["by"]> & {
+        [P in keyof T & keyof UserSessionGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], UserSessionGroupByOutputType[P]>
+          : GetScalarType<T[P], UserSessionGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type UserSessionSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      refreshTokenHash?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["userSession"]
+  >;
+
+  export type UserSessionSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      refreshTokenHash?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["userSession"]
+  >;
+
+  export type UserSessionSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      refreshTokenHash?: boolean;
+      expiresAt?: boolean;
+      createdAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["userSession"]
+  >;
+
+  export type UserSessionSelectScalar = {
+    id?: boolean;
+    userId?: boolean;
+    refreshTokenHash?: boolean;
+    expiresAt?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type UserSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      "id" | "userId" | "refreshTokenHash" | "expiresAt" | "createdAt",
+      ExtArgs["result"]["userSession"]
+    >;
+  export type UserSessionInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type UserSessionIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type UserSessionIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $UserSessionPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "UserSession";
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        userId: string;
+        refreshTokenHash: string;
+        expiresAt: Date;
+        createdAt: Date;
+      },
+      ExtArgs["result"]["userSession"]
+    >;
+    composites: {};
+  };
+
+  type UserSessionGetPayload<S extends boolean | null | undefined | UserSessionDefaultArgs> =
+    $Result.GetResult<Prisma.$UserSessionPayload, S>;
+
+  type UserSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserSessionFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+      select?: UserSessionCountAggregateInputType | true;
+    };
+
+  export interface UserSessionDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["UserSession"];
+      meta: { name: "UserSession" };
+    };
+    /**
+     * Find zero or one UserSession that matches the filter.
+     * @param {UserSessionFindUniqueArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserSessionFindUniqueArgs>(
+      args: SelectSubset<T, UserSessionFindUniqueArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<
+        Prisma.$UserSessionPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one UserSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserSessionFindUniqueOrThrowArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserSessionFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, UserSessionFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<
+        Prisma.$UserSessionPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first UserSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionFindFirstArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserSessionFindFirstArgs>(
+      args?: SelectSubset<T, UserSessionFindFirstArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<
+        Prisma.$UserSessionPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first UserSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionFindFirstOrThrowArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserSessionFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UserSessionFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<
+        Prisma.$UserSessionPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more UserSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserSessions
+     * const userSessions = await prisma.userSession.findMany()
+     *
+     * // Get first 10 UserSessions
+     * const userSessions = await prisma.userSession.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const userSessionWithIdOnly = await prisma.userSession.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends UserSessionFindManyArgs>(
+      args?: SelectSubset<T, UserSessionFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+    >;
+
+    /**
+     * Create a UserSession.
+     * @param {UserSessionCreateArgs} args - Arguments to create a UserSession.
+     * @example
+     * // Create one UserSession
+     * const UserSession = await prisma.userSession.create({
+     *   data: {
+     *     // ... data to create a UserSession
+     *   }
+     * })
+     *
+     */
+    create<T extends UserSessionCreateArgs>(
+      args: SelectSubset<T, UserSessionCreateArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many UserSessions.
+     * @param {UserSessionCreateManyArgs} args - Arguments to create many UserSessions.
+     * @example
+     * // Create many UserSessions
+     * const userSession = await prisma.userSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends UserSessionCreateManyArgs>(
+      args?: SelectSubset<T, UserSessionCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many UserSessions and returns the data saved in the database.
+     * @param {UserSessionCreateManyAndReturnArgs} args - Arguments to create many UserSessions.
+     * @example
+     * // Create many UserSessions
+     * const userSession = await prisma.userSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many UserSessions and only return the `id`
+     * const userSessionWithIdOnly = await prisma.userSession.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends UserSessionCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, UserSessionCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$UserSessionPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a UserSession.
+     * @param {UserSessionDeleteArgs} args - Arguments to delete one UserSession.
+     * @example
+     * // Delete one UserSession
+     * const UserSession = await prisma.userSession.delete({
+     *   where: {
+     *     // ... filter to delete one UserSession
+     *   }
+     * })
+     *
+     */
+    delete<T extends UserSessionDeleteArgs>(
+      args: SelectSubset<T, UserSessionDeleteArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one UserSession.
+     * @param {UserSessionUpdateArgs} args - Arguments to update one UserSession.
+     * @example
+     * // Update one UserSession
+     * const userSession = await prisma.userSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends UserSessionUpdateArgs>(
+      args: SelectSubset<T, UserSessionUpdateArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more UserSessions.
+     * @param {UserSessionDeleteManyArgs} args - Arguments to filter UserSessions to delete.
+     * @example
+     * // Delete a few UserSessions
+     * const { count } = await prisma.userSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends UserSessionDeleteManyArgs>(
+      args?: SelectSubset<T, UserSessionDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more UserSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserSessions
+     * const userSession = await prisma.userSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends UserSessionUpdateManyArgs>(
+      args: SelectSubset<T, UserSessionUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more UserSessions and returns the data updated in the database.
+     * @param {UserSessionUpdateManyAndReturnArgs} args - Arguments to update many UserSessions.
+     * @example
+     * // Update many UserSessions
+     * const userSession = await prisma.userSession.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more UserSessions and only return the `id`
+     * const userSessionWithIdOnly = await prisma.userSession.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends UserSessionUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, UserSessionUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$UserSessionPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one UserSession.
+     * @param {UserSessionUpsertArgs} args - Arguments to update or create a UserSession.
+     * @example
+     * // Update or create a UserSession
+     * const userSession = await prisma.userSession.upsert({
+     *   create: {
+     *     // ... data to create a UserSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserSessionUpsertArgs>(
+      args: SelectSubset<T, UserSessionUpsertArgs<ExtArgs>>,
+    ): Prisma__UserSessionClient<
+      $Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of UserSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionCountArgs} args - Arguments to filter UserSessions to count.
+     * @example
+     * // Count the number of UserSessions
+     * const count = await prisma.userSession.count({
+     *   where: {
+     *     // ... the filter for the UserSessions we want to count
+     *   }
+     * })
+     **/
+    count<T extends UserSessionCountArgs>(
+      args?: Subset<T, UserSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], UserSessionCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a UserSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends UserSessionAggregateArgs>(
+      args: Subset<T, UserSessionAggregateArgs>,
+    ): Prisma.PrismaPromise<GetUserSessionAggregateType<T>>;
+
+    /**
+     * Group by UserSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends UserSessionGroupByArgs,
+      HasSelectOrTake extends Or<Extends<"skip", Keys<T>>, Extends<"take", Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: UserSessionGroupByArgs["orderBy"] }
+        : { orderBy?: UserSessionGroupByArgs["orderBy"] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T["orderBy"]>>>,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T["by"] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, "Field ", P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, UserSessionGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetUserSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the UserSession model
+     */
+    readonly fields: UserSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserSessionClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the UserSession model
+   */
+  interface UserSessionFieldRefs {
+    readonly id: FieldRef<"UserSession", "String">;
+    readonly userId: FieldRef<"UserSession", "String">;
+    readonly refreshTokenHash: FieldRef<"UserSession", "String">;
+    readonly expiresAt: FieldRef<"UserSession", "DateTime">;
+    readonly createdAt: FieldRef<"UserSession", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * UserSession findUnique
+   */
+  export type UserSessionFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where: UserSessionWhereUniqueInput;
+  };
+
+  /**
+   * UserSession findUniqueOrThrow
+   */
+  export type UserSessionFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where: UserSessionWhereUniqueInput;
+  };
+
+  /**
+   * UserSession findFirst
+   */
+  export type UserSessionFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for UserSessions.
+     */
+    cursor?: UserSessionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserSessions.
+     */
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[];
+  };
+
+  /**
+   * UserSession findFirstOrThrow
+   */
+  export type UserSessionFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for UserSessions.
+     */
+    cursor?: UserSessionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserSessions.
+     */
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[];
+  };
+
+  /**
+   * UserSession findMany
+   */
+  export type UserSessionFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSessions to fetch.
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing UserSessions.
+     */
+    cursor?: UserSessionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserSessions.
+     */
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[];
+  };
+
+  /**
+   * UserSession create
+   */
+  export type UserSessionCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a UserSession.
+     */
+    data: XOR<UserSessionCreateInput, UserSessionUncheckedCreateInput>;
+  };
+
+  /**
+   * UserSession createMany
+   */
+  export type UserSessionCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many UserSessions.
+     */
+    data: UserSessionCreateManyInput | UserSessionCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * UserSession createManyAndReturn
+   */
+  export type UserSessionCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * The data used to create many UserSessions.
+     */
+    data: UserSessionCreateManyInput | UserSessionCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * UserSession update
+   */
+  export type UserSessionUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a UserSession.
+     */
+    data: XOR<UserSessionUpdateInput, UserSessionUncheckedUpdateInput>;
+    /**
+     * Choose, which UserSession to update.
+     */
+    where: UserSessionWhereUniqueInput;
+  };
+
+  /**
+   * UserSession updateMany
+   */
+  export type UserSessionUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update UserSessions.
+     */
+    data: XOR<UserSessionUpdateManyMutationInput, UserSessionUncheckedUpdateManyInput>;
+    /**
+     * Filter which UserSessions to update
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * Limit how many UserSessions to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * UserSession updateManyAndReturn
+   */
+  export type UserSessionUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * The data used to update UserSessions.
+     */
+    data: XOR<UserSessionUpdateManyMutationInput, UserSessionUncheckedUpdateManyInput>;
+    /**
+     * Filter which UserSessions to update
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * Limit how many UserSessions to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * UserSession upsert
+   */
+  export type UserSessionUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the UserSession to update in case it exists.
+     */
+    where: UserSessionWhereUniqueInput;
+    /**
+     * In case the UserSession found by the `where` argument doesn't exist, create a new UserSession with this data.
+     */
+    create: XOR<UserSessionCreateInput, UserSessionUncheckedCreateInput>;
+    /**
+     * In case the UserSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserSessionUpdateInput, UserSessionUncheckedUpdateInput>;
+  };
+
+  /**
+   * UserSession delete
+   */
+  export type UserSessionDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    /**
+     * Filter which UserSession to delete.
+     */
+    where: UserSessionWhereUniqueInput;
+  };
+
+  /**
+   * UserSession deleteMany
+   */
+  export type UserSessionDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which UserSessions to delete
+     */
+    where?: UserSessionWhereInput;
+    /**
+     * Limit how many UserSessions to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * UserSession without action
+   */
+  export type UserSessionDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+  };
+
+  /**
    * Model User
    */
 
@@ -8484,8 +14118,12 @@ export namespace Prisma {
         updatedAt?: boolean;
         bookings?: boolean | User$bookingsArgs<ExtArgs>;
         clientProfile?: boolean | User$clientProfileArgs<ExtArgs>;
+        emailVerifications?: boolean | User$emailVerificationsArgs<ExtArgs>;
         favorites?: boolean | User$favoritesArgs<ExtArgs>;
+        idempotencyKeys?: boolean | User$idempotencyKeysArgs<ExtArgs>;
+        notifications?: boolean | User$notificationsArgs<ExtArgs>;
         offers?: boolean | User$offersArgs<ExtArgs>;
+        sessions?: boolean | User$sessionsArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs["result"]["user"]
@@ -8549,8 +14187,12 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bookings?: boolean | User$bookingsArgs<ExtArgs>;
     clientProfile?: boolean | User$clientProfileArgs<ExtArgs>;
+    emailVerifications?: boolean | User$emailVerificationsArgs<ExtArgs>;
     favorites?: boolean | User$favoritesArgs<ExtArgs>;
+    idempotencyKeys?: boolean | User$idempotencyKeysArgs<ExtArgs>;
+    notifications?: boolean | User$notificationsArgs<ExtArgs>;
     offers?: boolean | User$offersArgs<ExtArgs>;
+    sessions?: boolean | User$sessionsArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -8565,8 +14207,12 @@ export namespace Prisma {
     objects: {
       bookings: Prisma.$BookingPayload<ExtArgs>[];
       clientProfile: Prisma.$ClientProfilePayload<ExtArgs> | null;
+      emailVerifications: Prisma.$EmailVerificationPayload<ExtArgs>[];
       favorites: Prisma.$FavoritePayload<ExtArgs>[];
+      idempotencyKeys: Prisma.$IdempotencyKeyPayload<ExtArgs>[];
+      notifications: Prisma.$NotificationPayload<ExtArgs>[];
       offers: Prisma.$OfferPayload<ExtArgs>[];
+      sessions: Prisma.$UserSessionPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -9074,15 +14720,44 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    emailVerifications<T extends User$emailVerificationsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$emailVerificationsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$EmailVerificationPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >;
     favorites<T extends User$favoritesArgs<ExtArgs> = {}>(
       args?: Subset<T, User$favoritesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
     >;
+    idempotencyKeys<T extends User$idempotencyKeysArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$idempotencyKeysArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+      | Null
+    >;
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$notificationsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+      | Null
+    >;
     offers<T extends User$offersArgs<ExtArgs> = {}>(
       args?: Subset<T, User$offersArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null
+    >;
+    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$sessionsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+      | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9581,6 +15256,34 @@ export namespace Prisma {
   };
 
   /**
+   * User.emailVerifications
+   */
+  export type User$emailVerificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EmailVerification
+     */
+    select?: EmailVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EmailVerification
+     */
+    omit?: EmailVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailVerificationInclude<ExtArgs> | null;
+    where?: EmailVerificationWhereInput;
+    orderBy?:
+      | EmailVerificationOrderByWithRelationInput
+      | EmailVerificationOrderByWithRelationInput[];
+    cursor?: EmailVerificationWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EmailVerificationScalarFieldEnum | EmailVerificationScalarFieldEnum[];
+  };
+
+  /**
    * User.favorites
    */
   export type User$favoritesArgs<
@@ -9607,6 +15310,58 @@ export namespace Prisma {
   };
 
   /**
+   * User.idempotencyKeys
+   */
+  export type User$idempotencyKeysArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the IdempotencyKey
+     */
+    select?: IdempotencyKeySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the IdempotencyKey
+     */
+    omit?: IdempotencyKeyOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IdempotencyKeyInclude<ExtArgs> | null;
+    where?: IdempotencyKeyWhereInput;
+    orderBy?: IdempotencyKeyOrderByWithRelationInput | IdempotencyKeyOrderByWithRelationInput[];
+    cursor?: IdempotencyKeyWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: IdempotencyKeyScalarFieldEnum | IdempotencyKeyScalarFieldEnum[];
+  };
+
+  /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    where?: NotificationWhereInput;
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    cursor?: NotificationWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
    * User.offers
    */
   export type User$offersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -9630,6 +15385,32 @@ export namespace Prisma {
       skip?: number;
       distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[];
     };
+
+  /**
+   * User.sessions
+   */
+  export type User$sessionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null;
+    where?: UserSessionWhereInput;
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[];
+    cursor?: UserSessionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[];
+  };
 
   /**
    * User without action
@@ -9706,6 +15487,17 @@ export namespace Prisma {
   export type DestinationScalarFieldEnum =
     (typeof DestinationScalarFieldEnum)[keyof typeof DestinationScalarFieldEnum];
 
+  export const EmailVerificationScalarFieldEnum: {
+    id: "id";
+    userId: "userId";
+    tokenHash: "tokenHash";
+    expiresAt: "expiresAt";
+    createdAt: "createdAt";
+  };
+
+  export type EmailVerificationScalarFieldEnum =
+    (typeof EmailVerificationScalarFieldEnum)[keyof typeof EmailVerificationScalarFieldEnum];
+
   export const FavoriteScalarFieldEnum: {
     id: "id";
     userId: "userId";
@@ -9715,6 +15507,34 @@ export namespace Prisma {
 
   export type FavoriteScalarFieldEnum =
     (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum];
+
+  export const IdempotencyKeyScalarFieldEnum: {
+    id: "id";
+    key: "key";
+    requestHash: "requestHash";
+    userId: "userId";
+    bookingId: "bookingId";
+    expiresAt: "expiresAt";
+    createdAt: "createdAt";
+  };
+
+  export type IdempotencyKeyScalarFieldEnum =
+    (typeof IdempotencyKeyScalarFieldEnum)[keyof typeof IdempotencyKeyScalarFieldEnum];
+
+  export const NotificationScalarFieldEnum: {
+    id: "id";
+    userId: "userId";
+    type: "type";
+    channel: "channel";
+    payload: "payload";
+    status: "status";
+    errorMessage: "errorMessage";
+    createdAt: "createdAt";
+    sentAt: "sentAt";
+  };
+
+  export type NotificationScalarFieldEnum =
+    (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
 
   export const OfferScalarFieldEnum: {
     id: "id";
@@ -9744,6 +15564,17 @@ export namespace Prisma {
   export type OfferScalarFieldEnum =
     (typeof OfferScalarFieldEnum)[keyof typeof OfferScalarFieldEnum];
 
+  export const UserSessionScalarFieldEnum: {
+    id: "id";
+    userId: "userId";
+    refreshTokenHash: "refreshTokenHash";
+    expiresAt: "expiresAt";
+    createdAt: "createdAt";
+  };
+
+  export type UserSessionScalarFieldEnum =
+    (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum];
+
   export const UserScalarFieldEnum: {
     id: "id";
     username: "username";
@@ -9764,6 +15595,12 @@ export namespace Prisma {
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull;
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput];
+
   export const QueryMode: {
     default: "default";
     insensitive: "insensitive";
@@ -9777,6 +15614,14 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull;
+    JsonNull: typeof JsonNull;
+    AnyNull: typeof AnyNull;
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter];
 
   /**
    * Field references
@@ -9852,6 +15697,67 @@ export namespace Prisma {
   export type ListEnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
     "Currency[]"
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "NotificationType"
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationType[]'
+   */
+  export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "NotificationType[]"
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationChannel'
+   */
+  export type EnumNotificationChannelFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "NotificationChannel"
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationChannel[]'
+   */
+  export type ListEnumNotificationChannelFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "NotificationChannel[]"
+  >;
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, "Json">;
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "QueryMode"
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationStatus'
+   */
+  export type EnumNotificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "NotificationStatus"
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationStatus[]'
+   */
+  export type ListEnumNotificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "NotificationStatus[]"
   >;
 
   /**
@@ -9932,6 +15838,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus;
     createdAt?: DateTimeFilter<"Booking"> | Date | string;
     updatedAt?: DateTimeFilter<"Booking"> | Date | string;
+    idempotencyKeys?: IdempotencyKeyListRelationFilter;
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
   };
@@ -9947,6 +15854,7 @@ export namespace Prisma {
     status?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    idempotencyKeys?: IdempotencyKeyOrderByRelationAggregateInput;
     offer?: OfferOrderByWithRelationInput;
     user?: UserOrderByWithRelationInput;
   };
@@ -9966,6 +15874,7 @@ export namespace Prisma {
       status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus;
       createdAt?: DateTimeFilter<"Booking"> | Date | string;
       updatedAt?: DateTimeFilter<"Booking"> | Date | string;
+      idempotencyKeys?: IdempotencyKeyListRelationFilter;
       offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     },
@@ -10146,6 +16055,68 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Destination"> | Date | string;
   };
 
+  export type EmailVerificationWhereInput = {
+    AND?: EmailVerificationWhereInput | EmailVerificationWhereInput[];
+    OR?: EmailVerificationWhereInput[];
+    NOT?: EmailVerificationWhereInput | EmailVerificationWhereInput[];
+    id?: StringFilter<"EmailVerification"> | string;
+    userId?: StringFilter<"EmailVerification"> | string;
+    tokenHash?: StringFilter<"EmailVerification"> | string;
+    expiresAt?: DateTimeFilter<"EmailVerification"> | Date | string;
+    createdAt?: DateTimeFilter<"EmailVerification"> | Date | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type EmailVerificationOrderByWithRelationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type EmailVerificationWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: EmailVerificationWhereInput | EmailVerificationWhereInput[];
+      OR?: EmailVerificationWhereInput[];
+      NOT?: EmailVerificationWhereInput | EmailVerificationWhereInput[];
+      userId?: StringFilter<"EmailVerification"> | string;
+      tokenHash?: StringFilter<"EmailVerification"> | string;
+      expiresAt?: DateTimeFilter<"EmailVerification"> | Date | string;
+      createdAt?: DateTimeFilter<"EmailVerification"> | Date | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    "id"
+  >;
+
+  export type EmailVerificationOrderByWithAggregationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+    _count?: EmailVerificationCountOrderByAggregateInput;
+    _max?: EmailVerificationMaxOrderByAggregateInput;
+    _min?: EmailVerificationMinOrderByAggregateInput;
+  };
+
+  export type EmailVerificationScalarWhereWithAggregatesInput = {
+    AND?:
+      | EmailVerificationScalarWhereWithAggregatesInput
+      | EmailVerificationScalarWhereWithAggregatesInput[];
+    OR?: EmailVerificationScalarWhereWithAggregatesInput[];
+    NOT?:
+      | EmailVerificationScalarWhereWithAggregatesInput
+      | EmailVerificationScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<"EmailVerification"> | string;
+    userId?: StringWithAggregatesFilter<"EmailVerification"> | string;
+    tokenHash?: StringWithAggregatesFilter<"EmailVerification"> | string;
+    expiresAt?: DateTimeWithAggregatesFilter<"EmailVerification"> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<"EmailVerification"> | Date | string;
+  };
+
   export type FavoriteWhereInput = {
     AND?: FavoriteWhereInput | FavoriteWhereInput[];
     OR?: FavoriteWhereInput[];
@@ -10201,6 +16172,162 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Favorite"> | string;
     offerId?: StringWithAggregatesFilter<"Favorite"> | string;
     createdAt?: DateTimeWithAggregatesFilter<"Favorite"> | Date | string;
+  };
+
+  export type IdempotencyKeyWhereInput = {
+    AND?: IdempotencyKeyWhereInput | IdempotencyKeyWhereInput[];
+    OR?: IdempotencyKeyWhereInput[];
+    NOT?: IdempotencyKeyWhereInput | IdempotencyKeyWhereInput[];
+    id?: StringFilter<"IdempotencyKey"> | string;
+    key?: StringFilter<"IdempotencyKey"> | string;
+    requestHash?: StringFilter<"IdempotencyKey"> | string;
+    userId?: StringFilter<"IdempotencyKey"> | string;
+    bookingId?: StringNullableFilter<"IdempotencyKey"> | string | null;
+    expiresAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
+    createdAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
+    booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type IdempotencyKeyOrderByWithRelationInput = {
+    id?: SortOrder;
+    key?: SortOrder;
+    requestHash?: SortOrder;
+    userId?: SortOrder;
+    bookingId?: SortOrderInput | SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+    booking?: BookingOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type IdempotencyKeyWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      userId_key?: IdempotencyKeyUserIdKeyCompoundUniqueInput;
+      AND?: IdempotencyKeyWhereInput | IdempotencyKeyWhereInput[];
+      OR?: IdempotencyKeyWhereInput[];
+      NOT?: IdempotencyKeyWhereInput | IdempotencyKeyWhereInput[];
+      key?: StringFilter<"IdempotencyKey"> | string;
+      requestHash?: StringFilter<"IdempotencyKey"> | string;
+      userId?: StringFilter<"IdempotencyKey"> | string;
+      bookingId?: StringNullableFilter<"IdempotencyKey"> | string | null;
+      expiresAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
+      createdAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
+      booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    "id" | "userId_key"
+  >;
+
+  export type IdempotencyKeyOrderByWithAggregationInput = {
+    id?: SortOrder;
+    key?: SortOrder;
+    requestHash?: SortOrder;
+    userId?: SortOrder;
+    bookingId?: SortOrderInput | SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+    _count?: IdempotencyKeyCountOrderByAggregateInput;
+    _max?: IdempotencyKeyMaxOrderByAggregateInput;
+    _min?: IdempotencyKeyMinOrderByAggregateInput;
+  };
+
+  export type IdempotencyKeyScalarWhereWithAggregatesInput = {
+    AND?:
+      | IdempotencyKeyScalarWhereWithAggregatesInput
+      | IdempotencyKeyScalarWhereWithAggregatesInput[];
+    OR?: IdempotencyKeyScalarWhereWithAggregatesInput[];
+    NOT?:
+      | IdempotencyKeyScalarWhereWithAggregatesInput
+      | IdempotencyKeyScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<"IdempotencyKey"> | string;
+    key?: StringWithAggregatesFilter<"IdempotencyKey"> | string;
+    requestHash?: StringWithAggregatesFilter<"IdempotencyKey"> | string;
+    userId?: StringWithAggregatesFilter<"IdempotencyKey"> | string;
+    bookingId?: StringNullableWithAggregatesFilter<"IdempotencyKey"> | string | null;
+    expiresAt?: DateTimeWithAggregatesFilter<"IdempotencyKey"> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<"IdempotencyKey"> | Date | string;
+  };
+
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[];
+    OR?: NotificationWhereInput[];
+    NOT?: NotificationWhereInput | NotificationWhereInput[];
+    id?: StringFilter<"Notification"> | string;
+    userId?: StringFilter<"Notification"> | string;
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFilter<"Notification"> | $Enums.NotificationChannel;
+    payload?: JsonFilter<"Notification">;
+    status?: EnumNotificationStatusFilter<"Notification"> | $Enums.NotificationStatus;
+    errorMessage?: StringNullableFilter<"Notification"> | string | null;
+    createdAt?: DateTimeFilter<"Notification"> | Date | string;
+    sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    channel?: SortOrder;
+    payload?: SortOrder;
+    status?: SortOrder;
+    errorMessage?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    sentAt?: SortOrderInput | SortOrder;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: NotificationWhereInput | NotificationWhereInput[];
+      OR?: NotificationWhereInput[];
+      NOT?: NotificationWhereInput | NotificationWhereInput[];
+      userId?: StringFilter<"Notification"> | string;
+      type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType;
+      channel?: EnumNotificationChannelFilter<"Notification"> | $Enums.NotificationChannel;
+      payload?: JsonFilter<"Notification">;
+      status?: EnumNotificationStatusFilter<"Notification"> | $Enums.NotificationStatus;
+      errorMessage?: StringNullableFilter<"Notification"> | string | null;
+      createdAt?: DateTimeFilter<"Notification"> | Date | string;
+      sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    "id"
+  >;
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    channel?: SortOrder;
+    payload?: SortOrder;
+    status?: SortOrder;
+    errorMessage?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    sentAt?: SortOrderInput | SortOrder;
+    _count?: NotificationCountOrderByAggregateInput;
+    _max?: NotificationMaxOrderByAggregateInput;
+    _min?: NotificationMinOrderByAggregateInput;
+  };
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[];
+    OR?: NotificationScalarWhereWithAggregatesInput[];
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<"Notification"> | string;
+    userId?: StringWithAggregatesFilter<"Notification"> | string;
+    type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType;
+    channel?:
+      | EnumNotificationChannelWithAggregatesFilter<"Notification">
+      | $Enums.NotificationChannel;
+    payload?: JsonWithAggregatesFilter<"Notification">;
+    status?: EnumNotificationStatusWithAggregatesFilter<"Notification"> | $Enums.NotificationStatus;
+    errorMessage?: StringNullableWithAggregatesFilter<"Notification"> | string | null;
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string;
+    sentAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null;
   };
 
   export type OfferWhereInput = {
@@ -10357,6 +16484,64 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Offer"> | Date | string | null;
   };
 
+  export type UserSessionWhereInput = {
+    AND?: UserSessionWhereInput | UserSessionWhereInput[];
+    OR?: UserSessionWhereInput[];
+    NOT?: UserSessionWhereInput | UserSessionWhereInput[];
+    id?: StringFilter<"UserSession"> | string;
+    userId?: StringFilter<"UserSession"> | string;
+    refreshTokenHash?: StringFilter<"UserSession"> | string;
+    expiresAt?: DateTimeFilter<"UserSession"> | Date | string;
+    createdAt?: DateTimeFilter<"UserSession"> | Date | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type UserSessionOrderByWithRelationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    refreshTokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type UserSessionWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      refreshTokenHash?: string;
+      AND?: UserSessionWhereInput | UserSessionWhereInput[];
+      OR?: UserSessionWhereInput[];
+      NOT?: UserSessionWhereInput | UserSessionWhereInput[];
+      userId?: StringFilter<"UserSession"> | string;
+      expiresAt?: DateTimeFilter<"UserSession"> | Date | string;
+      createdAt?: DateTimeFilter<"UserSession"> | Date | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    "id" | "refreshTokenHash"
+  >;
+
+  export type UserSessionOrderByWithAggregationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    refreshTokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+    _count?: UserSessionCountOrderByAggregateInput;
+    _max?: UserSessionMaxOrderByAggregateInput;
+    _min?: UserSessionMinOrderByAggregateInput;
+  };
+
+  export type UserSessionScalarWhereWithAggregatesInput = {
+    AND?: UserSessionScalarWhereWithAggregatesInput | UserSessionScalarWhereWithAggregatesInput[];
+    OR?: UserSessionScalarWhereWithAggregatesInput[];
+    NOT?: UserSessionScalarWhereWithAggregatesInput | UserSessionScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<"UserSession"> | string;
+    userId?: StringWithAggregatesFilter<"UserSession"> | string;
+    refreshTokenHash?: StringWithAggregatesFilter<"UserSession"> | string;
+    expiresAt?: DateTimeWithAggregatesFilter<"UserSession"> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<"UserSession"> | Date | string;
+  };
+
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[];
     OR?: UserWhereInput[];
@@ -10371,8 +16556,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string;
     bookings?: BookingListRelationFilter;
     clientProfile?: XOR<ClientProfileNullableScalarRelationFilter, ClientProfileWhereInput> | null;
+    emailVerifications?: EmailVerificationListRelationFilter;
     favorites?: FavoriteListRelationFilter;
+    idempotencyKeys?: IdempotencyKeyListRelationFilter;
+    notifications?: NotificationListRelationFilter;
     offers?: OfferListRelationFilter;
+    sessions?: UserSessionListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -10386,8 +16575,12 @@ export namespace Prisma {
     updatedAt?: SortOrder;
     bookings?: BookingOrderByRelationAggregateInput;
     clientProfile?: ClientProfileOrderByWithRelationInput;
+    emailVerifications?: EmailVerificationOrderByRelationAggregateInput;
     favorites?: FavoriteOrderByRelationAggregateInput;
+    idempotencyKeys?: IdempotencyKeyOrderByRelationAggregateInput;
+    notifications?: NotificationOrderByRelationAggregateInput;
     offers?: OfferOrderByRelationAggregateInput;
+    sessions?: UserSessionOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -10408,8 +16601,12 @@ export namespace Prisma {
         ClientProfileNullableScalarRelationFilter,
         ClientProfileWhereInput
       > | null;
+      emailVerifications?: EmailVerificationListRelationFilter;
       favorites?: FavoriteListRelationFilter;
+      idempotencyKeys?: IdempotencyKeyListRelationFilter;
+      notifications?: NotificationListRelationFilter;
       offers?: OfferListRelationFilter;
+      sessions?: UserSessionListRelationFilter;
     },
     "id" | "email"
   >;
@@ -10451,6 +16648,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
     offer: OfferCreateNestedOneWithoutBookingsInput;
     user: UserCreateNestedOneWithoutBookingsInput;
   };
@@ -10466,6 +16664,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingUpdateInput = {
@@ -10477,6 +16676,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
     offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
     user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
   };
@@ -10492,6 +16692,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type BookingCreateManyInput = {
@@ -10674,6 +16875,61 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type EmailVerificationCreateInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+    user: UserCreateNestedOneWithoutEmailVerificationsInput;
+  };
+
+  export type EmailVerificationUncheckedCreateInput = {
+    id?: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type EmailVerificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutEmailVerificationsNestedInput;
+  };
+
+  export type EmailVerificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EmailVerificationCreateManyInput = {
+    id?: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type EmailVerificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EmailVerificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type FavoriteCreateInput = {
     id?: string;
     createdAt?: Date | string;
@@ -10719,6 +16975,157 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string;
     offerId?: StringFieldUpdateOperationsInput | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type IdempotencyKeyCreateInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+    booking?: BookingCreateNestedOneWithoutIdempotencyKeysInput;
+    user: UserCreateNestedOneWithoutIdempotencyKeysInput;
+  };
+
+  export type IdempotencyKeyUncheckedCreateInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    userId: string;
+    bookingId?: string | null;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type IdempotencyKeyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    booking?: BookingUpdateOneWithoutIdempotencyKeysNestedInput;
+    user?: UserUpdateOneRequiredWithoutIdempotencyKeysNestedInput;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type IdempotencyKeyCreateManyInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    userId: string;
+    bookingId?: string | null;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type IdempotencyKeyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationCreateInput = {
+    id?: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+    user: UserCreateNestedOneWithoutNotificationsInput;
+  };
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string;
+    userId: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+  };
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput;
+  };
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type NotificationCreateManyInput = {
+    id?: string;
+    userId: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+  };
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
   export type OfferCreateInput = {
@@ -10902,6 +17309,61 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
+  export type UserSessionCreateInput = {
+    id?: string;
+    refreshTokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+    user: UserCreateNestedOneWithoutSessionsInput;
+  };
+
+  export type UserSessionUncheckedCreateInput = {
+    id?: string;
+    userId: string;
+    refreshTokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type UserSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutSessionsNestedInput;
+  };
+
+  export type UserSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserSessionCreateManyInput = {
+    id?: string;
+    userId: string;
+    refreshTokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type UserSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type UserCreateInput = {
     id?: string;
     username: string;
@@ -10913,8 +17375,12 @@ export namespace Prisma {
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
     clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -10928,8 +17394,12 @@ export namespace Prisma {
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
     clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserUpdateInput = {
@@ -10943,8 +17413,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
     clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -10958,8 +17432,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
     clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -11055,6 +17533,12 @@ export namespace Prisma {
     not?: NestedEnumBookingStatusFilter<$PrismaModel> | $Enums.BookingStatus;
   };
 
+  export type IdempotencyKeyListRelationFilter = {
+    every?: IdempotencyKeyWhereInput;
+    some?: IdempotencyKeyWhereInput;
+    none?: IdempotencyKeyWhereInput;
+  };
+
   export type OfferScalarRelationFilter = {
     is?: OfferWhereInput;
     isNot?: OfferWhereInput;
@@ -11063,6 +17547,10 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput;
     isNot?: UserWhereInput;
+  };
+
+  export type IdempotencyKeyOrderByRelationAggregateInput = {
+    _count?: SortOrder;
   };
 
   export type BookingCountOrderByAggregateInput = {
@@ -11323,6 +17811,30 @@ export namespace Prisma {
     updatedAt?: SortOrder;
   };
 
+  export type EmailVerificationCountOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type EmailVerificationMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type EmailVerificationMinOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
   export type FavoriteUserIdOfferIdCompoundUniqueInput = {
     userId: string;
     offerId: string;
@@ -11347,6 +17859,215 @@ export namespace Prisma {
     userId?: SortOrder;
     offerId?: SortOrder;
     createdAt?: SortOrder;
+  };
+
+  export type BookingNullableScalarRelationFilter = {
+    is?: BookingWhereInput | null;
+    isNot?: BookingWhereInput | null;
+  };
+
+  export type IdempotencyKeyUserIdKeyCompoundUniqueInput = {
+    userId: string;
+    key: string;
+  };
+
+  export type IdempotencyKeyCountOrderByAggregateInput = {
+    id?: SortOrder;
+    key?: SortOrder;
+    requestHash?: SortOrder;
+    userId?: SortOrder;
+    bookingId?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type IdempotencyKeyMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    key?: SortOrder;
+    requestHash?: SortOrder;
+    userId?: SortOrder;
+    bookingId?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type IdempotencyKeyMinOrderByAggregateInput = {
+    id?: SortOrder;
+    key?: SortOrder;
+    requestHash?: SortOrder;
+    userId?: SortOrder;
+    bookingId?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type EnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType;
+  };
+
+  export type EnumNotificationChannelFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationChannel | EnumNotificationChannelFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationChannelFilter<$PrismaModel> | $Enums.NotificationChannel;
+  };
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, "path">
+        >,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, "path">>;
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    path?: string[];
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>;
+    string_contains?: string | StringFieldRefInput<$PrismaModel>;
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>;
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>;
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+  };
+
+  export type EnumNotificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationStatus | EnumNotificationStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationStatusFilter<$PrismaModel> | $Enums.NotificationStatus;
+  };
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
+  };
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    channel?: SortOrder;
+    payload?: SortOrder;
+    status?: SortOrder;
+    errorMessage?: SortOrder;
+    createdAt?: SortOrder;
+    sentAt?: SortOrder;
+  };
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    channel?: SortOrder;
+    status?: SortOrder;
+    errorMessage?: SortOrder;
+    createdAt?: SortOrder;
+    sentAt?: SortOrder;
+  };
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    channel?: SortOrder;
+    status?: SortOrder;
+    errorMessage?: SortOrder;
+    createdAt?: SortOrder;
+    sentAt?: SortOrder;
+  };
+
+  export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+  };
+
+  export type EnumNotificationChannelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationChannel | EnumNotificationChannelFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumNotificationChannelWithAggregatesFilter<$PrismaModel>
+      | $Enums.NotificationChannel;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationChannelFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationChannelFilter<$PrismaModel>;
+  };
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonWithAggregatesFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, "path">
+        >,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, "path">>;
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    path?: string[];
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>;
+    string_contains?: string | StringFieldRefInput<$PrismaModel>;
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>;
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>;
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedJsonFilter<$PrismaModel>;
+    _max?: NestedJsonFilter<$PrismaModel>;
+  };
+
+  export type EnumNotificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationStatus | EnumNotificationStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumNotificationStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.NotificationStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationStatusFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationStatusFilter<$PrismaModel>;
+  };
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>;
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>;
   };
 
   export type EnumOfferTypeFilter<$PrismaModel = never> = {
@@ -11377,17 +18098,6 @@ export namespace Prisma {
   export type BoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null;
-  };
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
   };
 
   export type BookingListRelationFilter = {
@@ -11550,18 +18260,28 @@ export namespace Prisma {
     _max?: NestedBoolNullableFilter<$PrismaModel>;
   };
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>;
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>;
+  export type UserSessionCountOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    refreshTokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type UserSessionMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    refreshTokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type UserSessionMinOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    refreshTokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    createdAt?: SortOrder;
   };
 
   export type EnumUserRoleFilter<$PrismaModel = never> = {
@@ -11579,6 +18299,36 @@ export namespace Prisma {
   export type ClientProfileNullableScalarRelationFilter = {
     is?: ClientProfileWhereInput | null;
     isNot?: ClientProfileWhereInput | null;
+  };
+
+  export type EmailVerificationListRelationFilter = {
+    every?: EmailVerificationWhereInput;
+    some?: EmailVerificationWhereInput;
+    none?: EmailVerificationWhereInput;
+  };
+
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput;
+    some?: NotificationWhereInput;
+    none?: NotificationWhereInput;
+  };
+
+  export type UserSessionListRelationFilter = {
+    every?: UserSessionWhereInput;
+    some?: UserSessionWhereInput;
+    none?: UserSessionWhereInput;
+  };
+
+  export type EmailVerificationOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type UserSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder;
   };
 
   export type UserCountOrderByAggregateInput = {
@@ -11632,6 +18382,21 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>;
   };
 
+  export type IdempotencyKeyCreateNestedManyWithoutBookingInput = {
+    create?:
+      | XOR<
+          IdempotencyKeyCreateWithoutBookingInput,
+          IdempotencyKeyUncheckedCreateWithoutBookingInput
+        >
+      | IdempotencyKeyCreateWithoutBookingInput[]
+      | IdempotencyKeyUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput[];
+    createMany?: IdempotencyKeyCreateManyBookingInputEnvelope;
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+  };
+
   export type OfferCreateNestedOneWithoutBookingsInput = {
     create?: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutBookingsInput;
@@ -11642,6 +18407,21 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: UserCreateOrConnectWithoutBookingsInput;
     connect?: UserWhereUniqueInput;
+  };
+
+  export type IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput = {
+    create?:
+      | XOR<
+          IdempotencyKeyCreateWithoutBookingInput,
+          IdempotencyKeyUncheckedCreateWithoutBookingInput
+        >
+      | IdempotencyKeyCreateWithoutBookingInput[]
+      | IdempotencyKeyUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput[];
+    createMany?: IdempotencyKeyCreateManyBookingInputEnvelope;
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -11672,6 +18452,34 @@ export namespace Prisma {
     set?: $Enums.BookingStatus;
   };
 
+  export type IdempotencyKeyUpdateManyWithoutBookingNestedInput = {
+    create?:
+      | XOR<
+          IdempotencyKeyCreateWithoutBookingInput,
+          IdempotencyKeyUncheckedCreateWithoutBookingInput
+        >
+      | IdempotencyKeyCreateWithoutBookingInput[]
+      | IdempotencyKeyUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput[];
+    upsert?:
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutBookingInput
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutBookingInput[];
+    createMany?: IdempotencyKeyCreateManyBookingInputEnvelope;
+    set?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    disconnect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    delete?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    update?:
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutBookingInput
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutBookingInput[];
+    updateMany?:
+      | IdempotencyKeyUpdateManyWithWhereWithoutBookingInput
+      | IdempotencyKeyUpdateManyWithWhereWithoutBookingInput[];
+    deleteMany?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
+  };
+
   export type OfferUpdateOneRequiredWithoutBookingsNestedInput = {
     create?: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutBookingsInput;
@@ -11692,6 +18500,34 @@ export namespace Prisma {
       XOR<UserUpdateToOneWithWhereWithoutBookingsInput, UserUpdateWithoutBookingsInput>,
       UserUncheckedUpdateWithoutBookingsInput
     >;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput = {
+    create?:
+      | XOR<
+          IdempotencyKeyCreateWithoutBookingInput,
+          IdempotencyKeyUncheckedCreateWithoutBookingInput
+        >
+      | IdempotencyKeyCreateWithoutBookingInput[]
+      | IdempotencyKeyUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput
+      | IdempotencyKeyCreateOrConnectWithoutBookingInput[];
+    upsert?:
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutBookingInput
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutBookingInput[];
+    createMany?: IdempotencyKeyCreateManyBookingInputEnvelope;
+    set?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    disconnect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    delete?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    update?:
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutBookingInput
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutBookingInput[];
+    updateMany?:
+      | IdempotencyKeyUpdateManyWithWhereWithoutBookingInput
+      | IdempotencyKeyUpdateManyWithWhereWithoutBookingInput[];
+    deleteMany?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
   };
 
   export type UserCreateNestedOneWithoutClientProfileInput = {
@@ -11793,6 +18629,32 @@ export namespace Prisma {
     deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[];
   };
 
+  export type UserCreateNestedOneWithoutEmailVerificationsInput = {
+    create?: XOR<
+      UserCreateWithoutEmailVerificationsInput,
+      UserUncheckedCreateWithoutEmailVerificationsInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEmailVerificationsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type UserUpdateOneRequiredWithoutEmailVerificationsNestedInput = {
+    create?: XOR<
+      UserCreateWithoutEmailVerificationsInput,
+      UserUncheckedCreateWithoutEmailVerificationsInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEmailVerificationsInput;
+    upsert?: UserUpsertWithoutEmailVerificationsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutEmailVerificationsInput,
+        UserUpdateWithoutEmailVerificationsInput
+      >,
+      UserUncheckedUpdateWithoutEmailVerificationsInput
+    >;
+  };
+
   export type OfferCreateNestedOneWithoutFavoritesInput = {
     create?: XOR<OfferCreateWithoutFavoritesInput, OfferUncheckedCreateWithoutFavoritesInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutFavoritesInput;
@@ -11824,6 +18686,93 @@ export namespace Prisma {
     update?: XOR<
       XOR<UserUpdateToOneWithWhereWithoutFavoritesInput, UserUpdateWithoutFavoritesInput>,
       UserUncheckedUpdateWithoutFavoritesInput
+    >;
+  };
+
+  export type BookingCreateNestedOneWithoutIdempotencyKeysInput = {
+    create?: XOR<
+      BookingCreateWithoutIdempotencyKeysInput,
+      BookingUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+    connectOrCreate?: BookingCreateOrConnectWithoutIdempotencyKeysInput;
+    connect?: BookingWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutIdempotencyKeysInput = {
+    create?: XOR<
+      UserCreateWithoutIdempotencyKeysInput,
+      UserUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutIdempotencyKeysInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type BookingUpdateOneWithoutIdempotencyKeysNestedInput = {
+    create?: XOR<
+      BookingCreateWithoutIdempotencyKeysInput,
+      BookingUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+    connectOrCreate?: BookingCreateOrConnectWithoutIdempotencyKeysInput;
+    upsert?: BookingUpsertWithoutIdempotencyKeysInput;
+    disconnect?: BookingWhereInput | boolean;
+    delete?: BookingWhereInput | boolean;
+    connect?: BookingWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BookingUpdateToOneWithWhereWithoutIdempotencyKeysInput,
+        BookingUpdateWithoutIdempotencyKeysInput
+      >,
+      BookingUncheckedUpdateWithoutIdempotencyKeysInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutIdempotencyKeysNestedInput = {
+    create?: XOR<
+      UserCreateWithoutIdempotencyKeysInput,
+      UserUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutIdempotencyKeysInput;
+    upsert?: UserUpsertWithoutIdempotencyKeysInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutIdempotencyKeysInput,
+        UserUpdateWithoutIdempotencyKeysInput
+      >,
+      UserUncheckedUpdateWithoutIdempotencyKeysInput
+    >;
+  };
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType;
+  };
+
+  export type EnumNotificationChannelFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationChannel;
+  };
+
+  export type EnumNotificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationStatus;
+  };
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null;
+  };
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput;
+    upsert?: UserUpsertWithoutNotificationsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>,
+      UserUncheckedUpdateWithoutNotificationsInput
     >;
   };
 
@@ -11905,10 +18854,6 @@ export namespace Prisma {
 
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null;
-  };
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null;
   };
 
   export type BookingUpdateManyWithoutOfferNestedInput = {
@@ -12033,6 +18978,23 @@ export namespace Prisma {
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
   };
 
+  export type UserCreateNestedOneWithoutSessionsInput = {
+    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
+    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput;
+    upsert?: UserUpsertWithoutSessionsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>,
+      UserUncheckedUpdateWithoutSessionsInput
+    >;
+  };
+
   export type BookingCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<BookingCreateWithoutUserInput, BookingUncheckedCreateWithoutUserInput>
@@ -12051,6 +19013,21 @@ export namespace Prisma {
     connect?: ClientProfileWhereUniqueInput;
   };
 
+  export type EmailVerificationCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<
+          EmailVerificationCreateWithoutUserInput,
+          EmailVerificationUncheckedCreateWithoutUserInput
+        >
+      | EmailVerificationCreateWithoutUserInput[]
+      | EmailVerificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | EmailVerificationCreateOrConnectWithoutUserInput
+      | EmailVerificationCreateOrConnectWithoutUserInput[];
+    createMany?: EmailVerificationCreateManyUserInputEnvelope;
+    connect?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+  };
+
   export type FavoriteCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>
@@ -12063,6 +19040,30 @@ export namespace Prisma {
     connect?: FavoriteWhereUniqueInput | FavoriteWhereUniqueInput[];
   };
 
+  export type IdempotencyKeyCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<IdempotencyKeyCreateWithoutUserInput, IdempotencyKeyUncheckedCreateWithoutUserInput>
+      | IdempotencyKeyCreateWithoutUserInput[]
+      | IdempotencyKeyUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutUserInput
+      | IdempotencyKeyCreateOrConnectWithoutUserInput[];
+    createMany?: IdempotencyKeyCreateManyUserInputEnvelope;
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+  };
+
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutUserInput
+      | NotificationCreateOrConnectWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
   export type OfferCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
@@ -12071,6 +19072,18 @@ export namespace Prisma {
     connectOrCreate?: OfferCreateOrConnectWithoutUserInput | OfferCreateOrConnectWithoutUserInput[];
     createMany?: OfferCreateManyUserInputEnvelope;
     connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
+  };
+
+  export type UserSessionCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>
+      | UserSessionCreateWithoutUserInput[]
+      | UserSessionUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | UserSessionCreateOrConnectWithoutUserInput
+      | UserSessionCreateOrConnectWithoutUserInput[];
+    createMany?: UserSessionCreateManyUserInputEnvelope;
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
   };
 
   export type BookingUncheckedCreateNestedManyWithoutUserInput = {
@@ -12091,6 +19104,21 @@ export namespace Prisma {
     connect?: ClientProfileWhereUniqueInput;
   };
 
+  export type EmailVerificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<
+          EmailVerificationCreateWithoutUserInput,
+          EmailVerificationUncheckedCreateWithoutUserInput
+        >
+      | EmailVerificationCreateWithoutUserInput[]
+      | EmailVerificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | EmailVerificationCreateOrConnectWithoutUserInput
+      | EmailVerificationCreateOrConnectWithoutUserInput[];
+    createMany?: EmailVerificationCreateManyUserInputEnvelope;
+    connect?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+  };
+
   export type FavoriteUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>
@@ -12103,6 +19131,30 @@ export namespace Prisma {
     connect?: FavoriteWhereUniqueInput | FavoriteWhereUniqueInput[];
   };
 
+  export type IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<IdempotencyKeyCreateWithoutUserInput, IdempotencyKeyUncheckedCreateWithoutUserInput>
+      | IdempotencyKeyCreateWithoutUserInput[]
+      | IdempotencyKeyUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutUserInput
+      | IdempotencyKeyCreateOrConnectWithoutUserInput[];
+    createMany?: IdempotencyKeyCreateManyUserInputEnvelope;
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+  };
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutUserInput
+      | NotificationCreateOrConnectWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
   export type OfferUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
@@ -12111,6 +19163,18 @@ export namespace Prisma {
     connectOrCreate?: OfferCreateOrConnectWithoutUserInput | OfferCreateOrConnectWithoutUserInput[];
     createMany?: OfferCreateManyUserInputEnvelope;
     connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[];
+  };
+
+  export type UserSessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>
+      | UserSessionCreateWithoutUserInput[]
+      | UserSessionUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | UserSessionCreateOrConnectWithoutUserInput
+      | UserSessionCreateOrConnectWithoutUserInput[];
+    createMany?: UserSessionCreateManyUserInputEnvelope;
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
   };
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -12159,6 +19223,34 @@ export namespace Prisma {
     >;
   };
 
+  export type EmailVerificationUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<
+          EmailVerificationCreateWithoutUserInput,
+          EmailVerificationUncheckedCreateWithoutUserInput
+        >
+      | EmailVerificationCreateWithoutUserInput[]
+      | EmailVerificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | EmailVerificationCreateOrConnectWithoutUserInput
+      | EmailVerificationCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | EmailVerificationUpsertWithWhereUniqueWithoutUserInput
+      | EmailVerificationUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: EmailVerificationCreateManyUserInputEnvelope;
+    set?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    disconnect?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    delete?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    connect?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    update?:
+      | EmailVerificationUpdateWithWhereUniqueWithoutUserInput
+      | EmailVerificationUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | EmailVerificationUpdateManyWithWhereWithoutUserInput
+      | EmailVerificationUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: EmailVerificationScalarWhereInput | EmailVerificationScalarWhereInput[];
+  };
+
   export type FavoriteUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>
@@ -12184,6 +19276,56 @@ export namespace Prisma {
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
   };
 
+  export type IdempotencyKeyUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<IdempotencyKeyCreateWithoutUserInput, IdempotencyKeyUncheckedCreateWithoutUserInput>
+      | IdempotencyKeyCreateWithoutUserInput[]
+      | IdempotencyKeyUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutUserInput
+      | IdempotencyKeyCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutUserInput
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: IdempotencyKeyCreateManyUserInputEnvelope;
+    set?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    disconnect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    delete?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    update?:
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutUserInput
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | IdempotencyKeyUpdateManyWithWhereWithoutUserInput
+      | IdempotencyKeyUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
+  };
+
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutUserInput
+      | NotificationCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutUserInput
+      | NotificationUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutUserInput
+      | NotificationUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutUserInput
+      | NotificationUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
   export type OfferUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
@@ -12205,6 +19347,31 @@ export namespace Prisma {
       | OfferUpdateManyWithWhereWithoutUserInput
       | OfferUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[];
+  };
+
+  export type UserSessionUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>
+      | UserSessionCreateWithoutUserInput[]
+      | UserSessionUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | UserSessionCreateOrConnectWithoutUserInput
+      | UserSessionCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | UserSessionUpsertWithWhereUniqueWithoutUserInput
+      | UserSessionUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: UserSessionCreateManyUserInputEnvelope;
+    set?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    disconnect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    delete?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    update?:
+      | UserSessionUpdateWithWhereUniqueWithoutUserInput
+      | UserSessionUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | UserSessionUpdateManyWithWhereWithoutUserInput
+      | UserSessionUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[];
   };
 
   export type BookingUncheckedUpdateManyWithoutUserNestedInput = {
@@ -12245,6 +19412,34 @@ export namespace Prisma {
     >;
   };
 
+  export type EmailVerificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<
+          EmailVerificationCreateWithoutUserInput,
+          EmailVerificationUncheckedCreateWithoutUserInput
+        >
+      | EmailVerificationCreateWithoutUserInput[]
+      | EmailVerificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | EmailVerificationCreateOrConnectWithoutUserInput
+      | EmailVerificationCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | EmailVerificationUpsertWithWhereUniqueWithoutUserInput
+      | EmailVerificationUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: EmailVerificationCreateManyUserInputEnvelope;
+    set?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    disconnect?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    delete?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    connect?: EmailVerificationWhereUniqueInput | EmailVerificationWhereUniqueInput[];
+    update?:
+      | EmailVerificationUpdateWithWhereUniqueWithoutUserInput
+      | EmailVerificationUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | EmailVerificationUpdateManyWithWhereWithoutUserInput
+      | EmailVerificationUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: EmailVerificationScalarWhereInput | EmailVerificationScalarWhereInput[];
+  };
+
   export type FavoriteUncheckedUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<FavoriteCreateWithoutUserInput, FavoriteUncheckedCreateWithoutUserInput>
@@ -12270,6 +19465,56 @@ export namespace Prisma {
     deleteMany?: FavoriteScalarWhereInput | FavoriteScalarWhereInput[];
   };
 
+  export type IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<IdempotencyKeyCreateWithoutUserInput, IdempotencyKeyUncheckedCreateWithoutUserInput>
+      | IdempotencyKeyCreateWithoutUserInput[]
+      | IdempotencyKeyUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | IdempotencyKeyCreateOrConnectWithoutUserInput
+      | IdempotencyKeyCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutUserInput
+      | IdempotencyKeyUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: IdempotencyKeyCreateManyUserInputEnvelope;
+    set?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    disconnect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    delete?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+    update?:
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutUserInput
+      | IdempotencyKeyUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | IdempotencyKeyUpdateManyWithWhereWithoutUserInput
+      | IdempotencyKeyUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutUserInput
+      | NotificationCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutUserInput
+      | NotificationUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutUserInput
+      | NotificationUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutUserInput
+      | NotificationUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
   export type OfferUncheckedUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<OfferCreateWithoutUserInput, OfferUncheckedCreateWithoutUserInput>
@@ -12291,6 +19536,31 @@ export namespace Prisma {
       | OfferUpdateManyWithWhereWithoutUserInput
       | OfferUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[];
+  };
+
+  export type UserSessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>
+      | UserSessionCreateWithoutUserInput[]
+      | UserSessionUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | UserSessionCreateOrConnectWithoutUserInput
+      | UserSessionCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | UserSessionUpsertWithWhereUniqueWithoutUserInput
+      | UserSessionUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: UserSessionCreateManyUserInputEnvelope;
+    set?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    disconnect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    delete?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[];
+    update?:
+      | UserSessionUpdateWithWhereUniqueWithoutUserInput
+      | UserSessionUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | UserSessionUpdateManyWithWhereWithoutUserInput
+      | UserSessionUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[];
   };
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12505,6 +19775,112 @@ export namespace Prisma {
     _max?: NestedEnumCurrencyFilter<$PrismaModel>;
   };
 
+  export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType;
+  };
+
+  export type NestedEnumNotificationChannelFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationChannel | EnumNotificationChannelFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationChannelFilter<$PrismaModel> | $Enums.NotificationChannel;
+  };
+
+  export type NestedEnumNotificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationStatus | EnumNotificationStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationStatusFilter<$PrismaModel> | $Enums.NotificationStatus;
+  };
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
+  };
+
+  export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumNotificationChannelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationChannel | EnumNotificationChannelFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationChannel[] | ListEnumNotificationChannelFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumNotificationChannelWithAggregatesFilter<$PrismaModel>
+      | $Enums.NotificationChannel;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationChannelFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationChannelFilter<$PrismaModel>;
+  };
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<NestedJsonFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, "path">
+        >,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, "path">>;
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    path?: string[];
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>;
+    string_contains?: string | StringFieldRefInput<$PrismaModel>;
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>;
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>;
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+  };
+
+  export type NestedEnumNotificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationStatus | EnumNotificationStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationStatus[] | ListEnumNotificationStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumNotificationStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.NotificationStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationStatusFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationStatusFilter<$PrismaModel>;
+  };
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>;
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>;
+  };
+
   export type NestedEnumOfferTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.OfferType | EnumOfferTypeFieldRefInput<$PrismaModel>;
     in?: $Enums.OfferType[] | ListEnumOfferTypeFieldRefInput<$PrismaModel>;
@@ -12522,17 +19898,6 @@ export namespace Prisma {
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null;
-  };
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
   };
 
   export type NestedEnumOfferTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -12590,20 +19955,6 @@ export namespace Prisma {
     _max?: NestedBoolNullableFilter<$PrismaModel>;
   };
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>;
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>;
-  };
-
   export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>;
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>;
@@ -12632,6 +19983,37 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedBoolFilter<$PrismaModel>;
     _max?: NestedBoolFilter<$PrismaModel>;
+  };
+
+  export type IdempotencyKeyCreateWithoutBookingInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+    user: UserCreateNestedOneWithoutIdempotencyKeysInput;
+  };
+
+  export type IdempotencyKeyUncheckedCreateWithoutBookingInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    userId: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type IdempotencyKeyCreateOrConnectWithoutBookingInput = {
+    where: IdempotencyKeyWhereUniqueInput;
+    create: XOR<
+      IdempotencyKeyCreateWithoutBookingInput,
+      IdempotencyKeyUncheckedCreateWithoutBookingInput
+    >;
+  };
+
+  export type IdempotencyKeyCreateManyBookingInputEnvelope = {
+    data: IdempotencyKeyCreateManyBookingInput | IdempotencyKeyCreateManyBookingInput[];
+    skipDuplicates?: boolean;
   };
 
   export type OfferCreateWithoutBookingsInput = {
@@ -12701,8 +20083,12 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutBookingsInput = {
@@ -12715,13 +20101,58 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutBookingsInput = {
     where: UserWhereUniqueInput;
     create: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>;
+  };
+
+  export type IdempotencyKeyUpsertWithWhereUniqueWithoutBookingInput = {
+    where: IdempotencyKeyWhereUniqueInput;
+    update: XOR<
+      IdempotencyKeyUpdateWithoutBookingInput,
+      IdempotencyKeyUncheckedUpdateWithoutBookingInput
+    >;
+    create: XOR<
+      IdempotencyKeyCreateWithoutBookingInput,
+      IdempotencyKeyUncheckedCreateWithoutBookingInput
+    >;
+  };
+
+  export type IdempotencyKeyUpdateWithWhereUniqueWithoutBookingInput = {
+    where: IdempotencyKeyWhereUniqueInput;
+    data: XOR<
+      IdempotencyKeyUpdateWithoutBookingInput,
+      IdempotencyKeyUncheckedUpdateWithoutBookingInput
+    >;
+  };
+
+  export type IdempotencyKeyUpdateManyWithWhereWithoutBookingInput = {
+    where: IdempotencyKeyScalarWhereInput;
+    data: XOR<
+      IdempotencyKeyUpdateManyMutationInput,
+      IdempotencyKeyUncheckedUpdateManyWithoutBookingInput
+    >;
+  };
+
+  export type IdempotencyKeyScalarWhereInput = {
+    AND?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
+    OR?: IdempotencyKeyScalarWhereInput[];
+    NOT?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
+    id?: StringFilter<"IdempotencyKey"> | string;
+    key?: StringFilter<"IdempotencyKey"> | string;
+    requestHash?: StringFilter<"IdempotencyKey"> | string;
+    userId?: StringFilter<"IdempotencyKey"> | string;
+    bookingId?: StringNullableFilter<"IdempotencyKey"> | string | null;
+    expiresAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
+    createdAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
   };
 
   export type OfferUpsertWithoutBookingsInput = {
@@ -12808,8 +20239,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutBookingsInput = {
@@ -12822,8 +20257,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateWithoutClientProfileInput = {
@@ -12836,8 +20275,12 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutClientProfileInput = {
@@ -12850,8 +20293,12 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutClientProfileInput = {
@@ -12880,8 +20327,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutClientProfileInput = {
@@ -12894,8 +20345,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type OfferCreateWithoutDestinationInput = {
@@ -13004,6 +20459,106 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Offer"> | Date | string | null;
   };
 
+  export type UserCreateWithoutEmailVerificationsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutEmailVerificationsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutEmailVerificationsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutEmailVerificationsInput,
+      UserUncheckedCreateWithoutEmailVerificationsInput
+    >;
+  };
+
+  export type UserUpsertWithoutEmailVerificationsInput = {
+    update: XOR<
+      UserUpdateWithoutEmailVerificationsInput,
+      UserUncheckedUpdateWithoutEmailVerificationsInput
+    >;
+    create: XOR<
+      UserCreateWithoutEmailVerificationsInput,
+      UserUncheckedCreateWithoutEmailVerificationsInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutEmailVerificationsInput,
+      UserUncheckedUpdateWithoutEmailVerificationsInput
+    >;
+  };
+
+  export type UserUpdateWithoutEmailVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
   export type OfferCreateWithoutFavoritesInput = {
     id?: string;
     type: $Enums.OfferType;
@@ -13072,7 +20627,11 @@ export namespace Prisma {
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
     clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
     offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -13086,7 +20645,11 @@ export namespace Prisma {
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
     clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -13179,7 +20742,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
     clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
     offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -13193,7 +20760,279 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
     clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type BookingCreateWithoutIdempotencyKeysInput = {
+    id?: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    offer: OfferCreateNestedOneWithoutBookingsInput;
+    user: UserCreateNestedOneWithoutBookingsInput;
+  };
+
+  export type BookingUncheckedCreateWithoutIdempotencyKeysInput = {
+    id?: string;
+    userId: string;
+    offerId: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type BookingCreateOrConnectWithoutIdempotencyKeysInput = {
+    where: BookingWhereUniqueInput;
+    create: XOR<
+      BookingCreateWithoutIdempotencyKeysInput,
+      BookingUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+  };
+
+  export type UserCreateWithoutIdempotencyKeysInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutIdempotencyKeysInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutIdempotencyKeysInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutIdempotencyKeysInput,
+      UserUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+  };
+
+  export type BookingUpsertWithoutIdempotencyKeysInput = {
+    update: XOR<
+      BookingUpdateWithoutIdempotencyKeysInput,
+      BookingUncheckedUpdateWithoutIdempotencyKeysInput
+    >;
+    create: XOR<
+      BookingCreateWithoutIdempotencyKeysInput,
+      BookingUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+    where?: BookingWhereInput;
+  };
+
+  export type BookingUpdateToOneWithWhereWithoutIdempotencyKeysInput = {
+    where?: BookingWhereInput;
+    data: XOR<
+      BookingUpdateWithoutIdempotencyKeysInput,
+      BookingUncheckedUpdateWithoutIdempotencyKeysInput
+    >;
+  };
+
+  export type BookingUpdateWithoutIdempotencyKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
+    user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
+  };
+
+  export type BookingUncheckedUpdateWithoutIdempotencyKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    offerId?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserUpsertWithoutIdempotencyKeysInput = {
+    update: XOR<
+      UserUpdateWithoutIdempotencyKeysInput,
+      UserUncheckedUpdateWithoutIdempotencyKeysInput
+    >;
+    create: XOR<
+      UserCreateWithoutIdempotencyKeysInput,
+      UserUncheckedCreateWithoutIdempotencyKeysInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutIdempotencyKeysInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutIdempotencyKeysInput,
+      UserUncheckedUpdateWithoutIdempotencyKeysInput
+    >;
+  };
+
+  export type UserUpdateWithoutIdempotencyKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutIdempotencyKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+  };
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>;
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>;
+  };
+
+  export type UserUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type BookingCreateWithoutOfferInput = {
@@ -13205,6 +21044,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
     user: UserCreateNestedOneWithoutBookingsInput;
   };
 
@@ -13218,6 +21058,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingCreateOrConnectWithoutOfferInput = {
@@ -13286,7 +21127,11 @@ export namespace Prisma {
     updatedAt?: Date | string;
     bookings?: BookingCreateNestedManyWithoutUserInput;
     clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
     favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutOffersInput = {
@@ -13300,7 +21145,11 @@ export namespace Prisma {
     updatedAt?: Date | string;
     bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
     clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
     favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutOffersInput = {
@@ -13417,7 +21266,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUpdateManyWithoutUserNestedInput;
     clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutOffersInput = {
@@ -13431,7 +21284,99 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
     clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserCreateWithoutSessionsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    offers?: OfferCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutSessionsInput = {
+    id?: string;
+    username: string;
+    email: string;
+    passwordHash: string;
+    role?: $Enums.UserRole;
+    isEmailVerified?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    bookings?: BookingUncheckedCreateNestedManyWithoutUserInput;
+    clientProfile?: ClientProfileUncheckedCreateNestedOneWithoutUserInput;
+    emailVerifications?: EmailVerificationUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    offers?: OfferUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutSessionsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>;
+  };
+
+  export type UserUpsertWithoutSessionsInput = {
+    update: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>;
+    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutSessionsInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>;
+  };
+
+  export type UserUpdateWithoutSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    offers?: OfferUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    username?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bookings?: BookingUncheckedUpdateManyWithoutUserNestedInput;
+    clientProfile?: ClientProfileUncheckedUpdateOneWithoutUserNestedInput;
+    emailVerifications?: EmailVerificationUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    offers?: OfferUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type BookingCreateWithoutUserInput = {
@@ -13443,6 +21388,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
     offer: OfferCreateNestedOneWithoutBookingsInput;
   };
 
@@ -13456,6 +21402,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingCreateOrConnectWithoutUserInput = {
@@ -13493,6 +21440,33 @@ export namespace Prisma {
     create: XOR<ClientProfileCreateWithoutUserInput, ClientProfileUncheckedCreateWithoutUserInput>;
   };
 
+  export type EmailVerificationCreateWithoutUserInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type EmailVerificationUncheckedCreateWithoutUserInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type EmailVerificationCreateOrConnectWithoutUserInput = {
+    where: EmailVerificationWhereUniqueInput;
+    create: XOR<
+      EmailVerificationCreateWithoutUserInput,
+      EmailVerificationUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type EmailVerificationCreateManyUserInputEnvelope = {
+    data: EmailVerificationCreateManyUserInput | EmailVerificationCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type FavoriteCreateWithoutUserInput = {
     id?: string;
     createdAt?: Date | string;
@@ -13512,6 +21486,69 @@ export namespace Prisma {
 
   export type FavoriteCreateManyUserInputEnvelope = {
     data: FavoriteCreateManyUserInput | FavoriteCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type IdempotencyKeyCreateWithoutUserInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+    booking?: BookingCreateNestedOneWithoutIdempotencyKeysInput;
+  };
+
+  export type IdempotencyKeyUncheckedCreateWithoutUserInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    bookingId?: string | null;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type IdempotencyKeyCreateOrConnectWithoutUserInput = {
+    where: IdempotencyKeyWhereUniqueInput;
+    create: XOR<
+      IdempotencyKeyCreateWithoutUserInput,
+      IdempotencyKeyUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type IdempotencyKeyCreateManyUserInputEnvelope = {
+    data: IdempotencyKeyCreateManyUserInput | IdempotencyKeyCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type NotificationCreateWithoutUserInput = {
+    id?: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+  };
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+  };
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput;
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>;
+  };
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[];
     skipDuplicates?: boolean;
   };
 
@@ -13577,6 +21614,30 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type UserSessionCreateWithoutUserInput = {
+    id?: string;
+    refreshTokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type UserSessionUncheckedCreateWithoutUserInput = {
+    id?: string;
+    refreshTokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type UserSessionCreateOrConnectWithoutUserInput = {
+    where: UserSessionWhereUniqueInput;
+    create: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>;
+  };
+
+  export type UserSessionCreateManyUserInputEnvelope = {
+    data: UserSessionCreateManyUserInput | UserSessionCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type BookingUpsertWithWhereUniqueWithoutUserInput = {
     where: BookingWhereUniqueInput;
     update: XOR<BookingUpdateWithoutUserInput, BookingUncheckedUpdateWithoutUserInput>;
@@ -13624,6 +21685,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type EmailVerificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: EmailVerificationWhereUniqueInput;
+    update: XOR<
+      EmailVerificationUpdateWithoutUserInput,
+      EmailVerificationUncheckedUpdateWithoutUserInput
+    >;
+    create: XOR<
+      EmailVerificationCreateWithoutUserInput,
+      EmailVerificationUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type EmailVerificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: EmailVerificationWhereUniqueInput;
+    data: XOR<
+      EmailVerificationUpdateWithoutUserInput,
+      EmailVerificationUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type EmailVerificationUpdateManyWithWhereWithoutUserInput = {
+    where: EmailVerificationScalarWhereInput;
+    data: XOR<
+      EmailVerificationUpdateManyMutationInput,
+      EmailVerificationUncheckedUpdateManyWithoutUserInput
+    >;
+  };
+
+  export type EmailVerificationScalarWhereInput = {
+    AND?: EmailVerificationScalarWhereInput | EmailVerificationScalarWhereInput[];
+    OR?: EmailVerificationScalarWhereInput[];
+    NOT?: EmailVerificationScalarWhereInput | EmailVerificationScalarWhereInput[];
+    id?: StringFilter<"EmailVerification"> | string;
+    userId?: StringFilter<"EmailVerification"> | string;
+    tokenHash?: StringFilter<"EmailVerification"> | string;
+    expiresAt?: DateTimeFilter<"EmailVerification"> | Date | string;
+    createdAt?: DateTimeFilter<"EmailVerification"> | Date | string;
+  };
+
   export type FavoriteUpsertWithWhereUniqueWithoutUserInput = {
     where: FavoriteWhereUniqueInput;
     update: XOR<FavoriteUpdateWithoutUserInput, FavoriteUncheckedUpdateWithoutUserInput>;
@@ -13640,6 +21740,62 @@ export namespace Prisma {
     data: XOR<FavoriteUpdateManyMutationInput, FavoriteUncheckedUpdateManyWithoutUserInput>;
   };
 
+  export type IdempotencyKeyUpsertWithWhereUniqueWithoutUserInput = {
+    where: IdempotencyKeyWhereUniqueInput;
+    update: XOR<
+      IdempotencyKeyUpdateWithoutUserInput,
+      IdempotencyKeyUncheckedUpdateWithoutUserInput
+    >;
+    create: XOR<
+      IdempotencyKeyCreateWithoutUserInput,
+      IdempotencyKeyUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type IdempotencyKeyUpdateWithWhereUniqueWithoutUserInput = {
+    where: IdempotencyKeyWhereUniqueInput;
+    data: XOR<IdempotencyKeyUpdateWithoutUserInput, IdempotencyKeyUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type IdempotencyKeyUpdateManyWithWhereWithoutUserInput = {
+    where: IdempotencyKeyScalarWhereInput;
+    data: XOR<
+      IdempotencyKeyUpdateManyMutationInput,
+      IdempotencyKeyUncheckedUpdateManyWithoutUserInput
+    >;
+  };
+
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput;
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>;
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>;
+  };
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput;
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput;
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+    OR?: NotificationScalarWhereInput[];
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+    id?: StringFilter<"Notification"> | string;
+    userId?: StringFilter<"Notification"> | string;
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFilter<"Notification"> | $Enums.NotificationChannel;
+    payload?: JsonFilter<"Notification">;
+    status?: EnumNotificationStatusFilter<"Notification"> | $Enums.NotificationStatus;
+    errorMessage?: StringNullableFilter<"Notification"> | string | null;
+    createdAt?: DateTimeFilter<"Notification"> | Date | string;
+    sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
+  };
+
   export type OfferUpsertWithWhereUniqueWithoutUserInput = {
     where: OfferWhereUniqueInput;
     update: XOR<OfferUpdateWithoutUserInput, OfferUncheckedUpdateWithoutUserInput>;
@@ -13654,6 +21810,69 @@ export namespace Prisma {
   export type OfferUpdateManyWithWhereWithoutUserInput = {
     where: OfferScalarWhereInput;
     data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type UserSessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserSessionWhereUniqueInput;
+    update: XOR<UserSessionUpdateWithoutUserInput, UserSessionUncheckedUpdateWithoutUserInput>;
+    create: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>;
+  };
+
+  export type UserSessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserSessionWhereUniqueInput;
+    data: XOR<UserSessionUpdateWithoutUserInput, UserSessionUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type UserSessionUpdateManyWithWhereWithoutUserInput = {
+    where: UserSessionScalarWhereInput;
+    data: XOR<UserSessionUpdateManyMutationInput, UserSessionUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type UserSessionScalarWhereInput = {
+    AND?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[];
+    OR?: UserSessionScalarWhereInput[];
+    NOT?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[];
+    id?: StringFilter<"UserSession"> | string;
+    userId?: StringFilter<"UserSession"> | string;
+    refreshTokenHash?: StringFilter<"UserSession"> | string;
+    expiresAt?: DateTimeFilter<"UserSession"> | Date | string;
+    createdAt?: DateTimeFilter<"UserSession"> | Date | string;
+  };
+
+  export type IdempotencyKeyCreateManyBookingInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    userId: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type IdempotencyKeyUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutIdempotencyKeysNestedInput;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateManyWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type OfferCreateManyDestinationInput = {
@@ -13783,6 +22002,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
     user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
   };
 
@@ -13796,6 +22016,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type BookingUncheckedUpdateManyWithoutOfferInput = {
@@ -13840,10 +22061,37 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type EmailVerificationCreateManyUserInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
   export type FavoriteCreateManyUserInput = {
     id?: string;
     offerId: string;
     createdAt?: Date | string;
+  };
+
+  export type IdempotencyKeyCreateManyUserInput = {
+    id?: string;
+    key: string;
+    requestHash: string;
+    bookingId?: string | null;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
+  export type NotificationCreateManyUserInput = {
+    id?: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
   };
 
   export type OfferCreateManyUserInput = {
@@ -13870,6 +22118,13 @@ export namespace Prisma {
     deletedAt?: Date | string | null;
   };
 
+  export type UserSessionCreateManyUserInput = {
+    id?: string;
+    refreshTokenHash: string;
+    expiresAt: Date | string;
+    createdAt?: Date | string;
+  };
+
   export type BookingUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -13879,6 +22134,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
     offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
   };
 
@@ -13892,6 +22148,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type BookingUncheckedUpdateManyWithoutUserInput = {
@@ -13904,6 +22161,27 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EmailVerificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EmailVerificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EmailVerificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type FavoriteUpdateWithoutUserInput = {
@@ -13922,6 +22200,66 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     offerId?: StringFieldUpdateOperationsInput | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type IdempotencyKeyUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    booking?: BookingUpdateOneWithoutIdempotencyKeysNestedInput;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type IdempotencyKeyUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    key?: StringFieldUpdateOperationsInput | string;
+    requestHash?: StringFieldUpdateOperationsInput | string;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
   export type OfferUpdateWithoutUserInput = {
@@ -13998,6 +22336,27 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type UserSessionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserSessionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserSessionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    refreshTokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   /**

@@ -1,6 +1,6 @@
 import z from "zod";
 import { LIMIT_MAX_VALUE, LIMIT_MIN_VALUE, PAGE_MIN_VALUE } from "../models/schema.constants";
-import { BookingStatus } from "@prisma/client";
+import { V1_BOOKING_STATUSES } from "../models/v1-booking-status";
 
 export const bookingQuerySchema = z.object({
   page: z
@@ -22,9 +22,7 @@ export const bookingQuerySchema = z.object({
         .max(LIMIT_MAX_VALUE, `Limit must not exceed ${LIMIT_MAX_VALUE}`),
     ),
 
-  status: z
-    .enum([BookingStatus.cancelled, BookingStatus.confirmed, BookingStatus.draft])
-    .optional(),
+  status: z.enum(V1_BOOKING_STATUSES).optional(),
 });
 
 export type BookingQueryDto = z.infer<typeof bookingQuerySchema>;

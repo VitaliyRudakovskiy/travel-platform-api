@@ -9,7 +9,7 @@ export const bookingMock = {
   endDate: faker.date.future(),
   guestsCount: faker.number.int({ min: 1, max: 4 }),
   totalPrice: { toNumber: () => 300.5 },
-  status: "draft",
+  status: "pending",
   createdAt: faker.date.past(),
   updatedAt: faker.date.recent(),
   offer: {

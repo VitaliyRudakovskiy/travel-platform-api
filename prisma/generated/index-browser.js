@@ -149,11 +149,41 @@ exports.Prisma.DestinationScalarFieldEnum = {
   updatedAt: "updatedAt",
 };
 
+exports.Prisma.EmailVerificationScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  tokenHash: "tokenHash",
+  expiresAt: "expiresAt",
+  createdAt: "createdAt",
+};
+
 exports.Prisma.FavoriteScalarFieldEnum = {
   id: "id",
   userId: "userId",
   offerId: "offerId",
   createdAt: "createdAt",
+};
+
+exports.Prisma.IdempotencyKeyScalarFieldEnum = {
+  id: "id",
+  key: "key",
+  requestHash: "requestHash",
+  userId: "userId",
+  bookingId: "bookingId",
+  expiresAt: "expiresAt",
+  createdAt: "createdAt",
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  type: "type",
+  channel: "channel",
+  payload: "payload",
+  status: "status",
+  errorMessage: "errorMessage",
+  createdAt: "createdAt",
+  sentAt: "sentAt",
 };
 
 exports.Prisma.OfferScalarFieldEnum = {
@@ -181,6 +211,14 @@ exports.Prisma.OfferScalarFieldEnum = {
   deletedAt: "deletedAt",
 };
 
+exports.Prisma.UserSessionScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  refreshTokenHash: "refreshTokenHash",
+  expiresAt: "expiresAt",
+  createdAt: "createdAt",
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: "id",
   username: "username",
@@ -197,6 +235,10 @@ exports.Prisma.SortOrder = {
   desc: "desc",
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull,
+};
+
 exports.Prisma.QueryMode = {
   default: "default",
   insensitive: "insensitive",
@@ -206,9 +248,16 @@ exports.Prisma.NullsOrder = {
   first: "first",
   last: "last",
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull,
+};
 exports.BookingStatus = exports.$Enums.BookingStatus = {
-  draft: "draft",
+  pending: "pending",
   confirmed: "confirmed",
+  completed: "completed",
   cancelled: "cancelled",
 };
 
@@ -216,6 +265,24 @@ exports.Currency = exports.$Enums.Currency = {
   BYN: "BYN",
   USD: "USD",
   EUR: "EUR",
+};
+
+exports.NotificationType = exports.$Enums.NotificationType = {
+  booking_confirmed: "booking_confirmed",
+  booking_cancelled: "booking_cancelled",
+  booking_completed: "booking_completed",
+  email_verification: "email_verification",
+};
+
+exports.NotificationChannel = exports.$Enums.NotificationChannel = {
+  email: "email",
+  in_app: "in_app",
+};
+
+exports.NotificationStatus = exports.$Enums.NotificationStatus = {
+  pending: "pending",
+  sent: "sent",
+  failed: "failed",
 };
 
 exports.OfferType = exports.$Enums.OfferType = {
@@ -239,8 +306,12 @@ exports.Prisma.ModelName = {
   Booking: "Booking",
   ClientProfile: "ClientProfile",
   Destination: "Destination",
+  EmailVerification: "EmailVerification",
   Favorite: "Favorite",
+  IdempotencyKey: "IdempotencyKey",
+  Notification: "Notification",
   Offer: "Offer",
+  UserSession: "UserSession",
   User: "User",
 };
 

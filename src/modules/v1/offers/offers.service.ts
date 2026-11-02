@@ -8,7 +8,7 @@ import {
 import { PrismaService } from "@services/prisma.service";
 import { OfferResponseDto } from "./schemas/offer-response.schema";
 import { CreateOfferDto } from "./schemas/create-offer.schema";
-import { OfferStatus, OfferType } from "@prisma/client";
+import { OfferStatus, OfferType } from "#prisma";
 import { OfferQueryDto } from "./schemas/offer-query.schema";
 import { PaginatedOfferResponseDto } from "./schemas/paginated-offer-response.schema";
 import { UpdateOfferDto } from "./schemas/update-offer.schema";

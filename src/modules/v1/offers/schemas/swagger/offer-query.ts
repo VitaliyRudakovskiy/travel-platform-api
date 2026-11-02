@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { LIMIT_MAX_VALUE, LIMIT_MIN_VALUE, PAGE_MIN_VALUE } from "../../models/schema.constants";
-import { OfferType } from "@prisma/client";
+import { OfferType } from "#prisma";
 
 export class OfferQuery {
   @ApiProperty({

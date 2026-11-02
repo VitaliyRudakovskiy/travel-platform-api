@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Currency, OfferType } from "@prisma/client";
+import { Currency, OfferType } from "#prisma";
 
 export class FavoritesResponse {
   @ApiProperty({

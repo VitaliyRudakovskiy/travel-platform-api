@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Currency, OfferStatus, OfferType } from "@prisma/client";
+import { Currency, OfferStatus, OfferType } from "#prisma";
 import {
   ADDRESS_MAX_LENGTH,
   AIRLINE_MAX_LENGTH,

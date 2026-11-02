@@ -8,10 +8,11 @@ import {
 import { PrismaService } from "@services/prisma.service";
 import { CreateBookingDto } from "./schemas/create-booking.schema";
 import { BookingResponseDto } from "./schemas/booking-response.schema";
-import { BookingStatus, OfferStatus } from "@prisma/client";
+import { BookingStatus, OfferStatus } from "#prisma";
 import { BookingQueryDto } from "./schemas/booking-query.schema";
 import { PaginatedBookingResponseDto } from "./schemas/paginated-booking-response.schema";
 import { UpdateBookingStatusDto } from "./schemas/update-booking.schema";
+import { fromV1BookingStatus, toV1BookingStatus } from "./models/v1-booking-status";
 
 @Injectable()
 export class BookingsService {
@@ -34,7 +35,7 @@ export class BookingsService {
     const where: any = {};
 
     if (status) {
-      where.status = status;
+      where.status = fromV1BookingStatus(status);
     }
 
     const total = await this.prisma.booking.count({ where });
@@ -57,6 +58,7 @@ export class BookingsService {
 
     const data = bookings.map((booking) => ({
       ...booking,
+      status: toV1BookingStatus(booking.status),
       totalPrice: booking.totalPrice.toNumber(),
       offer: {
         ...booking.offer,
@@ -103,6 +105,7 @@ export class BookingsService {
 
     return {
       ...booking,
+      status: toV1BookingStatus(booking.status),
       totalPrice: booking.totalPrice.toNumber(),
       offer: {
         ...booking.offer,
@@ -177,7 +180,7 @@ export class BookingsService {
         endDate,
         guestsCount: createBookingDto.guestsCount,
         totalPrice,
-        status: BookingStatus.draft,
+        status: BookingStatus.pending,
       },
       include: {
         offer: {
@@ -190,6 +193,7 @@ export class BookingsService {
 
     return {
       ...booking,
+      status: toV1BookingStatus(booking.status),
       totalPrice: booking.totalPrice.toNumber(),
       offer: {
         ...booking.offer,
@@ -228,14 +232,14 @@ export class BookingsService {
     const currentStatus = booking.status;
     const newStatus = updateStatusDto.status;
 
-    if (newStatus === BookingStatus.confirmed && currentStatus !== BookingStatus.draft) {
-      throw new BadRequestException("Booking can only be confirmed from draft status");
+    if (newStatus === BookingStatus.confirmed && currentStatus !== BookingStatus.pending) {
+      throw new BadRequestException("Booking can only be confirmed from pending status");
     }
 
     if (newStatus === BookingStatus.cancelled) {
-      if (currentStatus !== BookingStatus.draft && currentStatus !== BookingStatus.confirmed) {
+      if (currentStatus !== BookingStatus.pending && currentStatus !== BookingStatus.confirmed) {
         throw new BadRequestException(
-          "Booking can only be cancelled from draft or confirmed status",
+          "Booking can only be cancelled from pending or confirmed status",
         );
       }
     }
@@ -296,6 +300,7 @@ export class BookingsService {
 
     return {
       ...updatedBooking,
+      status: toV1BookingStatus(updatedBooking.status),
       totalPrice: updatedBooking.totalPrice.toNumber(),
       offer: {
         ...updatedBooking.offer,

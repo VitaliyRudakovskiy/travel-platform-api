@@ -23,6 +23,7 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": "./",
     "paths": {
+      "#prisma": ["prisma/generated"],
       "@modules/*": ["src/modules/*"],
       "@pipes/*": ["src/shared/pipes/*"],
       "@services/*": ["src/shared/services/*"],

@@ -1,0 +1,35 @@
+enum NotificationType {
+  booking_confirmed
+  booking_cancelled
+  booking_completed
+  email_verification
+}
+
+enum NotificationChannel {
+  email
+  in_app
+}
+
+enum NotificationStatus {
+  pending
+  sent
+  failed
+}
+
+model Notification {
+  id           String              @id @default(uuid())
+  userId       String              @map("user_id")
+  type         NotificationType
+  channel      NotificationChannel
+  payload      Json
+  status       NotificationStatus  @default(pending)
+  errorMessage String?             @map("error_message")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  sentAt       DateTime?           @map("sent_at")
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@map("notifications")
+}

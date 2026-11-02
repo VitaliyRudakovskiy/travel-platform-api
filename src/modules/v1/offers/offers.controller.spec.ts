@@ -6,7 +6,7 @@ import { provideOffersService } from "@tests/providers/provide-offers-service";
 import { offersServiceMock } from "@tests/mocks/offers-service.mock";
 import { offerMock } from "@tests/mocks/offer.mock";
 import { providePrisma } from "@tests/providers/provide-prisma";
-import { OfferStatus } from "@prisma/client";
+import { OfferStatus } from "#prisma";
 
 describe("OffersController", () => {
   let controller: OffersController;

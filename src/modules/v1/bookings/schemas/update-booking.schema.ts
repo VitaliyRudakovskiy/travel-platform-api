@@ -1,4 +1,4 @@
-import { BookingStatus } from "@prisma/client";
+import { BookingStatus } from "#prisma";
 import z from "zod";
 
 export const updateBookingStatusSchema = z.object({

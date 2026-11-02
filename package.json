@@ -5,6 +5,12 @@
   "description": "This project is API for travel journal",
   "license": "UNLICENSED",
   "author": "Vitaliy Rudakovskiy",
+  "imports": {
+    "#prisma": {
+      "types": "./prisma/generated/index.d.ts",
+      "default": "./prisma/generated/index.js"
+    }
+  },
   "scripts": {
     "start": "nest start --watch",
     "start:debug": "nest start --debug --watch",

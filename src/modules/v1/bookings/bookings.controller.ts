@@ -114,7 +114,7 @@ export class BookingsController {
         - Guests count must not exceed offer's maxGuests
         - Must not exceed offer's maxConcurrentBookings
 
-        **Status:** New bookings are created with status "draft"
+        **Status:** New bookings are created with status "pending"
       `,
   })
   @ApiBody({ type: CreateBooking })
@@ -155,8 +155,8 @@ export class BookingsController {
        Updates the status of a booking.
 
        **Status transition rules:**
-       - "draft" → "confirmed" (confirm a draft booking)
-       - "draft" → "cancelled" (cancel a draft booking)
+       - "pending" → "confirmed" (confirm a pending booking)
+       - "pending" → "cancelled" (cancel a pending booking)
        - "confirmed" → "cancelled" (cancel a confirmed booking)
 
        **Cannot:**

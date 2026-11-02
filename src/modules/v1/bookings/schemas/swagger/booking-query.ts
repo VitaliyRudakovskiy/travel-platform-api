@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { LIMIT_MAX_VALUE, LIMIT_MIN_VALUE, PAGE_MIN_VALUE } from "../../models/schema.constants";
-import { BookingStatus } from "@prisma/client";
+import { type V1BookingStatus } from "../../models/v1-booking-status";
 
 export class BookingQuery {
   @ApiProperty({
@@ -25,8 +25,8 @@ export class BookingQuery {
   @ApiProperty({
     example: "confirmed",
     description: "Filter bookings by status",
-    enum: ["draft", "confirmed", "cancelled"],
+    enum: ["pending", "confirmed", "cancelled"],
     required: false,
   })
-  status?: BookingStatus;
+  status?: V1BookingStatus;
 }

@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { describe, it, expect } from "vitest";
-import { BookingStatus } from "@prisma/client";
 import { LIMIT_MAX_VALUE } from "../models/schema.constants";
 import { bookingQuerySchema } from "./booking-query.schema";
 
@@ -20,10 +19,10 @@ describe("bookingQuerySchema", () => {
   });
 
   it("parses optional status filter", () => {
-    expect(bookingQuerySchema.parse({ status: BookingStatus.confirmed })).toEqual({
+    expect(bookingQuerySchema.parse({ status: "confirmed" })).toEqual({
       page: 1,
       limit: 10,
-      status: BookingStatus.confirmed,
+      status: "confirmed",
     });
   });
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BookingStatus } from "@prisma/client";
+import { BookingStatus } from "#prisma";
 
 export class UpdateBooking {
   @ApiProperty({

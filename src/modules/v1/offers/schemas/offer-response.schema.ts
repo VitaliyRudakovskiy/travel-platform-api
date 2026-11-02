@@ -1,4 +1,4 @@
-import { Currency, OfferStatus, OfferType } from "@prisma/client";
+import { Currency, OfferStatus, OfferType } from "#prisma";
 import z from "zod";
 
 export const offerResponseSchema = z.object({

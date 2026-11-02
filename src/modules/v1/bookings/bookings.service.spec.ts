@@ -62,6 +62,7 @@ describe("BookingsService", () => {
         data: [
           {
             ...bookingMock,
+            status: "pending",
             totalPrice: bookingMock.totalPrice.toNumber(),
             offer: {
               ...bookingMock.offer,
@@ -92,6 +93,18 @@ describe("BookingsService", () => {
       );
     });
 
+    it("filters by pending status", async () => {
+      prismaServiceMock.user.findUnique.mockResolvedValue(userMock);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.booking.findMany.mockResolvedValue([]);
+
+      await service.getMyBookings({ ...query, status: "pending" }, userId);
+
+      expect(prismaServiceMock.booking.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({ where: { status: "pending" } }),
+      );
+    });
+
     it("throws NotFoundException when user is not found", async () => {
       prismaServiceMock.user.findUnique.mockResolvedValue(null);
 
@@ -119,6 +132,7 @@ describe("BookingsService", () => {
       });
       expect(result).toEqual({
         ...bookingMock,
+        status: "pending",
         totalPrice: bookingMock.totalPrice.toNumber(),
         offer: {
           ...bookingMock.offer,
@@ -162,7 +176,7 @@ describe("BookingsService", () => {
       maxConcurrentBookings: 2,
     };
 
-    it("creates a draft booking with computed total price", async () => {
+    it("creates a pending booking with computed total price", async () => {
       prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
       prismaServiceMock.booking.count.mockResolvedValue(0);
       prismaServiceMock.booking.create.mockResolvedValue(bookingMock);
@@ -184,7 +198,7 @@ describe("BookingsService", () => {
           endDate: new Date(createBookingDto.endDate),
           guestsCount: createBookingDto.guestsCount,
           totalPrice: 800,
-          status: "draft",
+          status: "pending",
         },
         include: {
           offer: {
@@ -196,6 +210,7 @@ describe("BookingsService", () => {
       });
       expect(result).toEqual({
         ...bookingMock,
+        status: "pending",
         totalPrice: bookingMock.totalPrice.toNumber(),
         offer: {
           ...bookingMock.offer,
@@ -278,7 +293,7 @@ describe("BookingsService", () => {
       maxConcurrentBookings: 2,
     };
 
-    it("confirms a draft booking", async () => {
+    it("confirms a pending booking", async () => {
       prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
       prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
       prismaServiceMock.booking.count.mockResolvedValue(0);
@@ -318,7 +333,7 @@ describe("BookingsService", () => {
       });
     });
 
-    it("cancels a draft booking", async () => {
+    it("cancels a pending booking", async () => {
       prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
       const cancelledBooking = { ...bookingMock, status: "cancelled" };
       prismaServiceMock.booking.update.mockResolvedValue(cancelledBooking);

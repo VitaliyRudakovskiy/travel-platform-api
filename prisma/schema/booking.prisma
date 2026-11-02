@@ -1,16 +1,17 @@
 model Booking {
-  id          String        @id @default(uuid())
-  userId      String        @map("user_id")
-  offerId     String        @map("offer_id")
-  startDate   DateTime      @map("start_date")
-  endDate     DateTime      @map("end_date")
-  guestsCount Int           @map("guests_count")
-  totalPrice  Decimal       @map("total_price") @db.Decimal(10, 2)
-  status      BookingStatus @default(draft)
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
-  offer       Offer         @relation(fields: [offerId], references: [id], onDelete: Cascade)
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id               String           @id @default(uuid())
+  userId           String           @map("user_id")
+  offerId          String           @map("offer_id")
+  startDate        DateTime         @map("start_date")
+  endDate          DateTime         @map("end_date")
+  guestsCount      Int              @map("guests_count")
+  totalPrice       Decimal          @map("total_price") @db.Decimal(10, 2)
+  status           BookingStatus    @default(pending)
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  idempotencyKeys  IdempotencyKey[]
+  offer            Offer            @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([offerId])
@@ -20,7 +21,8 @@ model Booking {
 }
 
 enum BookingStatus {
-  draft
+  pending
   confirmed
+  completed
   cancelled
 }

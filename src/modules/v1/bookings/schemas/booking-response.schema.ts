@@ -1,5 +1,6 @@
-import { BookingStatus, Currency, OfferType } from "@prisma/client";
+import { Currency, OfferType } from "#prisma";
 import z from "zod";
+import { V1_BOOKING_STATUSES } from "../models/v1-booking-status";
 
 export const bookingResponseSchema = z.object({
   id: z.uuid(),
@@ -9,7 +10,7 @@ export const bookingResponseSchema = z.object({
   endDate: z.date(),
   guestsCount: z.number().int(),
   totalPrice: z.number(),
-  status: z.enum([BookingStatus.draft, BookingStatus.cancelled, BookingStatus.confirmed]),
+  status: z.enum(V1_BOOKING_STATUSES),
   createdAt: z.date(),
   updatedAt: z.date(),
   offer: z

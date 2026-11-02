@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 export default defineConfig({
   resolve: {
     alias: {
+      "#prisma": fileURLToPath(new URL("./prisma/generated", import.meta.url)),
       "@modules": fileURLToPath(new URL("./src/modules", import.meta.url)),
       "@pipes": fileURLToPath(new URL("./src/shared/pipes", import.meta.url)),
       "@services": fileURLToPath(new URL("./src/shared/services", import.meta.url)),

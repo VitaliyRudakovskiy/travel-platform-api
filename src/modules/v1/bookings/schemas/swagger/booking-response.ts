@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BookingStatus, Currency, OfferType } from "@prisma/client";
+import { Currency, OfferType } from "#prisma";
+import { type V1BookingStatus } from "../../models/v1-booking-status";
 
 export class BookingResponse {
   @ApiProperty({
@@ -52,11 +53,11 @@ export class BookingResponse {
   totalPrice: number;
 
   @ApiProperty({
-    example: "draft",
+    example: "pending",
     description: "Booking status",
-    enum: ["draft", "confirmed", "cancelled"],
+    enum: ["pending", "confirmed", "cancelled"],
   })
-  status: BookingStatus;
+  status: V1BookingStatus;
 
   @ApiProperty({
     example: "2024-01-01T00:00:00.000Z",
