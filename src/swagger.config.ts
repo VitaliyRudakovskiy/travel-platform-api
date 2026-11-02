@@ -15,8 +15,9 @@ export const swaggerConfig = new DocumentBuilder()
       - Favorites management
 
       ### Versioning:
-      - API uses URI versioning: \`/api/v1/endpoint\`
-      - Current version: v1
+      - API uses URI versioning: \`/api/v1/endpoint\` and \`/api/v2/endpoint\`
+      - v1 keeps the Stage I contract
+      - v2 controllers share the same services; JWT and Stage II features will land here
     `,
   )
   .setVersion("1.0")

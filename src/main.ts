@@ -11,11 +11,10 @@ async function bootstrap() {
 
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  const version = "1";
   app.enableVersioning({
     type: VersioningType.URI,
     prefix: "api/v",
-    defaultVersion: version,
+    defaultVersion: "1",
   });
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
@@ -37,7 +36,8 @@ async function bootstrap() {
 
   console.log(`\n🚀 Application is running on: http://localhost:${port}`);
   console.log(`📚 Swagger UI: http://localhost:${port}/api/docs`);
-  console.log(`📌 API URL: http://localhost:${port}/api/v${version}`);
+  console.log(`📌 API URL: http://localhost:${port}/api/v1`);
+  console.log(`📌 API URL: http://localhost:${port}/api/v2`);
 }
 
 bootstrap();
