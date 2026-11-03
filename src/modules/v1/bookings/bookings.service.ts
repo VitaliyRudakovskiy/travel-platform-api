@@ -8,7 +8,7 @@ import {
 import { PrismaService } from "@services/prisma.service";
 import { CreateBookingDto } from "./schemas/create-booking.schema";
 import { BookingResponseDto } from "./schemas/booking-response.schema";
-import { BookingStatus, OfferStatus } from "#prisma";
+import { BookingStatus, OfferStatus, UserRole } from "#prisma";
 import { BookingQueryDto } from "./schemas/booking-query.schema";
 import { PaginatedBookingResponseDto } from "./schemas/paginated-booking-response.schema";
 import { UpdateBookingStatusDto } from "./schemas/update-booking.schema";
@@ -21,6 +21,7 @@ export class BookingsService {
   async getMyBookings(
     query: BookingQueryDto,
     userId: string,
+    role?: UserRole,
   ): Promise<PaginatedBookingResponseDto> {
     const { page, limit, status } = query;
 
@@ -32,7 +33,7 @@ export class BookingsService {
       throw new NotFoundException(`User with id ${userId} not found`);
     }
 
-    const where: any = {};
+    const where: any = this.bookingListScope(userId, role);
 
     if (status) {
       where.status = fromV1BookingStatus(status);
@@ -83,7 +84,7 @@ export class BookingsService {
     };
   }
 
-  async getById(bookingId: string, userId: string): Promise<BookingResponseDto> {
+  async getById(bookingId: string, userId: string, role?: UserRole): Promise<BookingResponseDto> {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
@@ -99,7 +100,7 @@ export class BookingsService {
       throw new NotFoundException(`Booking with id ${bookingId} not found`);
     }
 
-    if (booking.userId !== userId) {
+    if (!this.canViewBooking(booking, userId, role)) {
       throw new ForbiddenException("You can only access your own bookings");
     }
 
@@ -209,6 +210,7 @@ export class BookingsService {
     id: string,
     updateStatusDto: UpdateBookingStatusDto,
     userId: string,
+    role?: UserRole,
   ): Promise<BookingResponseDto> {
     const booking = await this.prisma.booking.findUnique({
       where: { id },
@@ -225,7 +227,7 @@ export class BookingsService {
       throw new NotFoundException(`Booking with id ${id} not found`);
     }
 
-    if (booking.userId !== userId) {
+    if (!this.canMutateBooking(booking, userId, role)) {
       throw new ForbiddenException("You can only update your own bookings");
     }
 
@@ -307,5 +309,33 @@ export class BookingsService {
         price: updatedBooking.offer.price.toNumber(),
       },
     };
+  }
+
+  private bookingListScope(userId: string, role?: UserRole) {
+    if (role === UserRole.Admin) {
+      return {};
+    }
+
+    if (role === UserRole.Agent) {
+      return { offer: { ownerId: userId } };
+    }
+
+    return { userId };
+  }
+
+  private canViewBooking(
+    booking: { userId: string; offer: { ownerId: string } },
+    userId: string,
+    role?: UserRole,
+  ): boolean {
+    if (role === UserRole.Admin || booking.userId === userId) {
+      return true;
+    }
+
+    return role === UserRole.Agent && booking.offer.ownerId === userId;
+  }
+
+  private canMutateBooking(booking: { userId: string }, userId: string, role?: UserRole): boolean {
+    return role === UserRole.Admin || booking.userId === userId;
   }
 }

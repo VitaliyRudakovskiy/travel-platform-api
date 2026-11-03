@@ -7,6 +7,7 @@ import {
 } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { describe, beforeEach, it, expect, vi } from "vitest";
+import { UserRole } from "#prisma";
 import { BookingsService } from "./bookings.service";
 import { providePrisma } from "@tests/providers/provide-prisma";
 import { prismaServiceMock } from "@tests/mocks/prisma-service.mock";
@@ -46,7 +47,7 @@ describe("BookingsService", () => {
         where: { id: userId },
       });
       expect(prismaServiceMock.booking.findMany).toHaveBeenCalledWith({
-        where: {},
+        where: { userId },
         skip: 0,
         take: 10,
         orderBy: { createdAt: "desc" },
@@ -89,7 +90,7 @@ describe("BookingsService", () => {
       await service.getMyBookings({ ...query, status: "confirmed" }, userId);
 
       expect(prismaServiceMock.booking.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ where: { status: "confirmed" } }),
+        expect.objectContaining({ where: { userId, status: "confirmed" } }),
       );
     });
 
@@ -101,7 +102,31 @@ describe("BookingsService", () => {
       await service.getMyBookings({ ...query, status: "pending" }, userId);
 
       expect(prismaServiceMock.booking.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ where: { status: "pending" } }),
+        expect.objectContaining({ where: { userId, status: "pending" } }),
+      );
+    });
+
+    it("returns bookings of the agent's offers", async () => {
+      prismaServiceMock.user.findUnique.mockResolvedValue(userMock);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.booking.findMany.mockResolvedValue([]);
+
+      await service.getMyBookings(query, userId, UserRole.Agent);
+
+      expect(prismaServiceMock.booking.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({ where: { offer: { ownerId: userId } } }),
+      );
+    });
+
+    it("returns all bookings for an Admin", async () => {
+      prismaServiceMock.user.findUnique.mockResolvedValue(userMock);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.booking.findMany.mockResolvedValue([]);
+
+      await service.getMyBookings(query, userId, UserRole.Admin);
+
+      expect(prismaServiceMock.booking.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({ where: {} }),
       );
     });
 
@@ -155,6 +180,34 @@ describe("BookingsService", () => {
       await expect(service.getById(bookingMock.id, faker.string.uuid())).rejects.toThrow(
         ForbiddenException,
       );
+    });
+
+    it("returns the booking when the user is Admin", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+
+      const result = await service.getById(bookingMock.id, faker.string.uuid(), UserRole.Admin);
+
+      expect(result.id).toBe(bookingMock.id);
+    });
+
+    it("returns the booking when the user is the offer Agent", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+
+      const result = await service.getById(
+        bookingMock.id,
+        bookingMock.offer.ownerId,
+        UserRole.Agent,
+      );
+
+      expect(result.id).toBe(bookingMock.id);
+    });
+
+    it("throws ForbiddenException when an Agent does not own the offer", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+
+      await expect(
+        service.getById(bookingMock.id, faker.string.uuid(), UserRole.Agent),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 
@@ -368,6 +421,46 @@ describe("BookingsService", () => {
 
       await expect(
         service.updateStatus(bookingMock.id, { status: "confirmed" }, faker.string.uuid()),
+      ).rejects.toThrow(ForbiddenException);
+
+      expect(prismaServiceMock.booking.update).not.toHaveBeenCalled();
+    });
+
+    it("cancels a booking when the user is Admin", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+      const cancelledBooking = { ...bookingMock, status: "cancelled" };
+      prismaServiceMock.booking.update.mockResolvedValue(cancelledBooking);
+
+      await service.updateStatus(
+        bookingMock.id,
+        { status: "cancelled" },
+        faker.string.uuid(),
+        UserRole.Admin,
+      );
+
+      expect(prismaServiceMock.booking.update).toHaveBeenCalledWith({
+        where: { id: bookingMock.id },
+        data: { status: "cancelled" },
+        include: {
+          offer: {
+            include: {
+              destination: true,
+            },
+          },
+        },
+      });
+    });
+
+    it("throws ForbiddenException when an Agent tries to update a customer's booking", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+
+      await expect(
+        service.updateStatus(
+          bookingMock.id,
+          { status: "cancelled" },
+          bookingMock.offer.ownerId,
+          UserRole.Agent,
+        ),
       ).rejects.toThrow(ForbiddenException);
 
       expect(prismaServiceMock.booking.update).not.toHaveBeenCalled();

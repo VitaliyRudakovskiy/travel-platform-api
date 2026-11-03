@@ -19,8 +19,11 @@ import {
 } from "@modules/v1/offers/schemas/create-offer.schema";
 import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
-import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
+import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
+import { UserRole } from "#prisma";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
+import { RolesGuard } from "@shared/guards/roles.guard";
+import { Roles } from "@shared/decorators/roles.decorator";
 import {
   type OfferQueryDto,
   offerQuerySchema,
@@ -93,11 +96,13 @@ export class OffersController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin, UserRole.Agent)
   @ApiBearerAuth()
   @ApiOperation({
     summary: "Create a new offer",
-    description: "Creates a new offer. Only the owner can later update or delete it.",
+    description:
+      "Creates a new offer. Admin and Agent only. The owner or an Admin can later update or delete it.",
   })
   @ApiBody({ type: CreateOffer })
   @ApiResponse({
@@ -114,13 +119,17 @@ export class OffersController {
     description: "Unauthorized - Authentication required",
   })
   @ApiResponse({
+    status: 403,
+    description: "Forbidden - Admin or Agent role required",
+  })
+  @ApiResponse({
     status: 404,
     description: "Destination not found",
   })
   async create(
     @Body(new ZodValidationPipe(createOfferSchema))
     createOfferDto: CreateOfferDto,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<OfferResponseDto> {
     return this.offersService.create(createOfferDto, currentUser.id);
   }
@@ -130,7 +139,7 @@ export class OffersController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: "Update an offer",
-    description: "Updates an existing offer. Only the owner can update their offer.",
+    description: "Updates an existing offer. Only the owner or an Admin can update it.",
   })
   @ApiBody({ type: UpdateOffer })
   @ApiParam({
@@ -154,7 +163,7 @@ export class OffersController {
   })
   @ApiResponse({
     status: 403,
-    description: "Forbidden - You can only update your own offers",
+    description: "Forbidden - You can only update your own offers unless you are an Admin",
   })
   @ApiResponse({
     status: 404,
@@ -164,9 +173,9 @@ export class OffersController {
     @Param("offerId") offerId: string,
     @Body(new ZodValidationPipe(updateOfferSchema))
     updateOfferDto: UpdateOfferDto,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ) {
-    return this.offersService.update(offerId, updateOfferDto, currentUser.id);
+    return this.offersService.update(offerId, updateOfferDto, currentUser.id, currentUser.role);
   }
 
   @Delete(":offerId")
@@ -176,7 +185,7 @@ export class OffersController {
   @ApiOperation({
     summary: "Soft delete an offer",
     description:
-      "Soft deletes an offer (sets deletedAt and status to archived). Only the owner can delete their offer.",
+      "Soft deletes an offer (sets deletedAt and status to archived). Only the owner or an Admin can delete it.",
   })
   @ApiParam({
     name: "offerId",
@@ -194,7 +203,7 @@ export class OffersController {
   })
   @ApiResponse({
     status: 403,
-    description: "Forbidden - You can only delete your own offers",
+    description: "Forbidden - You can only delete your own offers unless you are an Admin",
   })
   @ApiResponse({
     status: 404,
@@ -202,8 +211,8 @@ export class OffersController {
   })
   async delete(
     @Param("offerId") offerId: string,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<void> {
-    return this.offersService.delete(offerId, currentUser.id);
+    return this.offersService.delete(offerId, currentUser.id, currentUser.role);
   }
 }

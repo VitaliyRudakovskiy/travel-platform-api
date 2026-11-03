@@ -28,7 +28,10 @@ import {
   destinationQuerySchema,
 } from "@modules/v1/destinations/schemas/destination-query.schema";
 import { PaginatedDestinationResponseDto } from "@modules/v1/destinations/schemas/paginated-destination-response.schema";
+import { UserRole } from "#prisma";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
+import { RolesGuard } from "@shared/guards/roles.guard";
+import { Roles } from "@shared/decorators/roles.decorator";
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -115,12 +118,13 @@ export class DestinationsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin)
   @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(createDestinationSchema))
   @ApiOperation({
     summary: "Create a new destination",
-    description: "Creates a new destination",
+    description: "Creates a new destination. Admin only.",
   })
   @ApiResponse({
     status: 201,
@@ -130,6 +134,14 @@ export class DestinationsController {
   @ApiResponse({
     status: 400,
     description: "Invalid input data",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 403,
+    description: "Forbidden - Admin role required",
   })
   @ApiResponse({
     status: 409,
@@ -142,11 +154,12 @@ export class DestinationsController {
   }
 
   @Patch(":destinationId")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin)
   @ApiBearerAuth()
   @ApiOperation({
     summary: "Update a destination",
-    description: "Updates an existing destination",
+    description: "Updates an existing destination. Admin only.",
   })
   @ApiParam({
     name: "destinationId",
@@ -164,6 +177,14 @@ export class DestinationsController {
     description: "Invalid input data",
   })
   @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 403,
+    description: "Forbidden - Admin role required",
+  })
+  @ApiResponse({
     status: 404,
     description: "Destination not found",
   })
@@ -176,11 +197,12 @@ export class DestinationsController {
   }
 
   @Delete(":destinationId")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin)
   @ApiBearerAuth()
   @ApiOperation({
     summary: "Delete a destination",
-    description: "Deletes a destination by ID",
+    description: "Deletes a destination by ID. Admin only.",
   })
   @ApiParam({
     name: "destinationId",
@@ -191,6 +213,14 @@ export class DestinationsController {
   @ApiResponse({
     status: 204,
     description: "Destination deleted successfully",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 403,
+    description: "Forbidden - Admin role required",
   })
   @ApiResponse({
     status: 404,

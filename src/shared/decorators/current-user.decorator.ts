@@ -1,8 +1,8 @@
-import { UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
 
 export const CurrentUser = createParamDecorator(
-  (_data: unknown, context: ExecutionContext): UserResponseDto => {
+  (_data: unknown, context: ExecutionContext): AuthenticatedUser => {
     const request = context.switchToHttp().getRequest();
     return request.user;
   },

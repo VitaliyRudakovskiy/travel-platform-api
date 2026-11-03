@@ -14,6 +14,7 @@ export const bookingMock = {
   updatedAt: faker.date.recent(),
   offer: {
     id: faker.string.uuid(),
+    ownerId: faker.string.uuid(),
     title: faker.lorem.words(3),
     type: "hotel",
     price: { toNumber: () => 150.5 },

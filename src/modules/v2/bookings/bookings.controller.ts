@@ -6,7 +6,7 @@ import {
   createBookingSchema,
 } from "@modules/v1/bookings/schemas/create-booking.schema";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
-import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
+import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
 import { BookingResponseDto } from "@modules/v1/bookings/schemas/booking-response.schema";
 import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type PaginatedBookingResponseDto } from "@modules/v1/bookings/schemas/paginated-booking-response.schema";
@@ -41,7 +41,8 @@ export class BookingsController {
   @Get()
   @ApiOperation({
     summary: "Get current user's bookings",
-    description: "Returns a paginated list of bookings for the authenticated user",
+    description:
+      "Returns a paginated list of bookings. Users see their own bookings, Agents see bookings of their offers, Admins see all bookings.",
   })
   @ApiResponse({
     status: 200,
@@ -63,15 +64,16 @@ export class BookingsController {
   async getMyBookings(
     @Query(new ZodValidationPipe(bookingQuerySchema))
     query: BookingQueryDto,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<PaginatedBookingResponseDto> {
-    return this.bookingsService.getMyBookings(query, currentUser.id);
+    return this.bookingsService.getMyBookings(query, currentUser.id, currentUser.role);
   }
 
   @Get(":bookingId")
   @ApiOperation({
     summary: "Get a booking by ID",
-    description: "Returns detailed information about a specific booking",
+    description:
+      "Returns a booking. Users can access their own bookings, Agents can access bookings of their offers, Admins can access any booking.",
   })
   @ApiParam({
     name: "bookingId",
@@ -90,7 +92,8 @@ export class BookingsController {
   })
   @ApiResponse({
     status: 403,
-    description: "Forbidden - You can only access your own bookings",
+    description:
+      "Forbidden - You can only access your own bookings unless you are an Admin or the offer Agent",
   })
   @ApiResponse({
     status: 404,
@@ -98,9 +101,9 @@ export class BookingsController {
   })
   async getById(
     @Param("bookingId") bookingId: string,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<BookingResponseDto> {
-    return this.bookingsService.getById(bookingId, currentUser.id);
+    return this.bookingsService.getById(bookingId, currentUser.id, currentUser.role);
   }
 
   @Post()
@@ -134,7 +137,7 @@ export class BookingsController {
   async create(
     @Body(new ZodValidationPipe(createBookingSchema))
     createBookingDto: CreateBookingDto,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<BookingResponseDto> {
     return this.bookingsService.create(createBookingDto, currentUser.id);
   }
@@ -173,7 +176,7 @@ export class BookingsController {
   })
   @ApiResponse({
     status: 403,
-    description: "Forbidden - You can only update your own bookings",
+    description: "Forbidden - You can only update your own bookings unless you are an Admin",
   })
   @ApiResponse({
     status: 404,
@@ -188,8 +191,13 @@ export class BookingsController {
     @Param("id") bookingId: string,
     @Body(new ZodValidationPipe(updateBookingStatusSchema))
     updateStatusDto: UpdateBookingStatusDto,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<BookingResponseDto> {
-    return this.bookingsService.updateStatus(bookingId, updateStatusDto, currentUser.id);
+    return this.bookingsService.updateStatus(
+      bookingId,
+      updateStatusDto,
+      currentUser.id,
+      currentUser.role,
+    );
   }
 }

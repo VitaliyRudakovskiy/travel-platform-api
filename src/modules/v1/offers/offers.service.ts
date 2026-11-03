@@ -8,7 +8,7 @@ import {
 import { PrismaService } from "@services/prisma.service";
 import { OfferResponseDto } from "./schemas/offer-response.schema";
 import { CreateOfferDto } from "./schemas/create-offer.schema";
-import { OfferStatus, OfferType } from "#prisma";
+import { OfferStatus, OfferType, UserRole } from "#prisma";
 import { OfferQueryDto } from "./schemas/offer-query.schema";
 import { PaginatedOfferResponseDto } from "./schemas/paginated-offer-response.schema";
 import { UpdateOfferDto } from "./schemas/update-offer.schema";
@@ -232,6 +232,7 @@ export class OffersService {
     id: string,
     updateOfferDto: UpdateOfferDto,
     userId: string,
+    role?: UserRole,
   ): Promise<OfferResponseDto> {
     const existingOffer = await this.prisma.offer.findUnique({
       where: { id, deletedAt: null },
@@ -241,7 +242,7 @@ export class OffersService {
       throw new NotFoundException(`Offer with id ${id} not found or already deleted`);
     }
 
-    if (existingOffer.ownerId !== userId) {
+    if (role !== UserRole.Admin && existingOffer.ownerId !== userId) {
       throw new ForbiddenException("You can only update your own offers");
     }
 
@@ -359,7 +360,7 @@ export class OffersService {
     };
   }
 
-  async delete(id: string, userId: string): Promise<void> {
+  async delete(id: string, userId: string, role?: UserRole): Promise<void> {
     const offer = await this.prisma.offer.findUnique({
       where: { id, deletedAt: null },
     });
@@ -368,7 +369,7 @@ export class OffersService {
       throw new NotFoundException(`Offer with id ${id} not found or already deleted`);
     }
 
-    if (offer.ownerId !== userId) {
+    if (role !== UserRole.Admin && offer.ownerId !== userId) {
       throw new ConflictException("You can only delete your own offers");
     }
 
@@ -381,7 +382,7 @@ export class OffersService {
     });
   }
 
-  async hardDelete(id: string, userId: string): Promise<void> {
+  async hardDelete(id: string, userId: string, role?: UserRole): Promise<void> {
     const offer = await this.prisma.offer.findUnique({
       where: { id },
     });
@@ -390,7 +391,7 @@ export class OffersService {
       throw new NotFoundException(`Offer with id ${id} not found or already deleted`);
     }
 
-    if (offer.ownerId !== userId) {
+    if (role !== UserRole.Admin && offer.ownerId !== userId) {
       throw new ConflictException("You can only delete your own offers");
     }
 

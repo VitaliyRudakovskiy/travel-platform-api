@@ -7,6 +7,7 @@ import {
 } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { describe, beforeEach, it, expect, vi } from "vitest";
+import { UserRole } from "#prisma";
 import { OffersService } from "./offers.service";
 import { providePrisma } from "@tests/providers/provide-prisma";
 import { prismaServiceMock } from "@tests/mocks/prisma-service.mock";
@@ -300,6 +301,25 @@ describe("OffersService", () => {
       expect(prismaServiceMock.offer.update).not.toHaveBeenCalled();
     });
 
+    it("updates the offer when the user is Admin", async () => {
+      const updatedOffer = { ...offerMock, title: updateOfferDto.title };
+      prismaServiceMock.offer.findUnique.mockResolvedValue(existingOffer);
+      prismaServiceMock.offer.update.mockResolvedValue(updatedOffer);
+
+      const result = await service.update(
+        offerMock.id,
+        updateOfferDto,
+        faker.string.uuid(),
+        UserRole.Admin,
+      );
+
+      expect(prismaServiceMock.offer.update).toHaveBeenCalled();
+      expect(result).toEqual({
+        ...updatedOffer,
+        price: updatedOffer.price.toNumber(),
+      });
+    });
+
     it("throws BadRequestException when trying to change offer type", async () => {
       prismaServiceMock.offer.findUnique.mockResolvedValue(existingOffer);
 
@@ -370,6 +390,21 @@ describe("OffersService", () => {
 
       expect(prismaServiceMock.offer.update).not.toHaveBeenCalled();
     });
+
+    it("soft deletes the offer when the user is Admin", async () => {
+      prismaServiceMock.offer.findUnique.mockResolvedValue(offerMock);
+      prismaServiceMock.offer.update.mockResolvedValue(offerMock);
+
+      await service.delete(offerMock.id, faker.string.uuid(), UserRole.Admin);
+
+      expect(prismaServiceMock.offer.update).toHaveBeenCalledWith({
+        where: { id: offerMock.id },
+        data: {
+          deletedAt: expect.any(Date),
+          status: "archived",
+        },
+      });
+    });
   });
 
   describe("hardDelete", () => {
@@ -405,6 +440,17 @@ describe("OffersService", () => {
       );
 
       expect(prismaServiceMock.offer.delete).not.toHaveBeenCalled();
+    });
+
+    it("permanently deletes the offer when the user is Admin", async () => {
+      prismaServiceMock.offer.findUnique.mockResolvedValue(offerMock);
+      prismaServiceMock.offer.delete.mockResolvedValue(offerMock);
+
+      await service.hardDelete(offerMock.id, faker.string.uuid(), UserRole.Admin);
+
+      expect(prismaServiceMock.offer.delete).toHaveBeenCalledWith({
+        where: { id: offerMock.id },
+      });
     });
   });
 });

@@ -12,8 +12,12 @@ import {
 import { UsersService } from "@modules/v1/users/users.service";
 import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type CreateUserDto, createUserSchema } from "@modules/v1/users/schemas/create-user.schema";
+import { UserRole } from "#prisma";
+import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
+import { RolesGuard } from "@shared/guards/roles.guard";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
+import { Roles } from "@shared/decorators/roles.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { type UpdateUserDto, updateUserSchema } from "@modules/v1/users/schemas/update-user.schema";
 import {
@@ -34,11 +38,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.Admin)
   @ApiBearerAuth()
   @ApiOperation({
     summary: "Get all users",
-    description: "Returns a list of all registered users",
+    description: "Returns a list of all registered users. Admin only.",
   })
   @ApiResponse({
     status: 200,
@@ -46,6 +51,7 @@ export class UsersController {
     type: [UserResponse],
   })
   @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden - Admin role required" })
   async get(): Promise<UserResponseDto[]> {
     return this.usersService.getAll();
   }
@@ -53,20 +59,25 @@ export class UsersController {
   @Get(":userId")
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: "Get user by ID" })
+  @ApiOperation({
+    summary: "Get user by ID",
+    description:
+      "Returns a user profile. Users can only access their own profile. Admins can access any profile.",
+  })
   @ApiParam({ name: "userId", description: "User ID" })
   @ApiResponse({
     status: 200,
     description: "User found",
     type: UserResponse,
   })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
   @ApiResponse({ status: 404, description: "User not found" })
   async getOne(
     @Param("userId") userId: string,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<UserResponseDto> {
-    if (userId !== currentUser.id) {
+    if (currentUser.role !== UserRole.Admin && userId !== currentUser.id) {
       throw new ForbiddenException("You can only access your own profile");
     }
 
@@ -91,7 +102,11 @@ export class UsersController {
   @Patch(":userId")
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: "Update user" })
+  @ApiOperation({
+    summary: "Update user",
+    description:
+      "Updates a user profile. Users can only update their own profile. Admins can update any profile.",
+  })
   @ApiParam({ name: "userId", description: "User ID" })
   @ApiBody({ type: UpdateUser })
   @ApiResponse({
@@ -99,15 +114,16 @@ export class UsersController {
     description: "User updated",
     type: UserResponse,
   })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
   @ApiResponse({ status: 404, description: "User not found" })
   @ApiResponse({ status: 409, description: "Email is already taken" })
   async update(
     @Param("userId") userId: string,
     @Body(new ZodValidationPipe(updateUserSchema)) updateUserDto: UpdateUserDto,
-    @CurrentUser() currentUser: UserResponseDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ): Promise<UserResponseDto> {
-    if (userId !== currentUser.id) {
+    if (currentUser.role !== UserRole.Admin && userId !== currentUser.id) {
       throw new ForbiddenException("You can only update your own profile");
     }
 
