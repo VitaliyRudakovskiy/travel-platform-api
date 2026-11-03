@@ -91,7 +91,7 @@ describe("UsersService", () => {
     it("creates a user with a hashed password", async () => {
       prismaServiceMock.user.findFirst.mockResolvedValue(null);
       vi.mocked(bcrypt.genSaltSync).mockReturnValue("salt");
-      vi.mocked(bcrypt.hash).mockResolvedValue("hashed-password");
+      vi.mocked(bcrypt.hash).mockResolvedValue();
       prismaServiceMock.user.create.mockResolvedValue(userMock);
 
       const result = await service.create(createUserDto);
@@ -125,6 +125,55 @@ describe("UsersService", () => {
 
       expect(bcrypt.genSaltSync).not.toHaveBeenCalled();
       expect(prismaServiceMock.user.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("createWithProfile", () => {
+    const createUserDto = {
+      username: faker.internet.username(),
+      email: loginMock.email,
+      password: faker.internet.password(),
+    };
+
+    it("creates a user and an empty client profile in one transaction", async () => {
+      prismaServiceMock.user.findFirst.mockResolvedValue(null);
+      vi.mocked(bcrypt.genSaltSync).mockReturnValue("salt");
+      vi.mocked(bcrypt.hash).mockResolvedValue();
+      prismaServiceMock.$transaction.mockImplementation(
+        async (callback: (tx: unknown) => unknown) => callback(prismaServiceMock),
+      );
+      prismaServiceMock.user.create.mockResolvedValue(userMock);
+      prismaServiceMock.clientProfile.create.mockResolvedValue({
+        userId: userMock.id,
+      });
+
+      const result = await service.createWithProfile(createUserDto);
+
+      expect(prismaServiceMock.user.create).toHaveBeenCalledWith({
+        data: {
+          email: createUserDto.email,
+          username: createUserDto.username,
+          passwordHash: "hashed-password",
+        },
+      });
+      expect(prismaServiceMock.clientProfile.create).toHaveBeenCalledWith({
+        data: { userId: userMock.id },
+      });
+      expect(result).toEqual({
+        id: userMock.id,
+        username: userMock.username,
+        email: userMock.email,
+        createdAt: userMock.createdAt,
+        updatedAt: userMock.updatedAt,
+      });
+    });
+
+    it("throws ConflictException when the email already exists", async () => {
+      prismaServiceMock.user.findFirst.mockResolvedValue(userMock);
+
+      await expect(service.createWithProfile(createUserDto)).rejects.toThrow(ConflictException);
+
+      expect(prismaServiceMock.$transaction).not.toHaveBeenCalled();
     });
   });
 

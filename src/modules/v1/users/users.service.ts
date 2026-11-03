@@ -16,13 +16,7 @@ export class UsersService {
       },
     });
 
-    return users.map((user) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    }));
+    return users.map((user) => this.toResponse(user));
   }
 
   async getById(id: string): Promise<UserResponseDto> {
@@ -34,13 +28,7 @@ export class UsersService {
       throw new NotFoundException("User not found");
     }
 
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    return this.toResponse(user);
   }
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
@@ -63,13 +51,40 @@ export class UsersService {
       },
     });
 
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    return this.toResponse(user);
+  }
+
+  async createWithProfile(createUserDto: CreateUserDto): Promise<UserResponseDto> {
+    const existingUser = await this.prisma.user.findFirst({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException("User with this email or username already exists");
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const passwordHash = await bcrypt.hash(createUserDto.password, salt);
+
+    const user = await this.prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: {
+          email: createUserDto.email,
+          username: createUserDto.username,
+          passwordHash,
+        },
+      });
+
+      await tx.clientProfile.create({
+        data: {
+          userId: createdUser.id,
+        },
+      });
+
+      return createdUser;
+    });
+
+    return this.toResponse(user);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
@@ -96,12 +111,22 @@ export class UsersService {
       data: updateUserDto,
     });
 
+    return this.toResponse(updatedUser);
+  }
+
+  private toResponse(user: {
+    id: string;
+    username: string;
+    email: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }): UserResponseDto {
     return {
-      id: updatedUser.id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      createdAt: updatedUser.createdAt,
-      updatedAt: updatedUser.updatedAt,
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
   }
 }

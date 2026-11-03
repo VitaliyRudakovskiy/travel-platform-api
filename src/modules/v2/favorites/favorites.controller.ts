@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { AuthGuard } from "@shared/guards/auth.guard";
+import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import { FavoritesService } from "@modules/v1/favorites/favorites.service";
 import { FavoritesResponseDto } from "@modules/v1/favorites/schemas/favorite-response.schema";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
@@ -21,12 +21,20 @@ import {
   type FavoriteQueryDto,
   favoriteQuerySchema,
 } from "@modules/v1/favorites/schemas/favorite-query.schema";
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { PaginatedFavoritesResponse } from "@modules/v1/favorites/schemas/swagger/paginated-favorite-response";
 import { FavoritesResponse } from "@modules/v1/favorites/schemas/swagger/favorite-response";
 
 @ApiTags("Favorites")
-@UseGuards(AuthGuard)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller({ path: "favorites", version: "2" })
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}

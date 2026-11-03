@@ -17,10 +17,12 @@ export const swaggerConfig = new DocumentBuilder()
       ### Versioning:
       - API uses URI versioning: \`/api/v1/endpoint\` and \`/api/v2/endpoint\`
       - v1 keeps the Stage I contract
-      - v2 controllers share the same services; JWT and Stage II features will land here
+      - v2 controllers share the same services
+      - v2 protected routes use Bearer JWT (\`Authorization: Bearer <accessToken>\`)
     `,
   )
   .setVersion("1.0")
+  .addBearerAuth()
   .addTag("Users", "User management endpoints")
   .addTag("Sessions", "Authentication endpoints")
   .addTag("Destinations", "Destintaions management endpoints")

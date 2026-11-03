@@ -6,6 +6,8 @@ export const userMock = {
   username: faker.internet.username(),
   email: loginMock.email,
   passwordHash: faker.string.alphanumeric(60),
+  role: "User",
+  isEmailVerified: false,
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
 };

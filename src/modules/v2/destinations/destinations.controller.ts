@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
 } from "@nestjs/common";
 import { DestinationsService } from "@modules/v1/destinations/destinations.service";
@@ -27,7 +28,15 @@ import {
   destinationQuerySchema,
 } from "@modules/v1/destinations/schemas/destination-query.schema";
 import { PaginatedDestinationResponseDto } from "@modules/v1/destinations/schemas/paginated-destination-response.schema";
-import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { PaginatedDestinationResponse } from "@modules/v1/destinations/schemas/swagger/paginated-destination-response";
 import { DestinationResponse } from "@modules/v1/destinations/schemas/swagger/destination-response";
 
@@ -106,6 +115,8 @@ export class DestinationsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(createDestinationSchema))
   @ApiOperation({
     summary: "Create a new destination",
@@ -131,6 +142,8 @@ export class DestinationsController {
   }
 
   @Patch(":destinationId")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Update a destination",
     description: "Updates an existing destination",
@@ -163,6 +176,8 @@ export class DestinationsController {
   }
 
   @Delete(":destinationId")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Delete a destination",
     description: "Deletes a destination by ID",

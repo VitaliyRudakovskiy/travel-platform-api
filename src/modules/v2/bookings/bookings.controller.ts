@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { BookingsService } from "@modules/v1/bookings/bookings.service";
-import { AuthGuard } from "@shared/guards/auth.guard";
+import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import {
   type CreateBookingDto,
   createBookingSchema,
@@ -18,15 +18,23 @@ import {
   updateBookingStatusSchema,
   type UpdateBookingStatusDto,
 } from "@modules/v1/bookings/schemas/update-booking.schema";
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { PaginatedBookingResponse } from "@modules/v1/bookings/schemas/swagger/paginated-booking-response";
 import { BookingResponse } from "@modules/v1/bookings/schemas/swagger/booking-response";
 import { CreateBooking } from "@modules/v1/bookings/schemas/swagger/create-booking";
 import { UpdateBooking } from "@modules/v1/bookings/schemas/swagger/update-booking";
 
 @ApiTags("Bookings")
+@ApiBearerAuth()
 @Controller({ path: "bookings", version: "2" })
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 

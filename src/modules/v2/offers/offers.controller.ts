@@ -20,7 +20,7 @@ import {
 import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
-import { AuthGuard } from "@shared/guards/auth.guard";
+import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import {
   type OfferQueryDto,
   offerQuerySchema,
@@ -30,7 +30,14 @@ import {
   type UpdateOfferDto,
   updateOfferSchema,
 } from "@modules/v1/offers/schemas/update-offer.schema";
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { PaginatedOfferResponse } from "@modules/v1/offers/schemas/swagger/paginated-offer-response";
 import { OfferResponse } from "@modules/v1/offers/schemas/swagger/offer-response";
 import { UpdateOffer } from "@modules/v1/offers/schemas/swagger/update-offer";
@@ -86,7 +93,8 @@ export class OffersController {
   }
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Create a new offer",
     description: "Creates a new offer. Only the owner can later update or delete it.",
@@ -118,7 +126,8 @@ export class OffersController {
   }
 
   @Patch(":offerId")
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Update an offer",
     description: "Updates an existing offer. Only the owner can update their offer.",
@@ -161,7 +170,8 @@ export class OffersController {
   }
 
   @Delete(":offerId")
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: "Soft delete an offer",
