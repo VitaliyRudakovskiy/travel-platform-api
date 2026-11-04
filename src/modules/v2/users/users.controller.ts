@@ -13,6 +13,11 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "@modules/v1/users/users.service";
 import { EmailVerificationsService } from "@modules/v2/email-verifications/email-verifications.service";
+import { ClientProfilesService } from "./client-profiles.service";
+import { type ProfileResponseDto } from "./schemas/profile-response.schema";
+import { type UpdateProfileDto, updateProfileSchema } from "./schemas/update-profile.schema";
+import { ProfileResponse } from "./schemas/swagger/profile-response";
+import { UpdateProfile } from "./schemas/swagger/update-profile";
 import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type CreateUserDto, createUserSchema } from "@modules/v1/users/schemas/create-user.schema";
 import { UserRole } from "#prisma";
@@ -41,6 +46,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly emailVerificationsService: EmailVerificationsService,
+    private readonly clientProfilesService: ClientProfilesService,
   ) {}
 
   @Get()
@@ -90,6 +96,34 @@ export class UsersController {
     return this.usersService.getById(userId);
   }
 
+  @Get(":userId/profile")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Get client profile",
+    description:
+      "Returns the client profile. Users can only access their own profile. Admins can access any profile.",
+  })
+  @ApiParam({ name: "userId", description: "User ID" })
+  @ApiResponse({
+    status: 200,
+    description: "Profile found",
+    type: ProfileResponse,
+  })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Profile not found" })
+  async getProfile(
+    @Param("userId") userId: string,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ): Promise<ProfileResponseDto> {
+    if (currentUser.role !== UserRole.Admin && userId !== currentUser.id) {
+      throw new ForbiddenException("You can only access your own profile");
+    }
+
+    return this.clientProfilesService.getByUserId(userId);
+  }
+
   @Post()
   @UsePipes(new ZodValidationPipe(createUserSchema))
   @ApiOperation({ summary: "Create a new user" })
@@ -134,6 +168,37 @@ export class UsersController {
     }
 
     return this.emailVerificationsService.issue(userId);
+  }
+
+  @Patch(":userId/profile")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Update client profile",
+    description:
+      "Updates the client profile. Users can only update their own profile. Admins can update any profile.",
+  })
+  @ApiParam({ name: "userId", description: "User ID" })
+  @ApiBody({ type: UpdateProfile })
+  @ApiResponse({
+    status: 200,
+    description: "Profile updated",
+    type: ProfileResponse,
+  })
+  @ApiResponse({ status: 400, description: "Invalid input" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Profile not found" })
+  async updateProfile(
+    @Param("userId") userId: string,
+    @Body(new ZodValidationPipe(updateProfileSchema)) updateProfileDto: UpdateProfileDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ): Promise<ProfileResponseDto> {
+    if (currentUser.role !== UserRole.Admin && userId !== currentUser.id) {
+      throw new ForbiddenException("You can only update your own profile");
+    }
+
+    return this.clientProfilesService.update(userId, updateProfileDto);
   }
 
   @Patch(":userId")

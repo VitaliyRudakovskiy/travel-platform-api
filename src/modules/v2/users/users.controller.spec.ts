@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { ForbiddenException } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { describe, beforeEach, it, expect, vi } from "vitest";
-import { UserRole } from "#prisma";
+import { Currency, UserRole } from "#prisma";
 import { UsersController } from "./users.controller";
 import { providePrisma } from "@tests/providers/provide-prisma";
 import { userMock } from "@tests/mocks/user.mock";
@@ -10,6 +10,9 @@ import { provideUsersService } from "@tests/providers/provide-users-service";
 import { usersServiceMock } from "@tests/mocks/users-service.mock";
 import { provideEmailVerificationsService } from "@tests/providers/provide-email-verifications-service";
 import { emailVerificationsServiceMock } from "@tests/mocks/email-verifications-service.mock";
+import { provideClientProfilesService } from "@tests/providers/provide-client-profiles-service";
+import { clientProfilesServiceMock } from "@tests/mocks/client-profiles-service.mock";
+import { clientProfileMock } from "@tests/mocks/client-profile.mock";
 
 describe("UsersController v2", () => {
   let controller: UsersController;
@@ -19,7 +22,12 @@ describe("UsersController v2", () => {
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [provideUsersService(), provideEmailVerificationsService(), providePrisma()],
+      providers: [
+        provideUsersService(),
+        provideEmailVerificationsService(),
+        provideClientProfilesService(),
+        providePrisma(),
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
@@ -129,6 +137,87 @@ describe("UsersController v2", () => {
       ).rejects.toThrow(ForbiddenException);
 
       expect(emailVerificationsServiceMock.issue).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("getProfile", () => {
+    it("calls clientProfilesService.getByUserId when userId matches current user", async () => {
+      clientProfilesServiceMock.getByUserId.mockResolvedValue(clientProfileMock);
+
+      const result = await controller.getProfile(userMock.id, {
+        id: userMock.id,
+        role: UserRole.User,
+      } as never);
+
+      expect(clientProfilesServiceMock.getByUserId).toHaveBeenCalledWith(userMock.id);
+      expect(result).toEqual(clientProfileMock);
+    });
+
+    it("calls clientProfilesService.getByUserId when current user is Admin", async () => {
+      clientProfilesServiceMock.getByUserId.mockResolvedValue(clientProfileMock);
+
+      const result = await controller.getProfile(userMock.id, {
+        id: faker.string.uuid(),
+        role: UserRole.Admin,
+      } as never);
+
+      expect(clientProfilesServiceMock.getByUserId).toHaveBeenCalledWith(userMock.id);
+      expect(result).toEqual(clientProfileMock);
+    });
+
+    it("throws ForbiddenException when userId does not match current user", async () => {
+      await expect(
+        controller.getProfile(userMock.id, {
+          id: faker.string.uuid(),
+          role: UserRole.User,
+        } as never),
+      ).rejects.toThrow(ForbiddenException);
+
+      expect(clientProfilesServiceMock.getByUserId).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("updateProfile", () => {
+    const updateProfileDto = {
+      firstName: faker.person.firstName(),
+      preferredCurrency: Currency.USD,
+    };
+
+    it("calls clientProfilesService.update when userId matches current user", async () => {
+      const updatedProfile = { ...clientProfileMock, ...updateProfileDto };
+      clientProfilesServiceMock.update.mockResolvedValue(updatedProfile);
+
+      const result = await controller.updateProfile(userMock.id, updateProfileDto, {
+        id: userMock.id,
+        role: UserRole.User,
+      } as never);
+
+      expect(clientProfilesServiceMock.update).toHaveBeenCalledWith(userMock.id, updateProfileDto);
+      expect(result).toEqual(updatedProfile);
+    });
+
+    it("calls clientProfilesService.update when current user is Admin", async () => {
+      const updatedProfile = { ...clientProfileMock, ...updateProfileDto };
+      clientProfilesServiceMock.update.mockResolvedValue(updatedProfile);
+
+      const result = await controller.updateProfile(userMock.id, updateProfileDto, {
+        id: faker.string.uuid(),
+        role: UserRole.Admin,
+      } as never);
+
+      expect(clientProfilesServiceMock.update).toHaveBeenCalledWith(userMock.id, updateProfileDto);
+      expect(result).toEqual(updatedProfile);
+    });
+
+    it("throws ForbiddenException when userId does not match current user", async () => {
+      await expect(
+        controller.updateProfile(userMock.id, updateProfileDto, {
+          id: faker.string.uuid(),
+          role: UserRole.User,
+        } as never),
+      ).rejects.toThrow(ForbiddenException);
+
+      expect(clientProfilesServiceMock.update).not.toHaveBeenCalled();
     });
   });
 
