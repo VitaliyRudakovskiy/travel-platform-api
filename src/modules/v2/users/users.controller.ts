@@ -3,6 +3,8 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -10,6 +12,7 @@ import {
   UsePipes,
 } from "@nestjs/common";
 import { UsersService } from "@modules/v1/users/users.service";
+import { EmailVerificationsService } from "@modules/v2/email-verifications/email-verifications.service";
 import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
 import { type CreateUserDto, createUserSchema } from "@modules/v1/users/schemas/create-user.schema";
 import { UserRole } from "#prisma";
@@ -35,7 +38,10 @@ import { CreateUser } from "@modules/v1/users/schemas/swagger/create-user";
 @ApiTags("Users")
 @Controller({ path: "users", version: "2" })
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly emailVerificationsService: EmailVerificationsService,
+  ) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -96,7 +102,38 @@ export class UsersController {
   @ApiResponse({ status: 400, description: "Invalid input" })
   @ApiResponse({ status: 409, description: "User already exists" })
   async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
-    return this.usersService.createWithProfile(createUserDto);
+    const user = await this.usersService.createWithProfile(createUserDto);
+    await this.emailVerificationsService.issue(user.id);
+    return user;
+  }
+
+  @Post(":userId/email-verifications")
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: "Resend email verification",
+    description:
+      "Issues a new verification token and enqueues an email notification. Users can only resend for themselves. Admins can resend for any user.",
+  })
+  @ApiParam({ name: "userId", description: "User ID" })
+  @ApiResponse({
+    status: 204,
+    description: "Verification email queued",
+  })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "User not found" })
+  @ApiResponse({ status: 409, description: "Email is already verified" })
+  async resendEmailVerification(
+    @Param("userId") userId: string,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ): Promise<void> {
+    if (currentUser.role !== UserRole.Admin && userId !== currentUser.id) {
+      throw new ForbiddenException("You can only verify your own email");
+    }
+
+    return this.emailVerificationsService.issue(userId);
   }
 
   @Patch(":userId")

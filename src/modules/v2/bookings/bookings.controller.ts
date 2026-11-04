@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { BookingsService } from "@modules/v1/bookings/bookings.service";
+import { EmailVerifiedGuard } from "@shared/guards/email-verified.guard";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import {
   type CreateBookingDto,
@@ -107,10 +108,11 @@ export class BookingsController {
   }
 
   @Post()
+  @UseGuards(EmailVerifiedGuard)
   @ApiOperation({
     summary: "Create a new booking",
     description:
-      "Creates a new booking for an offer. New bookings are created with status pending.",
+      "Creates a new booking for an offer. New bookings are created with status pending. The user's email must be verified.",
   })
   @ApiBody({ type: CreateBooking })
   @ApiResponse({
@@ -125,6 +127,10 @@ export class BookingsController {
   @ApiResponse({
     status: 401,
     description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 403,
+    description: "Forbidden - Email is not verified",
   })
   @ApiResponse({
     status: 404,

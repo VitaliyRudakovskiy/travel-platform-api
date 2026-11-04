@@ -35,5 +35,22 @@ export const prismaServiceMock = {
     ...DEFAULT_CRUD,
     count: vi.fn(),
   },
+  emailVerification: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    findFirst: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    deleteMany: vi.fn(),
+  },
+  notification: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    findFirst: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+  },
   $transaction: vi.fn(),
 };

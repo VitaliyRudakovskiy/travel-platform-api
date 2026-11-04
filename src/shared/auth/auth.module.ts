@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { PrismaService } from "@services/prisma.service";
+import { EmailVerifiedGuard } from "@shared/guards/email-verified.guard";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import { RolesGuard } from "@shared/guards/roles.guard";
 import { JwtStrategy } from "./jwt.strategy";
@@ -25,7 +26,7 @@ import { JwtStrategy } from "./jwt.strategy";
       }),
     }),
   ],
-  providers: [JwtStrategy, JwtAuthGuard, RolesGuard, PrismaService],
-  exports: [JwtModule, PassportModule, JwtAuthGuard, RolesGuard, JwtStrategy],
+  providers: [JwtStrategy, JwtAuthGuard, RolesGuard, EmailVerifiedGuard, PrismaService],
+  exports: [JwtModule, PassportModule, JwtAuthGuard, RolesGuard, EmailVerifiedGuard, JwtStrategy],
 })
 export class AuthModule {}

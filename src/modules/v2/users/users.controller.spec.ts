@@ -8,6 +8,8 @@ import { providePrisma } from "@tests/providers/provide-prisma";
 import { userMock } from "@tests/mocks/user.mock";
 import { provideUsersService } from "@tests/providers/provide-users-service";
 import { usersServiceMock } from "@tests/mocks/users-service.mock";
+import { provideEmailVerificationsService } from "@tests/providers/provide-email-verifications-service";
+import { emailVerificationsServiceMock } from "@tests/mocks/email-verifications-service.mock";
 
 describe("UsersController v2", () => {
   let controller: UsersController;
@@ -17,7 +19,7 @@ describe("UsersController v2", () => {
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [provideUsersService(), providePrisma()],
+      providers: [provideUsersService(), provideEmailVerificationsService(), providePrisma()],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
@@ -77,7 +79,7 @@ describe("UsersController v2", () => {
   });
 
   describe("create", () => {
-    it("calls usersService.createWithProfile and returns its result", async () => {
+    it("creates the user and issues an email verification", async () => {
       const createUserDto = {
         username: faker.internet.username(),
         email: faker.internet.email(),
@@ -85,11 +87,48 @@ describe("UsersController v2", () => {
       };
 
       usersServiceMock.createWithProfile.mockResolvedValue(userMock);
+      emailVerificationsServiceMock.issue.mockResolvedValue(undefined);
 
       const result = await controller.create(createUserDto);
 
       expect(usersServiceMock.createWithProfile).toHaveBeenCalledWith(createUserDto);
+      expect(emailVerificationsServiceMock.issue).toHaveBeenCalledWith(userMock.id);
       expect(result).toEqual(userMock);
+    });
+  });
+
+  describe("resendEmailVerification", () => {
+    it("issues a verification when userId matches current user", async () => {
+      emailVerificationsServiceMock.issue.mockResolvedValue(undefined);
+
+      await controller.resendEmailVerification(userMock.id, {
+        id: userMock.id,
+        role: UserRole.User,
+      } as never);
+
+      expect(emailVerificationsServiceMock.issue).toHaveBeenCalledWith(userMock.id);
+    });
+
+    it("issues a verification when current user is Admin", async () => {
+      emailVerificationsServiceMock.issue.mockResolvedValue(undefined);
+
+      await controller.resendEmailVerification(userMock.id, {
+        id: faker.string.uuid(),
+        role: UserRole.Admin,
+      } as never);
+
+      expect(emailVerificationsServiceMock.issue).toHaveBeenCalledWith(userMock.id);
+    });
+
+    it("throws ForbiddenException when userId does not match current user", async () => {
+      await expect(
+        controller.resendEmailVerification(userMock.id, {
+          id: faker.string.uuid(),
+          role: UserRole.User,
+        } as never),
+      ).rejects.toThrow(ForbiddenException);
+
+      expect(emailVerificationsServiceMock.issue).not.toHaveBeenCalled();
     });
   });
 
