@@ -27,7 +27,7 @@ describe("BookingsController v2", () => {
   });
 
   describe("getMyBookings", () => {
-    it("calls bookingsService.getMyBookings with the current user id and role", async () => {
+    it("calls bookingsService.getMyBookings with native statuses", async () => {
       const query = { page: 1, limit: 10 };
       const result = {
         data: [],
@@ -51,13 +51,14 @@ describe("BookingsController v2", () => {
         query,
         bookingMock.userId,
         UserRole.User,
+        true,
       );
       expect(response).toEqual(result);
     });
   });
 
   describe("getById", () => {
-    it("calls bookingsService.getById with the current user id and role", async () => {
+    it("calls bookingsService.getById with native statuses", async () => {
       bookingsServiceMock.getById.mockResolvedValue(bookingMock);
 
       const result = await controller.getById(bookingMock.id, {
@@ -69,49 +70,55 @@ describe("BookingsController v2", () => {
         bookingMock.id,
         bookingMock.userId,
         UserRole.Agent,
+        true,
       );
       expect(result).toEqual(bookingMock);
     });
   });
 
   describe("create", () => {
-    it("calls bookingsService.create with the current user id", async () => {
+    it("calls bookingsService.create with the idempotency key", async () => {
       const createBookingDto = {
         offerId: faker.string.uuid(),
         startDate: "2026-06-01T00:00:00.000Z",
         endDate: "2026-06-05T00:00:00.000Z",
         guestsCount: 2,
       };
+      const idempotencyKey = faker.string.uuid();
       bookingsServiceMock.create.mockResolvedValue(bookingMock);
 
-      const result = await controller.create(createBookingDto, {
+      const result = await controller.create(createBookingDto, idempotencyKey, {
         id: bookingMock.userId,
         role: UserRole.User,
       } as never);
 
-      expect(bookingsServiceMock.create).toHaveBeenCalledWith(createBookingDto, bookingMock.userId);
+      expect(bookingsServiceMock.create).toHaveBeenCalledWith(
+        createBookingDto,
+        bookingMock.userId,
+        idempotencyKey,
+      );
       expect(result).toEqual(bookingMock);
     });
   });
 
   describe("updateStatus", () => {
-    it("calls bookingsService.updateStatus with the current user id and role", async () => {
-      const updateStatusDto = { status: "confirmed" as const };
-      const confirmedBooking = { ...bookingMock, status: "confirmed" };
-      bookingsServiceMock.updateStatus.mockResolvedValue(confirmedBooking);
+    it("calls bookingsService.changeStatus with the current user id and role", async () => {
+      const updateStatusDto = { status: "completed" as const };
+      const completedBooking = { ...bookingMock, status: "completed" };
+      bookingsServiceMock.changeStatus.mockResolvedValue(completedBooking);
 
       const result = await controller.updateStatus(bookingMock.id, updateStatusDto, {
         id: bookingMock.userId,
         role: UserRole.Admin,
       } as never);
 
-      expect(bookingsServiceMock.updateStatus).toHaveBeenCalledWith(
+      expect(bookingsServiceMock.changeStatus).toHaveBeenCalledWith(
         bookingMock.id,
         updateStatusDto,
         bookingMock.userId,
         UserRole.Admin,
       );
-      expect(result).toEqual(confirmedBooking);
+      expect(result).toEqual(completedBooking);
     });
   });
 });

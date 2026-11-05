@@ -5,4 +5,5 @@ export const bookingsServiceMock = {
   getById: vi.fn(),
   create: vi.fn(),
   updateStatus: vi.fn(),
+  changeStatus: vi.fn(),
 };

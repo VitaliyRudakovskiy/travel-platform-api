@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { Test, TestingModule } from "@nestjs/testing";
 import {
   BadRequestException,
@@ -528,6 +529,136 @@ describe("BookingsService", () => {
       ).rejects.toThrow(ConflictException);
 
       expect(prismaServiceMock.booking.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("changeStatus", () => {
+    const userId = bookingMock.userId;
+
+    beforeEach(() => {
+      prismaServiceMock.$transaction.mockImplementation(
+        async (callback: (tx: unknown) => unknown) => callback(prismaServiceMock),
+      );
+    });
+
+    it("completes a confirmed booking and creates a notification", async () => {
+      const confirmedBooking = { ...bookingMock, status: "confirmed" };
+      const completedBooking = { ...bookingMock, status: "completed" };
+      prismaServiceMock.booking.findUnique.mockResolvedValue(confirmedBooking);
+      prismaServiceMock.booking.update.mockResolvedValue(completedBooking);
+      prismaServiceMock.notification.create.mockResolvedValue({});
+
+      const result = await service.changeStatus(bookingMock.id, { status: "completed" }, userId);
+
+      expect(prismaServiceMock.booking.update).toHaveBeenCalledWith({
+        where: { id: bookingMock.id },
+        data: { status: "completed" },
+        include: {
+          offer: {
+            include: {
+              destination: true,
+            },
+          },
+        },
+      });
+      expect(prismaServiceMock.notification.create).toHaveBeenCalledWith({
+        data: {
+          userId: bookingMock.userId,
+          type: "booking_completed",
+          channel: "email",
+          status: "pending",
+          payload: { bookingId: bookingMock.id },
+        },
+      });
+      expect(result.status).toBe("completed");
+    });
+
+    it("throws ConflictException for an illegal transition", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+
+      await expect(
+        service.changeStatus(bookingMock.id, { status: "completed" }, userId),
+      ).rejects.toThrow(ConflictException);
+
+      expect(prismaServiceMock.booking.update).not.toHaveBeenCalled();
+      expect(prismaServiceMock.notification.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("create with idempotency", () => {
+    const userId = faker.string.uuid();
+    const createBookingDto = {
+      offerId: faker.string.uuid(),
+      startDate: "2026-06-01T00:00:00.000Z",
+      endDate: "2026-06-05T00:00:00.000Z",
+      guestsCount: 2,
+    };
+    const idempotencyKey = faker.string.uuid();
+    const activeOffer = {
+      ...offerMock,
+      id: createBookingDto.offerId,
+      availableFrom: new Date("2026-01-01T00:00:00.000Z"),
+      availableTo: new Date("2026-12-31T00:00:00.000Z"),
+      price: { toNumber: () => 100 },
+      maxGuests: 4,
+      maxConcurrentBookings: 2,
+    };
+
+    it("stores the idempotency key with the created booking", async () => {
+      prismaServiceMock.idempotencyKey.findUnique.mockResolvedValue(null);
+      prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.booking.create.mockResolvedValue(bookingMock);
+      prismaServiceMock.idempotencyKey.create.mockResolvedValue({});
+      prismaServiceMock.$transaction.mockImplementation(
+        async (callback: (tx: unknown) => unknown) => callback(prismaServiceMock),
+      );
+
+      await service.create(createBookingDto, userId, idempotencyKey);
+
+      expect(prismaServiceMock.idempotencyKey.create).toHaveBeenCalledWith({
+        data: {
+          key: idempotencyKey,
+          requestHash: createHash("sha256").update(JSON.stringify(createBookingDto)).digest("hex"),
+          userId,
+          bookingId: bookingMock.id,
+          expiresAt: expect.any(Date),
+        },
+      });
+    });
+
+    it("throws ConflictException with the booking id on same-key same-body replay", async () => {
+      prismaServiceMock.idempotencyKey.findUnique.mockResolvedValue({
+        id: faker.string.uuid(),
+        key: idempotencyKey,
+        requestHash: createHash("sha256").update(JSON.stringify(createBookingDto)).digest("hex"),
+        userId,
+        bookingId: bookingMock.id,
+        expiresAt: faker.date.future(),
+      });
+
+      await expect(service.create(createBookingDto, userId, idempotencyKey)).rejects.toThrow(
+        ConflictException,
+      );
+
+      expect(prismaServiceMock.booking.create).not.toHaveBeenCalled();
+    });
+
+    it("throws ConflictException when the same key is reused with a different body", async () => {
+      prismaServiceMock.idempotencyKey.findUnique.mockResolvedValue({
+        id: faker.string.uuid(),
+        key: idempotencyKey,
+        requestHash: createHash("sha256").update("other-body").digest("hex"),
+        userId,
+        bookingId: bookingMock.id,
+        expiresAt: faker.date.future(),
+      });
+
+      await expect(service.create(createBookingDto, userId, idempotencyKey)).rejects.toThrow(
+        ConflictException,
+      );
+
+      expect(prismaServiceMock.booking.create).not.toHaveBeenCalled();
     });
   });
 });
