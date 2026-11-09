@@ -4,10 +4,11 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
-import { describe, beforeEach, it, expect, vi } from "vitest";
+import { describe, beforeEach, afterEach, it, expect, vi } from "vitest";
 import { UserRole } from "#prisma";
 import { BookingsService } from "./bookings.service";
 import { providePrisma } from "@tests/providers/provide-prisma";
@@ -335,6 +336,83 @@ describe("BookingsService", () => {
       await expect(service.create(createBookingDto, userId)).rejects.toThrow(ConflictException);
 
       expect(prismaServiceMock.booking.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("lifecycle logging", () => {
+    let logSpy: ReturnType<typeof vi.spyOn>;
+    const activeOffer = {
+      ...offerMock,
+      availableFrom: new Date("2020-01-01T00:00:00.000Z"),
+      availableTo: new Date("2030-12-31T00:00:00.000Z"),
+      price: { toNumber: () => 100 },
+      maxGuests: 4,
+      maxConcurrentBookings: 2,
+    };
+
+    beforeEach(() => {
+      logSpy = vi.spyOn(Logger.prototype, "log").mockImplementation(() => undefined);
+      prismaServiceMock.$transaction.mockImplementation(
+        async (callback: (tx: unknown) => unknown) => callback(prismaServiceMock),
+      );
+    });
+
+    afterEach(() => {
+      logSpy.mockRestore();
+    });
+
+    it("logs booking creation", async () => {
+      prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.booking.create.mockResolvedValue(bookingMock);
+
+      await service.create(
+        {
+          offerId: bookingMock.offerId,
+          startDate: "2026-06-01T00:00:00.000Z",
+          endDate: "2026-06-05T00:00:00.000Z",
+          guestsCount: 2,
+        },
+        bookingMock.userId,
+      );
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `Booking ${bookingMock.id} created: user=${bookingMock.userId} offer=${bookingMock.offerId} status=pending`,
+      );
+    });
+
+    it("logs a status change", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+      prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.booking.update.mockResolvedValue({ ...bookingMock, status: "confirmed" });
+
+      await service.changeStatus(bookingMock.id, { status: "confirmed" }, bookingMock.userId);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `Booking ${bookingMock.id} status changed: pending -> confirmed by user=${bookingMock.userId}`,
+      );
+    });
+
+    it("logs a cancellation separately", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+      prismaServiceMock.booking.update.mockResolvedValue({ ...bookingMock, status: "cancelled" });
+
+      await service.updateStatus(bookingMock.id, { status: "cancelled" }, bookingMock.userId);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `Booking ${bookingMock.id} cancelled: pending -> cancelled by user=${bookingMock.userId}`,
+      );
+    });
+
+    it("does not log when the transition is rejected", async () => {
+      prismaServiceMock.booking.findUnique.mockResolvedValue(bookingMock);
+
+      await expect(
+        service.changeStatus(bookingMock.id, { status: "completed" }, bookingMock.userId),
+      ).rejects.toThrow(ConflictException);
+
+      expect(logSpy).not.toHaveBeenCalled();
     });
   });
 

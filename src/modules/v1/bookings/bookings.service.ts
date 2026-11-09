@@ -4,6 +4,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "@services/prisma.service";
@@ -30,6 +31,8 @@ import { createBookingState } from "./states/booking-state";
 
 @Injectable()
 export class BookingsService {
+  private readonly logger = new Logger(BookingsService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async getMyBookings(
@@ -250,6 +253,10 @@ export class BookingsService {
           include: bookingInclude,
         });
 
+    this.logger.log(
+      `Booking ${booking.id} created: user=${userId} offer=${booking.offerId} status=${booking.status}`,
+    );
+
     return {
       ...booking,
       status: this.mapStatus(booking.status, Boolean(idempotencyKey)),
@@ -321,6 +328,8 @@ export class BookingsService {
         },
       },
     });
+
+    this.logStatusChange(id, currentStatus, newStatus, userId);
 
     return {
       ...updatedBooking,
@@ -408,6 +417,8 @@ export class BookingsService {
       return updated;
     });
 
+    this.logStatusChange(id, booking.status, newStatus, userId);
+
     return {
       ...updatedBooking,
       status: this.mapStatus(updatedBooking.status, true),
@@ -417,6 +428,21 @@ export class BookingsService {
         price: updatedBooking.offer.price.toNumber(),
       },
     };
+  }
+
+  // Logged after the DB write succeeds, so the log never reports a change that was rolled back.
+  private logStatusChange(
+    bookingId: string,
+    from: BookingStatus,
+    to: BookingStatus,
+    actorId: string,
+  ): void {
+    if (to === BookingStatus.cancelled) {
+      this.logger.log(`Booking ${bookingId} cancelled: ${from} -> ${to} by user=${actorId}`);
+      return;
+    }
+
+    this.logger.log(`Booking ${bookingId} status changed: ${from} -> ${to} by user=${actorId}`);
   }
 
   private bookingListScope(userId: string, role?: UserRole): Prisma.BookingWhereInput {

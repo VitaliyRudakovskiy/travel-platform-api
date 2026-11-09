@@ -3,60 +3,44 @@ import { describe, it, expect } from "vitest";
 import { BookingStatus } from "#prisma";
 import { createBookingState } from "./booking-state";
 
+// Allowed transitions from the spec (Stage II, 2.4). Written out independently of the
+// implementation on purpose: the test must not derive its expectations from the code under test.
+const ALLOWED_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
+  pending: [BookingStatus.confirmed, BookingStatus.cancelled],
+  confirmed: [BookingStatus.completed, BookingStatus.cancelled],
+  completed: [BookingStatus.cancelled],
+  cancelled: [],
+};
+
+const ALL_STATUSES = Object.values(BookingStatus);
+
+const transitions = ALL_STATUSES.flatMap((from) =>
+  ALL_STATUSES.map((to) => ({ from, to, allowed: ALLOWED_TRANSITIONS[from].includes(to) })),
+);
+
 describe("createBookingState", () => {
-  describe("pending", () => {
-    const state = createBookingState(BookingStatus.pending);
-
-    it("allows confirmed", () => {
-      expect(state.transitionTo(BookingStatus.confirmed)).toBe(BookingStatus.confirmed);
-    });
-
-    it("allows cancelled", () => {
-      expect(state.transitionTo(BookingStatus.cancelled)).toBe(BookingStatus.cancelled);
-    });
-
-    it("rejects completed", () => {
-      expect(() => state.transitionTo(BookingStatus.completed)).toThrow(ConflictException);
-    });
+  it("covers every status pair (4 x 4)", () => {
+    expect(transitions).toHaveLength(16);
   });
 
-  describe("confirmed", () => {
-    const state = createBookingState(BookingStatus.confirmed);
-
-    it("allows completed", () => {
-      expect(state.transitionTo(BookingStatus.completed)).toBe(BookingStatus.completed);
-    });
-
-    it("allows cancelled", () => {
-      expect(state.transitionTo(BookingStatus.cancelled)).toBe(BookingStatus.cancelled);
-    });
-
-    it("rejects pending", () => {
-      expect(() => state.transitionTo(BookingStatus.pending)).toThrow(ConflictException);
-    });
+  describe("allowed transitions", () => {
+    it.each(transitions.filter(({ allowed }) => allowed))(
+      "$from -> $to returns the target status",
+      ({ from, to }) => {
+        expect(createBookingState(from).transitionTo(to)).toBe(to);
+      },
+    );
   });
 
-  describe("completed", () => {
-    const state = createBookingState(BookingStatus.completed);
+  describe("illegal transitions", () => {
+    it.each(transitions.filter(({ allowed }) => !allowed))(
+      "$from -> $to throws ConflictException",
+      ({ from, to }) => {
+        const transition = () => createBookingState(from).transitionTo(to);
 
-    it("allows cancelled", () => {
-      expect(state.transitionTo(BookingStatus.cancelled)).toBe(BookingStatus.cancelled);
-    });
-
-    it("rejects confirmed", () => {
-      expect(() => state.transitionTo(BookingStatus.confirmed)).toThrow(ConflictException);
-    });
-  });
-
-  describe("cancelled", () => {
-    const state = createBookingState(BookingStatus.cancelled);
-
-    it("rejects confirmed", () => {
-      expect(() => state.transitionTo(BookingStatus.confirmed)).toThrow(ConflictException);
-    });
-
-    it("rejects cancelled", () => {
-      expect(() => state.transitionTo(BookingStatus.cancelled)).toThrow(ConflictException);
-    });
+        expect(transition).toThrow(ConflictException);
+        expect(transition).toThrow(`Cannot transition booking from ${from} to ${to}`);
+      },
+    );
   });
 });

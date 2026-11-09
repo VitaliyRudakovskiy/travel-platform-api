@@ -18,6 +18,16 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
+      // Spec (Stage II, 4.6) requires >= 60% coverage of the business logic layer:
+      // services, the booking State pattern and the notifications worker.
+      include: ["src/**/*.service.ts", "src/**/states/**", "src/**/*.worker.ts"],
+      exclude: ["src/**/*.spec.ts"],
+      thresholds: {
+        statements: 60,
+        branches: 60,
+        functions: 60,
+        lines: 60,
+      },
     },
   },
 });

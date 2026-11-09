@@ -49,13 +49,16 @@ Dockerfile, README, tests (State + integration for sessions/bookings, ≥60% ser
 
 10. **Analytics** (done 2026-11-09) — `src/modules/v2/analytics/` (v2-only service). `GET /api/v2/analytics/bookings?from=YYYY-MM-DD&to=YYYY-MM-DD&groupBy=status|destination&limit=10` (1..100), Admin only via class-level `@Roles`. Period = booking `createdAt` in `[from 00:00, to+1d 00:00)` UTC; `from > to` → 400 (Zod refine). Response `{ groupBy, from, to, data: [{ key, label, count }] }` sorted by count desc. `status`: Prisma `groupBy`, all 4 statuses zero-filled. `destination`: `$queryRaw` tagged template (Prisma can't group by relation), `COUNT(*)::int` to avoid BigInt.
 
+11.1 **Booking lifecycle logging** (done 2026-11-09) — `Logger` in `BookingsService`: created / status changed / cancelled, written after the DB write, ids only (no PII), both v1 `updateStatus` and v2 `changeStatus`.
+11.2 **State tests + coverage** (done 2026-11-09) — `booking-state.spec.ts` is a full 4×4 matrix (`it.each`) against a transition table written independently of the implementation. `vitest.config.mjs` coverage limited to services, `states/`, workers, with 60% thresholds (current: ~90% lines, ~78% branches). Note: the text reporter hides 100%-covered files (e.g. `booking-state.ts`) — that's not a missing file.
+
 ## Remaining
 
-11. **Wrap-up** — Dockerfile; README (v1/v2 module structure, ClientProfile separation, `draft → pending` migration); tests: State pattern (mandatory), integration for `/api/v2/sessions` and `/api/v2/bookings`, ≥60% service coverage; log booking lifecycle events (create, status change, cancel) — check whether already done.
+11.3 integration tests, 11.4 Dockerfile, 11.5 README. Original scope: **Wrap-up** — Dockerfile; README (v1/v2 module structure, ClientProfile separation, `draft → pending` migration); tests: State pattern (mandatory), integration for `/api/v2/sessions` and `/api/v2/bookings`, ≥60% service coverage; log booking lifecycle events (create, status change, cancel) — check whether already done.
 
 ## Open questions
 
-- **Foreign offer DELETE returns 409** (`ConflictException` in `src/modules/v1/offers/offers.service.ts:373,395`) while v2 Swagger documents 403 and spec requires 403. Assistant offered to change it; user hasn't decided. Changing it affects v1 too.
+- **Foreign offer DELETE returns 409** (`ConflictException` in `src/modules/v1/offers/offers.service.ts`), spec says 403. **Decided 2026-11-09: keep 409, don't change** (user's call). Worth mentioning in README as a known deviation.
 - Spec says Jest; project uses **Vitest** — kept Vitest.
 - v1 says `pending` instead of `draft` (spec §3.0 deviation) — should be documented in README.
 
