@@ -64,6 +64,10 @@ Dockerfile, README, tests (State + integration for sessions/bookings, ≥60% ser
 - `dotenv` moved to dependencies (imported by `main.ts`). `@prisma/client-runtime-utils@7.9.1` added as a direct dependency: the generated client in `prisma/generated` requires it, pnpm doesn't expose transitive deps there — **local `node dist/main` was broken too** before this. Keep its version in sync with `@prisma/client`.
 - `src/tests` excluded from `tsconfig.build.json`.
 
+11.5 **README** (done 2026-11-09) — English, replaces the Nest starter: quick start (local/Docker), env vars, architecture + v1/v2 structure, roles, ClientProfile rationale, State table, Idempotency-Key (incl. race), `draft → pending` migration, notifications, analytics, testing, deviations from spec.
+
+**Stage II spec is fully implemented.**
+
 ## Remaining bookings integration tests, 11.4 Dockerfile, 11.5 README. Original scope: **Wrap-up** — Dockerfile; README (v1/v2 module structure, ClientProfile separation, `draft → pending` migration); tests: State pattern (mandatory), integration for `/api/v2/sessions` and `/api/v2/bookings`, ≥60% service coverage; log booking lifecycle events (create, status change, cancel) — check whether already done.
 
 ## Open questions
