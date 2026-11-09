@@ -38,7 +38,7 @@ describe("OffersService", () => {
       status: "active",
       sortBy: "createdAt",
       sortOrder: "desc",
-    };
+    } as const;
 
     it("returns a paginated list with default status filter", async () => {
       prismaServiceMock.offer.findMany.mockResolvedValue([offerMock]);
@@ -89,7 +89,7 @@ describe("OffersService", () => {
         availableTo,
         sortBy: "price",
         sortOrder: "asc",
-      };
+      } as const;
       prismaServiceMock.offer.findMany.mockResolvedValue([]);
       prismaServiceMock.offer.count.mockResolvedValue(0);
 
@@ -158,9 +158,11 @@ describe("OffersService", () => {
       maxConcurrentBookings: 1,
       availableFrom: "2026-01-01T00:00:00.000Z",
       availableTo: "2026-12-31T00:00:00.000Z",
+      // DTO is the ZodValidationPipe output, where status already has its default applied.
+      status: "active",
       stars: 5,
       address: faker.location.streetAddress(),
-    };
+    } as const;
 
     it("creates a hotel offer", async () => {
       prismaServiceMock.destination.findUnique.mockResolvedValue(destinationMock);

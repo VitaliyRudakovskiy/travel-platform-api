@@ -5,14 +5,19 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 import { SessionsService } from "./sessions.service";
-import * as bcrypt from "bcrypt";
 import { providePrisma } from "@tests/providers/provide-prisma";
 import { prismaServiceMock } from "@tests/mocks/prisma-service.mock";
 import { userMock } from "@tests/mocks/user.mock";
 import { loginMock } from "@tests/mocks/login.mock";
 
+// Explicitly typed: vi.mocked(bcrypt.compare) picks the callback overload (returns void),
+// which makes mockResolvedValue(true) a type error.
+const { compareMock } = vi.hoisted(() => ({
+  compareMock: vi.fn<(data: string, encrypted: string) => Promise<boolean>>(),
+}));
+
 vi.mock("bcrypt", () => ({
-  compare: vi.fn(),
+  compare: compareMock,
 }));
 
 const jwtServiceMock = {
@@ -49,13 +54,14 @@ describe("SessionsService", () => {
   describe("login", () => {
     it("returns session response for valid credentials", async () => {
       prismaServiceMock.user.findFirst.mockResolvedValue(userMock);
-      vi.mocked(bcrypt.compare).mockResolvedValue();
+      compareMock.mockResolvedValue(true);
 
       const result = await service.login(loginMock);
 
       expect(prismaServiceMock.user.findFirst).toHaveBeenCalledWith({
         where: { email: loginMock.email },
       });
+      expect(compareMock).toHaveBeenCalledWith(loginMock.password, userMock.passwordHash);
 
       expect(result).toEqual({
         userId: userMock.id,
@@ -70,12 +76,12 @@ describe("SessionsService", () => {
 
       await expect(service.login(loginMock)).rejects.toThrow(UnauthorizedException);
 
-      expect(bcrypt.compare).not.toHaveBeenCalled();
+      expect(compareMock).not.toHaveBeenCalled();
     });
 
     it("throws UnauthorizedException when password is invalid", async () => {
       prismaServiceMock.user.findFirst.mockResolvedValue(userMock);
-      vi.mocked(bcrypt.compare).mockResolvedValue();
+      compareMock.mockResolvedValue(false);
 
       await expect(service.login(loginMock)).rejects.toThrow(UnauthorizedException);
     });
@@ -84,7 +90,7 @@ describe("SessionsService", () => {
   describe("loginWithTokens", () => {
     it("returns access and refresh tokens and stores a hashed refresh token", async () => {
       prismaServiceMock.user.findFirst.mockResolvedValue(userMock);
-      vi.mocked(bcrypt.compare).mockResolvedValue();
+      compareMock.mockResolvedValue(true);
       jwtServiceMock.signAsync.mockResolvedValue("access-token");
       prismaServiceMock.userSession.create.mockResolvedValue({});
 

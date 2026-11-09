@@ -3,16 +3,22 @@ import { ConflictException, NotFoundException } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 import { UsersService } from "./users.service";
-import bcrypt from "bcrypt";
 import { providePrisma } from "@tests/providers/provide-prisma";
 import { prismaServiceMock } from "@tests/mocks/prisma-service.mock";
 import { userMock } from "@tests/mocks/user.mock";
 import { loginMock } from "@tests/mocks/login.mock";
 
+// Explicitly typed: vi.mocked(bcrypt.hash) picks the callback overload (returns void),
+// which makes mockResolvedValue("hashed-password") a type error.
+const { genSaltSyncMock, hashMock } = vi.hoisted(() => ({
+  genSaltSyncMock: vi.fn<(rounds?: number) => string>(),
+  hashMock: vi.fn<(data: string, salt: string) => Promise<string>>(),
+}));
+
 vi.mock("bcrypt", () => ({
   default: {
-    genSaltSync: vi.fn(),
-    hash: vi.fn(),
+    genSaltSync: genSaltSyncMock,
+    hash: hashMock,
   },
 }));
 
@@ -90,8 +96,8 @@ describe("UsersService", () => {
 
     it("creates a user with a hashed password", async () => {
       prismaServiceMock.user.findFirst.mockResolvedValue(null);
-      vi.mocked(bcrypt.genSaltSync).mockReturnValue("salt");
-      vi.mocked(bcrypt.hash).mockResolvedValue();
+      genSaltSyncMock.mockReturnValue("salt");
+      hashMock.mockResolvedValue("hashed-password");
       prismaServiceMock.user.create.mockResolvedValue(userMock);
 
       const result = await service.create(createUserDto);
@@ -99,8 +105,8 @@ describe("UsersService", () => {
       expect(prismaServiceMock.user.findFirst).toHaveBeenCalledWith({
         where: { email: createUserDto.email },
       });
-      expect(bcrypt.genSaltSync).toHaveBeenCalledWith(10);
-      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, "salt");
+      expect(genSaltSyncMock).toHaveBeenCalledWith(10);
+      expect(hashMock).toHaveBeenCalledWith(createUserDto.password, "salt");
       expect(prismaServiceMock.user.create).toHaveBeenCalledWith({
         data: {
           email: createUserDto.email,
@@ -123,7 +129,7 @@ describe("UsersService", () => {
 
       await expect(service.create(createUserDto)).rejects.toThrow(ConflictException);
 
-      expect(bcrypt.genSaltSync).not.toHaveBeenCalled();
+      expect(genSaltSyncMock).not.toHaveBeenCalled();
       expect(prismaServiceMock.user.create).not.toHaveBeenCalled();
     });
   });
@@ -137,8 +143,8 @@ describe("UsersService", () => {
 
     it("creates a user and an empty client profile in one transaction", async () => {
       prismaServiceMock.user.findFirst.mockResolvedValue(null);
-      vi.mocked(bcrypt.genSaltSync).mockReturnValue("salt");
-      vi.mocked(bcrypt.hash).mockResolvedValue();
+      genSaltSyncMock.mockReturnValue("salt");
+      hashMock.mockResolvedValue("hashed-password");
       prismaServiceMock.$transaction.mockImplementation(
         async (callback: (tx: unknown) => unknown) => callback(prismaServiceMock),
       );

@@ -61,8 +61,7 @@ Dockerfile, README, tests (State + integration for sessions/bookings, ≥60% ser
 
 ## Known bugs / issues
 
-- `pnpm exec tsc --noEmit` fails on pre-existing errors in `src/modules/v1/offers/offers.service.spec.ts`: fixtures use `status` as `string` instead of `"active" | "archived"`. Build (`tsconfig.build.json`) passes. Not fixed yet.
-- 4 pre-existing failing tests (also fail on clean `main`): `users.service.spec.ts` ("creates a user with a hashed password", "creates a user and an empty client profile in one transaction") and `sessions.service.spec.ts` ("returns session response for valid credentials", "returns access and refresh tokens and stores a hashed refresh token") — `toHaveBeenCalledWith` mismatch. Not investigated yet.
+- None open. Fixed 2026-11-09: `tsc --noEmit` is clean (offers spec fixtures use `as const` + `status`), and all tests pass. bcrypt mocks in `users`/`sessions` specs are now typed via `vi.hoisted` — don't go back to `vi.mocked(bcrypt.x)`: it picks the callback overload (`void`), which is why the return values had been deleted and tests silently broke.
 
 ## Testing tips (for Bruno)
 
