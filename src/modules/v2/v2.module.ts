@@ -3,6 +3,7 @@ import { BookingsModule } from "./bookings/bookings.module";
 import { DestinationsModule } from "./destinations/destinations.module";
 import { EmailVerificationsModule } from "./email-verifications/email-verifications.module";
 import { FavoritesModule } from "./favorites/favorites.module";
+import { NotificationsModule } from "./notifications/notifications.module";
 import { OffersModule } from "./offers/offers.module";
 import { SessionsModule } from "./sessions/sessions.module";
 import { UsersModule } from "./users/users.module";
@@ -13,6 +14,7 @@ import { UsersModule } from "./users/users.module";
     DestinationsModule,
     EmailVerificationsModule,
     FavoritesModule,
+    NotificationsModule,
     OffersModule,
     SessionsModule,
     UsersModule,

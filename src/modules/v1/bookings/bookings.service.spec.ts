@@ -541,12 +541,12 @@ describe("BookingsService", () => {
       );
     });
 
-    it("completes a confirmed booking and creates a notification", async () => {
+    it("completes a confirmed booking and creates email and in-app notifications", async () => {
       const confirmedBooking = { ...bookingMock, status: "confirmed" };
       const completedBooking = { ...bookingMock, status: "completed" };
       prismaServiceMock.booking.findUnique.mockResolvedValue(confirmedBooking);
       prismaServiceMock.booking.update.mockResolvedValue(completedBooking);
-      prismaServiceMock.notification.create.mockResolvedValue({});
+      prismaServiceMock.notification.createMany.mockResolvedValue({ count: 2 });
 
       const result = await service.changeStatus(bookingMock.id, { status: "completed" }, userId);
 
@@ -561,14 +561,26 @@ describe("BookingsService", () => {
           },
         },
       });
-      expect(prismaServiceMock.notification.create).toHaveBeenCalledWith({
-        data: {
-          userId: bookingMock.userId,
-          type: "booking_completed",
-          channel: "email",
-          status: "pending",
-          payload: { bookingId: bookingMock.id },
-        },
+      expect(prismaServiceMock.notification.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            userId: bookingMock.userId,
+            bookingId: bookingMock.id,
+            type: "booking_completed",
+            payload: { bookingId: bookingMock.id },
+            channel: "email",
+            status: "pending",
+          },
+          {
+            userId: bookingMock.userId,
+            bookingId: bookingMock.id,
+            type: "booking_completed",
+            payload: { bookingId: bookingMock.id },
+            channel: "in_app",
+            status: "sent",
+            sentAt: expect.any(Date),
+          },
+        ],
       });
       expect(result.status).toBe("completed");
     });
@@ -581,7 +593,7 @@ describe("BookingsService", () => {
       ).rejects.toThrow(ConflictException);
 
       expect(prismaServiceMock.booking.update).not.toHaveBeenCalled();
-      expect(prismaServiceMock.notification.create).not.toHaveBeenCalled();
+      expect(prismaServiceMock.notification.createMany).not.toHaveBeenCalled();
     });
   });
 

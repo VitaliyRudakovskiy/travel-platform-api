@@ -1860,12 +1860,14 @@ export namespace Prisma {
 
   export type BookingCountOutputType = {
     idempotencyKeys: number;
+    notifications: number;
   };
 
   export type BookingCountOutputTypeSelect<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     idempotencyKeys?: boolean | BookingCountOutputTypeCountIdempotencyKeysArgs;
+    notifications?: boolean | BookingCountOutputTypeCountNotificationsArgs;
   };
 
   // Custom InputTypes
@@ -1888,6 +1890,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: IdempotencyKeyWhereInput;
+  };
+
+  /**
+   * BookingCountOutputType without action
+   */
+  export type BookingCountOutputTypeCountNotificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: NotificationWhereInput;
   };
 
   /**
@@ -2322,6 +2333,7 @@ export namespace Prisma {
         createdAt?: boolean;
         updatedAt?: boolean;
         idempotencyKeys?: boolean | Booking$idempotencyKeysArgs<ExtArgs>;
+        notifications?: boolean | Booking$notificationsArgs<ExtArgs>;
         offer?: boolean | OfferDefaultArgs<ExtArgs>;
         user?: boolean | UserDefaultArgs<ExtArgs>;
         _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>;
@@ -2398,6 +2410,7 @@ export namespace Prisma {
     >;
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     idempotencyKeys?: boolean | Booking$idempotencyKeysArgs<ExtArgs>;
+    notifications?: boolean | Booking$notificationsArgs<ExtArgs>;
     offer?: boolean | OfferDefaultArgs<ExtArgs>;
     user?: boolean | UserDefaultArgs<ExtArgs>;
     _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>;
@@ -2420,6 +2433,7 @@ export namespace Prisma {
       name: "Booking";
       objects: {
         idempotencyKeys: Prisma.$IdempotencyKeyPayload<ExtArgs>[];
+        notifications: Prisma.$NotificationPayload<ExtArgs>[];
         offer: Prisma.$OfferPayload<ExtArgs>;
         user: Prisma.$UserPayload<ExtArgs>;
       };
@@ -2925,6 +2939,12 @@ export namespace Prisma {
       args?: Subset<T, Booking$idempotencyKeysArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       | $Result.GetResult<Prisma.$IdempotencyKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
+      | Null
+    >;
+    notifications<T extends Booking$notificationsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Booking$notificationsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>
       | Null
     >;
     offer<T extends OfferDefaultArgs<ExtArgs> = {}>(
@@ -3437,6 +3457,32 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: IdempotencyKeyScalarFieldEnum | IdempotencyKeyScalarFieldEnum[];
+  };
+
+  /**
+   * Booking.notifications
+   */
+  export type Booking$notificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    where?: NotificationWhereInput;
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    cursor?: NotificationWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
   };
 
   /**
@@ -9827,6 +9873,7 @@ export namespace Prisma {
     errorMessage: string | null;
     createdAt: Date | null;
     sentAt: Date | null;
+    bookingId: string | null;
   };
 
   export type NotificationMaxAggregateOutputType = {
@@ -9838,6 +9885,7 @@ export namespace Prisma {
     errorMessage: string | null;
     createdAt: Date | null;
     sentAt: Date | null;
+    bookingId: string | null;
   };
 
   export type NotificationCountAggregateOutputType = {
@@ -9850,6 +9898,7 @@ export namespace Prisma {
     errorMessage: number;
     createdAt: number;
     sentAt: number;
+    bookingId: number;
     _all: number;
   };
 
@@ -9862,6 +9911,7 @@ export namespace Prisma {
     errorMessage?: true;
     createdAt?: true;
     sentAt?: true;
+    bookingId?: true;
   };
 
   export type NotificationMaxAggregateInputType = {
@@ -9873,6 +9923,7 @@ export namespace Prisma {
     errorMessage?: true;
     createdAt?: true;
     sentAt?: true;
+    bookingId?: true;
   };
 
   export type NotificationCountAggregateInputType = {
@@ -9885,6 +9936,7 @@ export namespace Prisma {
     errorMessage?: true;
     createdAt?: true;
     sentAt?: true;
+    bookingId?: true;
     _all?: true;
   };
 
@@ -9971,6 +10023,7 @@ export namespace Prisma {
     errorMessage: string | null;
     createdAt: Date;
     sentAt: Date | null;
+    bookingId: string | null;
     _count: NotificationCountAggregateOutputType | null;
     _min: NotificationMinAggregateOutputType | null;
     _max: NotificationMaxAggregateOutputType | null;
@@ -10001,7 +10054,9 @@ export namespace Prisma {
       errorMessage?: boolean;
       createdAt?: boolean;
       sentAt?: boolean;
+      bookingId?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
+      booking?: boolean | Notification$bookingArgs<ExtArgs>;
     },
     ExtArgs["result"]["notification"]
   >;
@@ -10019,7 +10074,9 @@ export namespace Prisma {
       errorMessage?: boolean;
       createdAt?: boolean;
       sentAt?: boolean;
+      bookingId?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
+      booking?: boolean | Notification$bookingArgs<ExtArgs>;
     },
     ExtArgs["result"]["notification"]
   >;
@@ -10037,7 +10094,9 @@ export namespace Prisma {
       errorMessage?: boolean;
       createdAt?: boolean;
       sentAt?: boolean;
+      bookingId?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
+      booking?: boolean | Notification$bookingArgs<ExtArgs>;
     },
     ExtArgs["result"]["notification"]
   >;
@@ -10052,6 +10111,7 @@ export namespace Prisma {
     errorMessage?: boolean;
     createdAt?: boolean;
     sentAt?: boolean;
+    bookingId?: boolean;
   };
 
   export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -10064,23 +10124,27 @@ export namespace Prisma {
       | "status"
       | "errorMessage"
       | "createdAt"
-      | "sentAt",
+      | "sentAt"
+      | "bookingId",
       ExtArgs["result"]["notification"]
     >;
   export type NotificationInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     user?: boolean | UserDefaultArgs<ExtArgs>;
+    booking?: boolean | Notification$bookingArgs<ExtArgs>;
   };
   export type NotificationIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     user?: boolean | UserDefaultArgs<ExtArgs>;
+    booking?: boolean | Notification$bookingArgs<ExtArgs>;
   };
   export type NotificationIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     user?: boolean | UserDefaultArgs<ExtArgs>;
+    booking?: boolean | Notification$bookingArgs<ExtArgs>;
   };
 
   export type $NotificationPayload<
@@ -10089,6 +10153,7 @@ export namespace Prisma {
     name: "Notification";
     objects: {
       user: Prisma.$UserPayload<ExtArgs>;
+      booking: Prisma.$BookingPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -10101,6 +10166,7 @@ export namespace Prisma {
         errorMessage: string | null;
         createdAt: Date;
         sentAt: Date | null;
+        bookingId: string | null;
       },
       ExtArgs["result"]["notification"]
     >;
@@ -10619,6 +10685,19 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    booking<T extends Notification$bookingArgs<ExtArgs> = {}>(
+      args?: Subset<T, Notification$bookingArgs<ExtArgs>>,
+    ): Prisma__BookingClient<
+      $Result.GetResult<
+        Prisma.$BookingPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10659,6 +10738,7 @@ export namespace Prisma {
     readonly errorMessage: FieldRef<"Notification", "String">;
     readonly createdAt: FieldRef<"Notification", "DateTime">;
     readonly sentAt: FieldRef<"Notification", "DateTime">;
+    readonly bookingId: FieldRef<"Notification", "String">;
   }
 
   // Custom InputTypes
@@ -11084,6 +11164,27 @@ export namespace Prisma {
      * Limit how many Notifications to delete.
      */
     limit?: number;
+  };
+
+  /**
+   * Notification.booking
+   */
+  export type Notification$bookingArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Booking
+     */
+    select?: BookingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Booking
+     */
+    omit?: BookingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInclude<ExtArgs> | null;
+    where?: BookingWhereInput;
   };
 
   /**
@@ -15531,6 +15632,7 @@ export namespace Prisma {
     errorMessage: "errorMessage";
     createdAt: "createdAt";
     sentAt: "sentAt";
+    bookingId: "bookingId";
   };
 
   export type NotificationScalarFieldEnum =
@@ -15839,6 +15941,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Booking"> | Date | string;
     updatedAt?: DateTimeFilter<"Booking"> | Date | string;
     idempotencyKeys?: IdempotencyKeyListRelationFilter;
+    notifications?: NotificationListRelationFilter;
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
   };
@@ -15855,6 +15958,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     idempotencyKeys?: IdempotencyKeyOrderByRelationAggregateInput;
+    notifications?: NotificationOrderByRelationAggregateInput;
     offer?: OfferOrderByWithRelationInput;
     user?: UserOrderByWithRelationInput;
   };
@@ -15875,6 +15979,7 @@ export namespace Prisma {
       createdAt?: DateTimeFilter<"Booking"> | Date | string;
       updatedAt?: DateTimeFilter<"Booking"> | Date | string;
       idempotencyKeys?: IdempotencyKeyListRelationFilter;
+      notifications?: NotificationListRelationFilter;
       offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     },
@@ -16263,7 +16368,9 @@ export namespace Prisma {
     errorMessage?: StringNullableFilter<"Notification"> | string | null;
     createdAt?: DateTimeFilter<"Notification"> | Date | string;
     sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
+    bookingId?: StringNullableFilter<"Notification"> | string | null;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null;
   };
 
   export type NotificationOrderByWithRelationInput = {
@@ -16276,7 +16383,9 @@ export namespace Prisma {
     errorMessage?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     sentAt?: SortOrderInput | SortOrder;
+    bookingId?: SortOrderInput | SortOrder;
     user?: UserOrderByWithRelationInput;
+    booking?: BookingOrderByWithRelationInput;
   };
 
   export type NotificationWhereUniqueInput = Prisma.AtLeast<
@@ -16293,7 +16402,9 @@ export namespace Prisma {
       errorMessage?: StringNullableFilter<"Notification"> | string | null;
       createdAt?: DateTimeFilter<"Notification"> | Date | string;
       sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
+      bookingId?: StringNullableFilter<"Notification"> | string | null;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+      booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null;
     },
     "id"
   >;
@@ -16308,6 +16419,7 @@ export namespace Prisma {
     errorMessage?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     sentAt?: SortOrderInput | SortOrder;
+    bookingId?: SortOrderInput | SortOrder;
     _count?: NotificationCountOrderByAggregateInput;
     _max?: NotificationMaxOrderByAggregateInput;
     _min?: NotificationMinOrderByAggregateInput;
@@ -16328,6 +16440,7 @@ export namespace Prisma {
     errorMessage?: StringNullableWithAggregatesFilter<"Notification"> | string | null;
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string;
     sentAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null;
+    bookingId?: StringNullableWithAggregatesFilter<"Notification"> | string | null;
   };
 
   export type OfferWhereInput = {
@@ -16649,6 +16762,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
+    notifications?: NotificationCreateNestedManyWithoutBookingInput;
     offer: OfferCreateNestedOneWithoutBookingsInput;
     user: UserCreateNestedOneWithoutBookingsInput;
   };
@@ -16665,6 +16779,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingUpdateInput = {
@@ -16677,6 +16792,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
+    notifications?: NotificationUpdateManyWithoutBookingNestedInput;
     offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
     user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
   };
@@ -16693,6 +16809,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type BookingCreateManyInput = {
@@ -17055,6 +17172,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     sentAt?: Date | string | null;
     user: UserCreateNestedOneWithoutNotificationsInput;
+    booking?: BookingCreateNestedOneWithoutNotificationsInput;
   };
 
   export type NotificationUncheckedCreateInput = {
@@ -17067,6 +17185,7 @@ export namespace Prisma {
     errorMessage?: string | null;
     createdAt?: Date | string;
     sentAt?: Date | string | null;
+    bookingId?: string | null;
   };
 
   export type NotificationUpdateInput = {
@@ -17079,6 +17198,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     user?: UserUpdateOneRequiredWithoutNotificationsNestedInput;
+    booking?: BookingUpdateOneWithoutNotificationsNestedInput;
   };
 
   export type NotificationUncheckedUpdateInput = {
@@ -17091,6 +17211,7 @@ export namespace Prisma {
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
   export type NotificationCreateManyInput = {
@@ -17103,6 +17224,7 @@ export namespace Prisma {
     errorMessage?: string | null;
     createdAt?: Date | string;
     sentAt?: Date | string | null;
+    bookingId?: string | null;
   };
 
   export type NotificationUpdateManyMutationInput = {
@@ -17126,6 +17248,7 @@ export namespace Prisma {
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
   export type OfferCreateInput = {
@@ -17539,6 +17662,12 @@ export namespace Prisma {
     none?: IdempotencyKeyWhereInput;
   };
 
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput;
+    some?: NotificationWhereInput;
+    none?: NotificationWhereInput;
+  };
+
   export type OfferScalarRelationFilter = {
     is?: OfferWhereInput;
     isNot?: OfferWhereInput;
@@ -17550,6 +17679,10 @@ export namespace Prisma {
   };
 
   export type IdempotencyKeyOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -17969,6 +18102,7 @@ export namespace Prisma {
     errorMessage?: SortOrder;
     createdAt?: SortOrder;
     sentAt?: SortOrder;
+    bookingId?: SortOrder;
   };
 
   export type NotificationMaxOrderByAggregateInput = {
@@ -17980,6 +18114,7 @@ export namespace Prisma {
     errorMessage?: SortOrder;
     createdAt?: SortOrder;
     sentAt?: SortOrder;
+    bookingId?: SortOrder;
   };
 
   export type NotificationMinOrderByAggregateInput = {
@@ -17991,6 +18126,7 @@ export namespace Prisma {
     errorMessage?: SortOrder;
     createdAt?: SortOrder;
     sentAt?: SortOrder;
+    bookingId?: SortOrder;
   };
 
   export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -18307,12 +18443,6 @@ export namespace Prisma {
     none?: EmailVerificationWhereInput;
   };
 
-  export type NotificationListRelationFilter = {
-    every?: NotificationWhereInput;
-    some?: NotificationWhereInput;
-    none?: NotificationWhereInput;
-  };
-
   export type UserSessionListRelationFilter = {
     every?: UserSessionWhereInput;
     some?: UserSessionWhereInput;
@@ -18320,10 +18450,6 @@ export namespace Prisma {
   };
 
   export type EmailVerificationOrderByRelationAggregateInput = {
-    _count?: SortOrder;
-  };
-
-  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -18397,6 +18523,18 @@ export namespace Prisma {
     connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
   };
 
+  export type NotificationCreateNestedManyWithoutBookingInput = {
+    create?:
+      | XOR<NotificationCreateWithoutBookingInput, NotificationUncheckedCreateWithoutBookingInput>
+      | NotificationCreateWithoutBookingInput[]
+      | NotificationUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutBookingInput
+      | NotificationCreateOrConnectWithoutBookingInput[];
+    createMany?: NotificationCreateManyBookingInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
   export type OfferCreateNestedOneWithoutBookingsInput = {
     create?: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutBookingsInput;
@@ -18422,6 +18560,18 @@ export namespace Prisma {
       | IdempotencyKeyCreateOrConnectWithoutBookingInput[];
     createMany?: IdempotencyKeyCreateManyBookingInputEnvelope;
     connect?: IdempotencyKeyWhereUniqueInput | IdempotencyKeyWhereUniqueInput[];
+  };
+
+  export type NotificationUncheckedCreateNestedManyWithoutBookingInput = {
+    create?:
+      | XOR<NotificationCreateWithoutBookingInput, NotificationUncheckedCreateWithoutBookingInput>
+      | NotificationCreateWithoutBookingInput[]
+      | NotificationUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutBookingInput
+      | NotificationCreateOrConnectWithoutBookingInput[];
+    createMany?: NotificationCreateManyBookingInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -18480,6 +18630,31 @@ export namespace Prisma {
     deleteMany?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
   };
 
+  export type NotificationUpdateManyWithoutBookingNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutBookingInput, NotificationUncheckedCreateWithoutBookingInput>
+      | NotificationCreateWithoutBookingInput[]
+      | NotificationUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutBookingInput
+      | NotificationCreateOrConnectWithoutBookingInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutBookingInput
+      | NotificationUpsertWithWhereUniqueWithoutBookingInput[];
+    createMany?: NotificationCreateManyBookingInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutBookingInput
+      | NotificationUpdateWithWhereUniqueWithoutBookingInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutBookingInput
+      | NotificationUpdateManyWithWhereWithoutBookingInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
   export type OfferUpdateOneRequiredWithoutBookingsNestedInput = {
     create?: XOR<OfferCreateWithoutBookingsInput, OfferUncheckedCreateWithoutBookingsInput>;
     connectOrCreate?: OfferCreateOrConnectWithoutBookingsInput;
@@ -18528,6 +18703,31 @@ export namespace Prisma {
       | IdempotencyKeyUpdateManyWithWhereWithoutBookingInput
       | IdempotencyKeyUpdateManyWithWhereWithoutBookingInput[];
     deleteMany?: IdempotencyKeyScalarWhereInput | IdempotencyKeyScalarWhereInput[];
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutBookingNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutBookingInput, NotificationUncheckedCreateWithoutBookingInput>
+      | NotificationCreateWithoutBookingInput[]
+      | NotificationUncheckedCreateWithoutBookingInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutBookingInput
+      | NotificationCreateOrConnectWithoutBookingInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutBookingInput
+      | NotificationUpsertWithWhereUniqueWithoutBookingInput[];
+    createMany?: NotificationCreateManyBookingInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutBookingInput
+      | NotificationUpdateWithWhereUniqueWithoutBookingInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutBookingInput
+      | NotificationUpdateManyWithWhereWithoutBookingInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
   };
 
   export type UserCreateNestedOneWithoutClientProfileInput = {
@@ -18749,6 +18949,15 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput;
   };
 
+  export type BookingCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<
+      BookingCreateWithoutNotificationsInput,
+      BookingUncheckedCreateWithoutNotificationsInput
+    >;
+    connectOrCreate?: BookingCreateOrConnectWithoutNotificationsInput;
+    connect?: BookingWhereUniqueInput;
+  };
+
   export type EnumNotificationTypeFieldUpdateOperationsInput = {
     set?: $Enums.NotificationType;
   };
@@ -18773,6 +18982,25 @@ export namespace Prisma {
     update?: XOR<
       XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>,
       UserUncheckedUpdateWithoutNotificationsInput
+    >;
+  };
+
+  export type BookingUpdateOneWithoutNotificationsNestedInput = {
+    create?: XOR<
+      BookingCreateWithoutNotificationsInput,
+      BookingUncheckedCreateWithoutNotificationsInput
+    >;
+    connectOrCreate?: BookingCreateOrConnectWithoutNotificationsInput;
+    upsert?: BookingUpsertWithoutNotificationsInput;
+    disconnect?: BookingWhereInput | boolean;
+    delete?: BookingWhereInput | boolean;
+    connect?: BookingWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BookingUpdateToOneWithWhereWithoutNotificationsInput,
+        BookingUpdateWithoutNotificationsInput
+      >,
+      BookingUncheckedUpdateWithoutNotificationsInput
     >;
   };
 
@@ -20016,6 +20244,43 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type NotificationCreateWithoutBookingInput = {
+    id?: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+    user: UserCreateNestedOneWithoutNotificationsInput;
+  };
+
+  export type NotificationUncheckedCreateWithoutBookingInput = {
+    id?: string;
+    userId: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+  };
+
+  export type NotificationCreateOrConnectWithoutBookingInput = {
+    where: NotificationWhereUniqueInput;
+    create: XOR<
+      NotificationCreateWithoutBookingInput,
+      NotificationUncheckedCreateWithoutBookingInput
+    >;
+  };
+
+  export type NotificationCreateManyBookingInputEnvelope = {
+    data: NotificationCreateManyBookingInput | NotificationCreateManyBookingInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type OfferCreateWithoutBookingsInput = {
     id?: string;
     type: $Enums.OfferType;
@@ -20153,6 +20418,50 @@ export namespace Prisma {
     bookingId?: StringNullableFilter<"IdempotencyKey"> | string | null;
     expiresAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
     createdAt?: DateTimeFilter<"IdempotencyKey"> | Date | string;
+  };
+
+  export type NotificationUpsertWithWhereUniqueWithoutBookingInput = {
+    where: NotificationWhereUniqueInput;
+    update: XOR<
+      NotificationUpdateWithoutBookingInput,
+      NotificationUncheckedUpdateWithoutBookingInput
+    >;
+    create: XOR<
+      NotificationCreateWithoutBookingInput,
+      NotificationUncheckedCreateWithoutBookingInput
+    >;
+  };
+
+  export type NotificationUpdateWithWhereUniqueWithoutBookingInput = {
+    where: NotificationWhereUniqueInput;
+    data: XOR<
+      NotificationUpdateWithoutBookingInput,
+      NotificationUncheckedUpdateWithoutBookingInput
+    >;
+  };
+
+  export type NotificationUpdateManyWithWhereWithoutBookingInput = {
+    where: NotificationScalarWhereInput;
+    data: XOR<
+      NotificationUpdateManyMutationInput,
+      NotificationUncheckedUpdateManyWithoutBookingInput
+    >;
+  };
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+    OR?: NotificationScalarWhereInput[];
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+    id?: StringFilter<"Notification"> | string;
+    userId?: StringFilter<"Notification"> | string;
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFilter<"Notification"> | $Enums.NotificationChannel;
+    payload?: JsonFilter<"Notification">;
+    status?: EnumNotificationStatusFilter<"Notification"> | $Enums.NotificationStatus;
+    errorMessage?: StringNullableFilter<"Notification"> | string | null;
+    createdAt?: DateTimeFilter<"Notification"> | Date | string;
+    sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
+    bookingId?: StringNullableFilter<"Notification"> | string | null;
   };
 
   export type OfferUpsertWithoutBookingsInput = {
@@ -20776,6 +21085,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    notifications?: NotificationCreateNestedManyWithoutBookingInput;
     offer: OfferCreateNestedOneWithoutBookingsInput;
     user: UserCreateNestedOneWithoutBookingsInput;
   };
@@ -20791,6 +21101,7 @@ export namespace Prisma {
     status?: $Enums.BookingStatus;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingCreateOrConnectWithoutIdempotencyKeysInput = {
@@ -20874,6 +21185,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    notifications?: NotificationUpdateManyWithoutBookingNestedInput;
     offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
     user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
   };
@@ -20889,6 +21201,7 @@ export namespace Prisma {
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    notifications?: NotificationUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type UserUpsertWithoutIdempotencyKeysInput = {
@@ -20988,6 +21301,42 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
   };
 
+  export type BookingCreateWithoutNotificationsInput = {
+    id?: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
+    offer: OfferCreateNestedOneWithoutBookingsInput;
+    user: UserCreateNestedOneWithoutBookingsInput;
+  };
+
+  export type BookingUncheckedCreateWithoutNotificationsInput = {
+    id?: string;
+    userId: string;
+    offerId: string;
+    startDate: Date | string;
+    endDate: Date | string;
+    guestsCount: number;
+    totalPrice: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.BookingStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
+  };
+
+  export type BookingCreateOrConnectWithoutNotificationsInput = {
+    where: BookingWhereUniqueInput;
+    create: XOR<
+      BookingCreateWithoutNotificationsInput,
+      BookingUncheckedCreateWithoutNotificationsInput
+    >;
+  };
+
   export type UserUpsertWithoutNotificationsInput = {
     update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>;
     create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
@@ -21035,6 +21384,54 @@ export namespace Prisma {
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput;
   };
 
+  export type BookingUpsertWithoutNotificationsInput = {
+    update: XOR<
+      BookingUpdateWithoutNotificationsInput,
+      BookingUncheckedUpdateWithoutNotificationsInput
+    >;
+    create: XOR<
+      BookingCreateWithoutNotificationsInput,
+      BookingUncheckedCreateWithoutNotificationsInput
+    >;
+    where?: BookingWhereInput;
+  };
+
+  export type BookingUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: BookingWhereInput;
+    data: XOR<
+      BookingUpdateWithoutNotificationsInput,
+      BookingUncheckedUpdateWithoutNotificationsInput
+    >;
+  };
+
+  export type BookingUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
+    offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
+    user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
+  };
+
+  export type BookingUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    offerId?: StringFieldUpdateOperationsInput | string;
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    guestsCount?: IntFieldUpdateOperationsInput | number;
+    totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string;
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
+  };
+
   export type BookingCreateWithoutOfferInput = {
     id?: string;
     startDate: Date | string;
@@ -21045,6 +21442,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
+    notifications?: NotificationCreateNestedManyWithoutBookingInput;
     user: UserCreateNestedOneWithoutBookingsInput;
   };
 
@@ -21059,6 +21457,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingCreateOrConnectWithoutOfferInput = {
@@ -21389,6 +21788,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     idempotencyKeys?: IdempotencyKeyCreateNestedManyWithoutBookingInput;
+    notifications?: NotificationCreateNestedManyWithoutBookingInput;
     offer: OfferCreateNestedOneWithoutBookingsInput;
   };
 
@@ -21403,6 +21803,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     idempotencyKeys?: IdempotencyKeyUncheckedCreateNestedManyWithoutBookingInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutBookingInput;
   };
 
   export type BookingCreateOrConnectWithoutUserInput = {
@@ -21529,6 +21930,7 @@ export namespace Prisma {
     errorMessage?: string | null;
     createdAt?: Date | string;
     sentAt?: Date | string | null;
+    booking?: BookingCreateNestedOneWithoutNotificationsInput;
   };
 
   export type NotificationUncheckedCreateWithoutUserInput = {
@@ -21540,6 +21942,7 @@ export namespace Prisma {
     errorMessage?: string | null;
     createdAt?: Date | string;
     sentAt?: Date | string | null;
+    bookingId?: string | null;
   };
 
   export type NotificationCreateOrConnectWithoutUserInput = {
@@ -21781,21 +22184,6 @@ export namespace Prisma {
     data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>;
   };
 
-  export type NotificationScalarWhereInput = {
-    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
-    OR?: NotificationScalarWhereInput[];
-    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
-    id?: StringFilter<"Notification"> | string;
-    userId?: StringFilter<"Notification"> | string;
-    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType;
-    channel?: EnumNotificationChannelFilter<"Notification"> | $Enums.NotificationChannel;
-    payload?: JsonFilter<"Notification">;
-    status?: EnumNotificationStatusFilter<"Notification"> | $Enums.NotificationStatus;
-    errorMessage?: StringNullableFilter<"Notification"> | string | null;
-    createdAt?: DateTimeFilter<"Notification"> | Date | string;
-    sentAt?: DateTimeNullableFilter<"Notification"> | Date | string | null;
-  };
-
   export type OfferUpsertWithWhereUniqueWithoutUserInput = {
     where: OfferWhereUniqueInput;
     update: XOR<OfferUpdateWithoutUserInput, OfferUncheckedUpdateWithoutUserInput>;
@@ -21848,6 +22236,18 @@ export namespace Prisma {
     createdAt?: Date | string;
   };
 
+  export type NotificationCreateManyBookingInput = {
+    id?: string;
+    userId: string;
+    type: $Enums.NotificationType;
+    channel: $Enums.NotificationChannel;
+    payload: JsonNullValueInput | InputJsonValue;
+    status?: $Enums.NotificationStatus;
+    errorMessage?: string | null;
+    createdAt?: Date | string;
+    sentAt?: Date | string | null;
+  };
+
   export type IdempotencyKeyUpdateWithoutBookingInput = {
     id?: StringFieldUpdateOperationsInput | string;
     key?: StringFieldUpdateOperationsInput | string;
@@ -21873,6 +22273,42 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput;
+  };
+
+  export type NotificationUncheckedUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    channel?: EnumNotificationChannelFieldUpdateOperationsInput | $Enums.NotificationChannel;
+    payload?: JsonNullValueInput | InputJsonValue;
+    status?: EnumNotificationStatusFieldUpdateOperationsInput | $Enums.NotificationStatus;
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
   export type OfferCreateManyDestinationInput = {
@@ -22003,6 +22439,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
+    notifications?: NotificationUpdateManyWithoutBookingNestedInput;
     user?: UserUpdateOneRequiredWithoutBookingsNestedInput;
   };
 
@@ -22017,6 +22454,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type BookingUncheckedUpdateManyWithoutOfferInput = {
@@ -22092,6 +22530,7 @@ export namespace Prisma {
     errorMessage?: string | null;
     createdAt?: Date | string;
     sentAt?: Date | string | null;
+    bookingId?: string | null;
   };
 
   export type OfferCreateManyUserInput = {
@@ -22135,6 +22574,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     idempotencyKeys?: IdempotencyKeyUpdateManyWithoutBookingNestedInput;
+    notifications?: NotificationUpdateManyWithoutBookingNestedInput;
     offer?: OfferUpdateOneRequiredWithoutBookingsNestedInput;
   };
 
@@ -22149,6 +22589,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     idempotencyKeys?: IdempotencyKeyUncheckedUpdateManyWithoutBookingNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutBookingNestedInput;
   };
 
   export type BookingUncheckedUpdateManyWithoutUserInput = {
@@ -22238,6 +22679,7 @@ export namespace Prisma {
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    booking?: BookingUpdateOneWithoutNotificationsNestedInput;
   };
 
   export type NotificationUncheckedUpdateWithoutUserInput = {
@@ -22249,6 +22691,7 @@ export namespace Prisma {
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
   export type NotificationUncheckedUpdateManyWithoutUserInput = {
@@ -22260,6 +22703,7 @@ export namespace Prisma {
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
   export type OfferUpdateWithoutUserInput = {

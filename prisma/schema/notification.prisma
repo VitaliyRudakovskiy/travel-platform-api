@@ -26,9 +26,12 @@ model Notification {
   errorMessage String?             @map("error_message")
   createdAt    DateTime            @default(now()) @map("created_at")
   sentAt       DateTime?           @map("sent_at")
+  bookingId    String?             @map("booking_id")
   user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking      Booking?            @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([bookingId])
   @@index([status])
   @@index([type])
   @@map("notifications")

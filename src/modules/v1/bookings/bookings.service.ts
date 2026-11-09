@@ -380,14 +380,28 @@ export class BookingsService {
       });
 
       if (notificationType) {
-        await tx.notification.create({
-          data: {
-            userId: booking.userId,
-            type: notificationType,
-            channel: NotificationChannel.email,
-            status: NotificationStatus.pending,
-            payload: { bookingId: booking.id },
-          },
+        const notification = {
+          userId: booking.userId,
+          bookingId: booking.id,
+          type: notificationType,
+          payload: { bookingId: booking.id },
+        };
+
+        // Email goes to the outbox for the worker; in-app is delivered by being stored.
+        await tx.notification.createMany({
+          data: [
+            {
+              ...notification,
+              channel: NotificationChannel.email,
+              status: NotificationStatus.pending,
+            },
+            {
+              ...notification,
+              channel: NotificationChannel.in_app,
+              status: NotificationStatus.sent,
+              sentAt: new Date(),
+            },
+          ],
         });
       }
 

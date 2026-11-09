@@ -184,6 +184,7 @@ exports.Prisma.NotificationScalarFieldEnum = {
   errorMessage: "errorMessage",
   createdAt: "createdAt",
   sentAt: "sentAt",
+  bookingId: "bookingId",
 };
 
 exports.Prisma.OfferScalarFieldEnum = {
