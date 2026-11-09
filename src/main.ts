@@ -1,21 +1,14 @@
 import "dotenv/config";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { VersioningType } from "@nestjs/common";
 import { SwaggerModule } from "@nestjs/swagger";
 import { swaggerConfig } from "./swagger.config";
-import { GlobalExceptionFilter } from "@shared/filters/global-exception.filter";
+import { configureApp } from "./configure-app";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
-
-  app.enableVersioning({
-    type: VersioningType.URI,
-    prefix: "api/v",
-    defaultVersion: "1",
-  });
+  configureApp(app);
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
 

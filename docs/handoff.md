@@ -52,9 +52,12 @@ Dockerfile, README, tests (State + integration for sessions/bookings, ≥60% ser
 11.1 **Booking lifecycle logging** (done 2026-11-09) — `Logger` in `BookingsService`: created / status changed / cancelled, written after the DB write, ids only (no PII), both v1 `updateStatus` and v2 `changeStatus`.
 11.2 **State tests + coverage** (done 2026-11-09) — `booking-state.spec.ts` is a full 4×4 matrix (`it.each`) against a transition table written independently of the implementation. `vitest.config.mjs` coverage limited to services, `states/`, workers, with 60% thresholds (current: ~90% lines, ~78% branches). Note: the text reporter hides 100%-covered files (e.g. `booking-state.ts`) — that's not a missing file.
 
+11.3a **Integration test infrastructure** (done 2026-11-09) — `pnpm test:int` (`vitest.integration.config.mjs`, files `src/tests/integration/**/*.int-spec.ts`, run sequentially). Real `AppModule` + Postgres DB `travel_platform_test` (override with `TEST_DATABASE_URL`), created from `template0` by `global-setup.ts` + `prisma migrate deploy`. Safety: refuses any DB name not ending in `_test` (checked in global setup, env setup and `resetDatabase` via `current_database()`). `src/configure-app.ts` (versioning + global filter) shared by `main.ts` and tests. Helpers: `createTestApp()` (MailService mocked, NotificationsWorker stubbed), `resetDatabase()`, `createUser()`. Smoke tests: health + infrastructure.
+- Env note: the Postgres volume was created by a glibc image, now served by `postgres:17-alpine` (musl) → "collation version mismatch" warnings; `CREATE DATABASE` from `template1` fails. Dev DBs work but text sort/index order may differ; not fixed (user's call). Also two dev DBs exist: `travel_platform` and `travel-platform` (the latter is what `.env` points to).
+
 ## Remaining
 
-11.3 integration tests, 11.4 Dockerfile, 11.5 README. Original scope: **Wrap-up** — Dockerfile; README (v1/v2 module structure, ClientProfile separation, `draft → pending` migration); tests: State pattern (mandatory), integration for `/api/v2/sessions` and `/api/v2/bookings`, ≥60% service coverage; log booking lifecycle events (create, status change, cancel) — check whether already done.
+11.3b sessions integration tests, 11.3c bookings integration tests, 11.4 Dockerfile, 11.5 README. Original scope: **Wrap-up** — Dockerfile; README (v1/v2 module structure, ClientProfile separation, `draft → pending` migration); tests: State pattern (mandatory), integration for `/api/v2/sessions` and `/api/v2/bookings`, ≥60% service coverage; log booking lifecycle events (create, status change, cancel) — check whether already done.
 
 ## Open questions
 
