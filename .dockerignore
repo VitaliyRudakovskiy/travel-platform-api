@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+.git
+.husky
+.claude
+docs
+.env
+.env.*
+*.log
+Dockerfile
+.dockerignore

@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    image: postgres:17-trixie
     container_name: travel-platform-db
     restart: unless-stopped
 
@@ -15,6 +15,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   mailhog:
     image: mailhog/mailhog:v1.0.1
     container_name: travel-platform-mailhog
@@ -23,6 +29,48 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  migrate:
+    profiles: ["app"]
+    build:
+      context: .
+      target: build
+    container_name: travel-platform-migrate
+    command: ["pnpm", "exec", "prisma", "migrate", "deploy"]
+
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/travel-platform
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    profiles: ["app"]
+    build:
+      context: .
+      target: runtime
+    container_name: travel-platform-api
+    restart: unless-stopped
+
+    env_file:
+      - path: .env
+        required: false
+
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/travel-platform
+      SMTP_HOST: mailhog
+      SMTP_PORT: "1025"
+      PORT: ${PORT:-4200}
+
+    ports:
+      - "${PORT:-4200}:${PORT:-4200}"
+
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mailhog:
+        condition: service_started
 
 volumes:
   postgres_data:
