@@ -21,7 +21,7 @@ export class SessionsController {
   })
   @ApiBody({ type: LoginClass })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: "Successfully authenticated",
     type: SessionResponse,
   })

@@ -16,7 +16,7 @@ import {
   NotificationStatus,
   NotificationType,
   OfferStatus,
-  type Prisma,
+  Prisma,
   UserRole,
 } from "#prisma";
 import { BookingQueryDto } from "./schemas/booking-query.schema";
@@ -214,32 +214,40 @@ export class BookingsService {
     };
 
     const booking = idempotencyKey
-      ? await this.prisma.$transaction(async (tx) => {
-          const created = await tx.booking.create({
-            data: {
-              userId,
-              offerId: createBookingDto.offerId,
-              startDate,
-              endDate,
-              guestsCount: createBookingDto.guestsCount,
-              totalPrice,
-              status: BookingStatus.pending,
-            },
-            include: bookingInclude,
-          });
+      ? await this.prisma
+          .$transaction(async (tx) => {
+            const created = await tx.booking.create({
+              data: {
+                userId,
+                offerId: createBookingDto.offerId,
+                startDate,
+                endDate,
+                guestsCount: createBookingDto.guestsCount,
+                totalPrice,
+                status: BookingStatus.pending,
+              },
+              include: bookingInclude,
+            });
 
-          await tx.idempotencyKey.create({
-            data: {
-              key: idempotencyKey,
-              requestHash: hashRequest(createBookingDto),
-              userId,
-              bookingId: created.id,
-              expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            },
-          });
+            await tx.idempotencyKey.create({
+              data: {
+                key: idempotencyKey,
+                requestHash: hashRequest(createBookingDto),
+                userId,
+                bookingId: created.id,
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+              },
+            });
 
-          return created;
-        })
+            return created;
+          })
+          .catch(async (error: unknown) => {
+            // Concurrent request with the same key won the unique (user_id, key) race.
+            if (isUniqueViolation(error)) {
+              await this.assertIdempotency(userId, idempotencyKey, createBookingDto);
+            }
+            throw error;
+          })
       : await this.prisma.booking.create({
           data: {
             userId,
@@ -553,6 +561,13 @@ export class BookingsService {
 
     throw new ConflictException("Idempotency key was already used with a different request body");
   }
+}
+
+function isUniqueViolation(error: unknown): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    (error as Prisma.PrismaClientKnownRequestError).code === "P2002"
+  );
 }
 
 function hashRequest(createBookingDto: CreateBookingDto): string {

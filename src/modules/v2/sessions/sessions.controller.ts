@@ -28,8 +28,8 @@ export class SessionsController {
   })
   @ApiBody({ type: LoginClass })
   @ApiResponse({
-    status: 200,
-    description: "Successfully authenticated",
+    status: 201,
+    description: "Successfully authenticated, session created",
     type: TokenResponse,
   })
   @ApiResponse({
@@ -47,7 +47,7 @@ export class SessionsController {
   })
   @ApiBody({ type: RefreshTokenBody })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: "Access token refreshed",
     type: AccessTokenResponse,
   })

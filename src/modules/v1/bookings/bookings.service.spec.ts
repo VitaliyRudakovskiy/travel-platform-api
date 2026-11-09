@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { describe, beforeEach, afterEach, it, expect, vi } from "vitest";
-import { UserRole } from "#prisma";
+import { Prisma, UserRole } from "#prisma";
 import { BookingsService } from "./bookings.service";
 import { providePrisma } from "@tests/providers/provide-prisma";
 import { prismaServiceMock } from "@tests/mocks/prisma-service.mock";
@@ -749,6 +749,62 @@ describe("BookingsService", () => {
       );
 
       expect(prismaServiceMock.booking.create).not.toHaveBeenCalled();
+    });
+
+    describe("when a concurrent request with the same key wins the race", () => {
+      const uniqueViolation = new Prisma.PrismaClientKnownRequestError(
+        "Unique constraint failed on the fields: (`user_id`,`key`)",
+        { code: "P2002", clientVersion: "test" },
+      );
+
+      beforeEach(() => {
+        prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
+        prismaServiceMock.booking.count.mockResolvedValue(0);
+        prismaServiceMock.$transaction.mockRejectedValue(uniqueViolation);
+      });
+
+      it("returns 409 with the winner's booking id instead of a 500", async () => {
+        prismaServiceMock.idempotencyKey.findUnique
+          .mockResolvedValueOnce(null)
+          .mockResolvedValueOnce({
+            id: faker.string.uuid(),
+            key: idempotencyKey,
+            requestHash: createHash("sha256")
+              .update(JSON.stringify(createBookingDto))
+              .digest("hex"),
+            userId,
+            bookingId: bookingMock.id,
+            expiresAt: faker.date.future(),
+          });
+
+        const error = await service
+          .create(createBookingDto, userId, idempotencyKey)
+          .catch((caught: unknown) => caught);
+
+        expect(error).toBeInstanceOf(ConflictException);
+        expect((error as ConflictException).getResponse()).toMatchObject({
+          errors: { bookingId: bookingMock.id },
+        });
+      });
+
+      it("rethrows the original error when the key is not found on re-check", async () => {
+        prismaServiceMock.idempotencyKey.findUnique.mockResolvedValue(null);
+
+        await expect(service.create(createBookingDto, userId, idempotencyKey)).rejects.toBe(
+          uniqueViolation,
+        );
+      });
+    });
+
+    it("rethrows non-unique database errors unchanged", async () => {
+      const dbError = new Error("connection lost");
+      prismaServiceMock.idempotencyKey.findUnique.mockResolvedValue(null);
+      prismaServiceMock.offer.findFirst.mockResolvedValue(activeOffer);
+      prismaServiceMock.booking.count.mockResolvedValue(0);
+      prismaServiceMock.$transaction.mockRejectedValue(dbError);
+
+      await expect(service.create(createBookingDto, userId, idempotencyKey)).rejects.toBe(dbError);
+      expect(prismaServiceMock.idempotencyKey.findUnique).toHaveBeenCalledTimes(1);
     });
   });
 });
