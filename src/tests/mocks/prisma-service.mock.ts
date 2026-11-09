@@ -22,6 +22,7 @@ export const prismaServiceMock = {
   booking: {
     ...DEFAULT_CRUD,
     count: vi.fn(),
+    groupBy: vi.fn(),
   },
   offer: {
     ...DEFAULT_CRUD,
@@ -63,4 +64,5 @@ export const prismaServiceMock = {
     delete: vi.fn(),
   },
   $transaction: vi.fn(),
+  $queryRaw: vi.fn(),
 };

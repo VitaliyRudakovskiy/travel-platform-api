@@ -47,9 +47,10 @@ Dockerfile, README, tests (State + integration for sessions/bookings, ≥60% ser
 
 9. **Notifications worker + Mailhog** (done 2026-11-09, uncommitted at time of writing) — `src/modules/v2/notifications/`: `NotificationsWorker` (`@Interval(10s)`, `isRunning` guard) → `NotificationsService.sendPendingEmails()` (batch 20, `pending`+`email` → `sent`/`failed`) via `MailService` (nodemailer, `SMTP_HOST`/`SMTP_PORT`/`MAIL_FROM` with defaults localhost:1025). `GET /api/v2/notifications` returns only `in_app` (email payloads hold the verification token). New nullable `notifications.booking_id` (migration `20261109120000_add_notification_booking_id`, backfilled from payload) for the Agent scope. Booking status change now creates two notifications: `email`/`pending` + `in_app`/`sent`. Mailhog in compose (UI :8025).
 
+10. **Analytics** (done 2026-11-09) — `src/modules/v2/analytics/` (v2-only service). `GET /api/v2/analytics/bookings?from=YYYY-MM-DD&to=YYYY-MM-DD&groupBy=status|destination&limit=10` (1..100), Admin only via class-level `@Roles`. Period = booking `createdAt` in `[from 00:00, to+1d 00:00)` UTC; `from > to` → 400 (Zod refine). Response `{ groupBy, from, to, data: [{ key, label, count }] }` sorted by count desc. `status`: Prisma `groupBy`, all 4 statuses zero-filled. `destination`: `$queryRaw` tagged template (Prisma can't group by relation), `COUNT(*)::int` to avoid BigInt.
+
 ## Remaining
 
-10. **Analytics** — `GET /api/v2/analytics/bookings?from&to&groupBy=status|destination&limit=10`, Admin only (403 otherwise); destination grouping sorted desc.
 11. **Wrap-up** — Dockerfile; README (v1/v2 module structure, ClientProfile separation, `draft → pending` migration); tests: State pattern (mandatory), integration for `/api/v2/sessions` and `/api/v2/bookings`, ≥60% service coverage; log booking lifecycle events (create, status change, cancel) — check whether already done.
 
 ## Open questions
