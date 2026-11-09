@@ -1,0 +1,141 @@
+---
+description: Vitest testing conventions for services, controllers and test fixtures
+globs: ["src/**/*.spec.ts", "src/**/*.test.ts", "src/tests/**/*.ts"]
+alwaysApply: true
+---
+# Testing Conventions
+
+The project uses:
+
+- Vitest
+- @nestjs/testing
+- @faker-js/faker
+
+## Test structure
+
+Use `describe` blocks for the class and its methods.
+
+Use descriptive `it` names that describe observable behavior.
+
+Follow the existing structure:
+
+```ts
+describe("UsersService", () => {
+  describe("getById", () => {
+    it("returns the user when found", async () => {
+      // ...
+    });
+
+    it("throws NotFoundException when user is not found", async () => {
+      // ...
+    });
+  });
+});
+```
+
+## NestJS testing
+
+Use Test.createTestingModule() for NestJS services and controllers.
+
+Follow the existing provider factory pattern from src/tests/providers.
+
+Example:
+
+providers: [UsersService, providePrisma()]
+
+or the equivalent project-specific provider factory.
+
+## Mocks
+
+Reusable mocks belong in:
+
+src/tests/mocks/
+
+Provider factories belong in:
+
+src/tests/providers/
+
+Follow the existing pattern:
+
+export const provideUsersService = () => ({
+  provide: UsersService,
+  useValue: usersServiceMock,
+});
+
+Do not create ad-hoc mocks when an existing reusable mock can be used.
+
+## Faker
+
+Use Faker for generated test data.
+
+Reusable entity mocks may be defined using Faker.
+
+When the exact value is important to an assertion, use a local deterministic value instead of relying on random generation.
+
+Do not make test behavior depend on randomness.
+
+## Mock lifecycle
+
+Clear mocks before each test:
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+Follow the existing project lifecycle unless there is a concrete reason to use a different strategy.
+
+## Service tests
+
+Service tests should verify:
+
+returned data
+database calls and their relevant arguments
+business rules
+expected exceptions
+that dependent operations are not called after a failure
+
+For Prisma-based services, use the project's Prisma mock.
+
+Do not mock the service method being tested.
+
+## Controller tests
+
+Controller tests should verify:
+
+correct service invocation
+arguments passed to the service
+returned service result
+controller-level authorization behavior
+expected exceptions
+
+Do not test Prisma behavior in controller tests.
+
+Controllers should use mocked services.
+
+## Assertions
+
+Prefer precise assertions.
+
+For example:
+
+```ts
+expect(prismaServiceMock.user.findUnique).toHaveBeenCalledWith({
+  where: { id: userMock.id },
+});
+```
+
+Avoid weak assertions such as:
+
+```ts
+expect(result).toBeTruthy();
+```
+
+when the actual response contract can be asserted.
+
+## Test scope
+
+Do not add tests that duplicate behavior already covered at another appropriate layer.
+
+Do not test private implementation details.
+
+Tests should protect behavior and important integration boundaries.

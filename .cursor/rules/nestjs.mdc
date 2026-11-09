@@ -1,0 +1,156 @@
+---
+description: NestJS implementation conventions
+globs: ["src/**/*.ts"]
+alwaysApply: true
+---
+
+# NestJS Conventions
+
+## Modules
+
+Use standard NestJS modules.
+
+Feature modules should declare their required:
+
+- controllers
+- providers
+- imports
+- exports
+
+Follow existing module definitions before changing provider registration.
+
+## Controllers
+
+Controllers must stay thin.
+
+A controller should:
+
+1. Receive HTTP input.
+2. Apply guards and validation.
+3. Call the appropriate service method.
+4. Return the service result.
+
+Do not implement business logic in controllers.
+
+Simple access-control checks that depend directly on authenticated request context may remain in controllers when this matches the existing project pattern.
+
+For example, checking that the requested `userId` matches `CurrentUser.id` is acceptable when it is part of the existing controller convention.
+
+Do not move such logic into a new abstraction without a concrete need.
+
+## Validation
+
+Use the existing `ZodValidationPipe`.
+
+For body validation, follow the established project pattern:
+
+```ts
+@Body(new ZodValidationPipe(schema))
+```
+
+---
+description: NestJS implementation conventions
+globs: ["src/**/*.ts"]
+alwaysApply: true
+---
+
+# NestJS Conventions
+
+## Modules
+
+Use standard NestJS modules.
+
+Feature modules should declare their required:
+
+- controllers
+- providers
+- imports
+- exports
+
+Follow existing module definitions before changing provider registration.
+
+## Controllers
+
+Controllers must stay thin.
+
+A controller should:
+
+1. Receive HTTP input.
+2. Apply guards and validation.
+3. Call the appropriate service method.
+4. Return the service result.
+
+Do not implement business logic in controllers.
+
+Simple access-control checks that depend directly on authenticated request context may remain in controllers when this matches the existing project pattern.
+
+For example, checking that the requested `userId` matches `CurrentUser.id` is acceptable when it is part of the existing controller convention.
+
+Do not move such logic into a new abstraction without a concrete need.
+
+## Validation
+
+Use the existing `ZodValidationPipe`.
+
+For body validation, follow the established project pattern:
+
+```ts
+@Body(new ZodValidationPipe(schema))
+```
+
+or the existing equivalent used by the surrounding code.
+
+Do not duplicate schema validation manually inside controllers.
+
+## Authentication
+
+Authentication is currently implemented through the project's existing AuthGuard.
+
+Do not introduce Passport/JWT-specific implementation into the current API unless explicitly requested.
+
+Future authentication changes must preserve the existing controller/service architecture.
+
+## Responses
+
+Controller methods should return typed response DTOs.
+
+Prefer explicit return types for public controller and service methods.
+
+## Swagger
+
+Public endpoints should follow the project's existing Swagger conventions.
+
+Keep Swagger DTO classes separate from Zod API schemas when required by the current project structure.
+
+Do not replace the existing Swagger approach with automatic schema generation unless explicitly requested.
+
+## Exceptions
+
+Use NestJS HTTP exceptions.
+
+Do not use Express Response directly for normal endpoint responses.
+
+Do not manually construct success/error HTTP responses.
+
+## Dependency injection
+
+Use NestJS constructor dependency injection.
+
+Do not instantiate providers manually.
+
+## Imports
+
+Follow the project's existing import aliases and module boundaries.
+
+Prefer the established aliases such as:
+
+```ts
+@shared/*
+@services/*
+@modules/*
+@tests/*
+```
+
+when available.
+
+Do not introduce a new alias when an existing alias is suitable.
