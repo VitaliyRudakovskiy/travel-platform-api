@@ -58,7 +58,13 @@
       "entryFile": "apps/booking-service/src/main",
       "sourceRoot": "apps/booking-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/booking-service/tsconfig.app.json"
+        "tsConfigPath": "apps/booking-service/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "../../../libs/contracts/proto/*.proto",
+            "outDir": "dist/apps/booking-service/libs/contracts/proto"
+          }
+        ]
       }
     },
     "notification-service": {

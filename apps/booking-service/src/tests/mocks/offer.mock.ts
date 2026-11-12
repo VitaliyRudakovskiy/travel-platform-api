@@ -1,0 +1,26 @@
+import { faker } from "@faker-js/faker";
+
+export const offerMock = {
+  id: faker.string.uuid(),
+  type: "hotel",
+  destinationId: faker.string.uuid(),
+  ownerId: faker.string.uuid(),
+  title: faker.lorem.words(3),
+  description: faker.lorem.sentence(),
+  price: { toNumber: () => 150.5 },
+  currency: "USD",
+  maxGuests: faker.number.int({ min: 1, max: 10 }),
+  maxConcurrentBookings: faker.number.int({ min: 1, max: 5 }),
+  availableFrom: faker.date.recent(),
+  availableTo: faker.date.future(),
+  status: "active",
+  stars: faker.number.int({ min: 1, max: 5 }),
+  address: faker.location.streetAddress(),
+  flightNumber: null,
+  airline: null,
+  durationDays: null,
+  includesMeals: null,
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.recent(),
+  deletedAt: null,
+};
