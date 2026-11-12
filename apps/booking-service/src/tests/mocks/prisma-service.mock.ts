@@ -21,6 +21,8 @@ export const prismaServiceMock = {
     delete: vi.fn(),
   },
   outboxEvent: {
+    findMany: vi.fn(),
+    update: vi.fn(),
     create: vi.fn(),
   },
   $transaction: vi.fn(),

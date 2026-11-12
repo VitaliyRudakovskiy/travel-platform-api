@@ -507,6 +507,14 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 
 ## Шаг 4. Transactional Outbox → RabbitMQ (booking-service)
 
+> **✅ Сделано** (ветка `feature/stage3-outbox-rabbitmq`). Отличия от первоначального плана:
+> - `@golevelup/nestjs-rabbitmq@9.1.2` (peer: Nest ^11.1.24). Заодно `@nestjs/axios` 12 → 4 (12.x — ESM-only, конфликт с terminus).
+> - Пока RabbitMQ недоступен (`amqp.connected = false`), такт воркера пропускается и попытки не тратятся —
+>   иначе события при простое брокера > 25 с ушли бы в `failed`.
+> - Таймаут публикации 10 с: amqp-connection-manager при обрыве копит сообщения в памяти и ждёт переподключения.
+> - Проверено вживую: при остановленном RabbitMQ брони создаются, события ждут в `pending`, после старта брокера
+>   публикуются по порядку (~10 с на переподключение).
+
 ### Что добавить
 1. `pnpm add @golevelup/nestjs-rabbitmq` (внутри использует `amqplib`, как требует ТЗ 4.2).
 2. Подключение:
