@@ -67,21 +67,28 @@ Do not access Prisma from controllers.
 
 ## Project structure
 
-Application code is organized as:
+Nest monorepo (stage III in progress, see `docs/stage3-plan.md`):
 
-src/
-├── modules/
-│   ├── health/
-│   └── v1/
-├── shared/
-├── tests/
-├── app.module.ts
-├── main.ts
-└── swagger.config.ts
+apps/
+├── travel-platform-api/      # stage I–II monolith, kept until all services are done
+│   └── src/
+│       ├── modules/{health,v1,v2}/
+│       ├── shared/
+│       ├── tests/
+│       ├── app.module.ts
+│       ├── main.ts
+│       └── swagger.config.ts
+├── api-gateway/              # stage III services (skeletons for now)
+├── auth-service/
+├── catalog-service/
+├── booking-service/
+└── notification-service/
+libs/
+└── common/                   # @app/common — infrastructure shared by all apps
 
-Versioned API features belong under:
+In the monolith, versioned API features belong under:
 
-src/modules/v1/
+apps/travel-platform-api/src/modules/v1/ and apps/travel-platform-api/src/modules/v2/
 
 Each feature normally contains:
 
@@ -93,16 +100,16 @@ Each feature normally contains:
 
 ## Shared code
 
-The `src/shared` directory contains cross-feature infrastructure:
+`libs/common` contains infrastructure shared by several apps: exception filter, Zod validation pipe, paginated schema, `configureApp`. It must not depend on any app (no app DTOs, no app's Prisma client).
 
+The monolith's `apps/travel-platform-api/src/shared` directory contains its own cross-feature infrastructure:
+
+- auth
 - decorators
-- filters
 - guards
-- pipes
-- schemas
 - services
 
-Do not move feature-specific code into `shared`.
+Do not move feature-specific code into `shared` or `libs/common`.
 
 Do not add code to `shared` merely to avoid duplication between two files. First verify that the abstraction is genuinely cross-feature.
 

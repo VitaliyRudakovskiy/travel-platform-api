@@ -40,28 +40,38 @@ PrismaService is the only database access dependency used by feature services. N
 
 ## Project structure
 
+Nest monorepo (stage III in progress, see `docs/stage3-plan.md`): one `package.json`, several apps and libraries.
+
 ```
-src/
-├── modules/
-│   ├── health/
-│   ├── v1/
-│   └── v2/
-├── shared/
-├── tests/
-├── app.module.ts
-├── main.ts
-└── swagger.config.ts
+apps/
+├── travel-platform-api/      # stage I–II monolith, kept until all services are done
+│   └── src/
+│       ├── modules/{health,v1,v2}/
+│       ├── shared/
+│       ├── tests/
+│       ├── app.module.ts
+│       ├── main.ts
+│       └── swagger.config.ts
+├── api-gateway/              # stage III services (skeletons for now)
+├── auth-service/
+├── catalog-service/
+├── booking-service/
+└── notification-service/
+libs/
+└── common/                   # @app/common — infrastructure shared by all apps
 ```
 
-Versioned API features belong under `src/modules/v1/` or `src/modules/v2/`. Each feature normally contains: controller, service, module, models, schemas.
+In the monolith, versioned API features belong under `apps/travel-platform-api/src/modules/v1/` or `.../v2/`. Each feature normally contains: controller, service, module, models, schemas.
 
 v2 controllers reuse v1 services where possible (passing v2-specific flags/params); only create a v2 service when the logic is v2-only.
 
 ## Shared code
 
-`src/shared` contains cross-feature infrastructure: auth, decorators, filters, guards, pipes, schemas, services.
+`libs/common` contains infrastructure shared by several apps: exception filter, Zod validation pipe, paginated schema, `configureApp`. It must not depend on any app (no app DTOs, no app's Prisma client).
 
-Do not move feature-specific code into `shared`. Do not add code to `shared` merely to avoid duplication between two files — first verify the abstraction is genuinely cross-feature.
+The monolith's `apps/travel-platform-api/src/shared` contains its own cross-feature infrastructure: auth, decorators, guards, services.
+
+Do not move feature-specific code into `shared` or `libs/common`. Do not add code to `shared` merely to avoid duplication between two files — first verify the abstraction is genuinely cross-feature.
 
 ## API contracts
 

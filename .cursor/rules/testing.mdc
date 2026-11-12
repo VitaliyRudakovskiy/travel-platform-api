@@ -1,6 +1,6 @@
 ---
 description: Vitest testing conventions for services, controllers and test fixtures
-globs: ["src/**/*.spec.ts", "src/**/*.test.ts", "src/tests/**/*.ts"]
+globs: ["apps/**/*.spec.ts", "libs/**/*.spec.ts", "apps/**/*.int-spec.ts", "apps/*/src/tests/**/*.ts"]
 alwaysApply: true
 ---
 # Testing Conventions
@@ -37,7 +37,7 @@ describe("UsersService", () => {
 
 Use Test.createTestingModule() for NestJS services and controllers.
 
-Follow the existing provider factory pattern from src/tests/providers.
+Follow the existing provider factory pattern from apps/travel-platform-api/src/tests/providers.
 
 Example:
 
@@ -49,11 +49,11 @@ or the equivalent project-specific provider factory.
 
 Reusable mocks belong in:
 
-src/tests/mocks/
+apps/travel-platform-api/src/tests/mocks/
 
 Provider factories belong in:
 
-src/tests/providers/
+apps/travel-platform-api/src/tests/providers/
 
 Follow the existing pattern:
 

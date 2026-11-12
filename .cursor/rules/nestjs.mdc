@@ -1,6 +1,6 @@
 ---
 description: NestJS implementation conventions
-globs: ["src/**/*.ts"]
+globs: ["apps/**/*.ts", "libs/**/*.ts"]
 alwaysApply: true
 ---
 
@@ -50,7 +50,7 @@ For body validation, follow the established project pattern:
 
 ---
 description: NestJS implementation conventions
-globs: ["src/**/*.ts"]
+globs: ["apps/**/*.ts", "libs/**/*.ts"]
 alwaysApply: true
 ---
 
@@ -145,12 +145,15 @@ Follow the project's existing import aliases and module boundaries.
 Prefer the established aliases such as:
 
 ```ts
-@shared/*
+@app/common   // libs/common: ZodValidationPipe, GlobalExceptionFilter, paginatedSchema, configureApp
+@shared/*     // monolith (apps/travel-platform-api)
 @services/*
 @modules/*
 @tests/*
 ```
 
 when available.
+
+Prisma clients (`#prisma`) are resolved through `package.json` → `imports` only. Never add them to `tsconfig.json` → `paths`: Nest CLI rewrites `paths` aliases into relative paths that break at runtime for folders outside `dist`.
 
 Do not introduce a new alias when an existing alias is suitable.
