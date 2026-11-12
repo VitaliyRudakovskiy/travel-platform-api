@@ -638,6 +638,15 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 
 ## Шаг 6. api-gateway
 
+> **✅ Сделано** (ветка `feature/stage3-api-gateway`). Отличия от первоначального плана:
+> - `ioredis@5`, `@nestjs/throttler@6`. Подпись JWT проверяется на каждом запросе локально (дёшево), в Redis кэшируются
+>   только claims из auth-service — повторный запрос с тем же токеном не ходит в auth-service (проверено: auth выключен → 200).
+> - Redis недоступен → gateway спрашивает auth-service напрямую (кэш — оптимизация, не точка отказа).
+> - v1 `X-User-Id`: поиск пользователя кэшируется на 60 с (`v1:identity:<id>`).
+> - Rate limit — один счётчик на `GET /api/v1/offers*` и `GET /api/v2/offers*`; 429 в едином формате + `Retry-After`.
+> - В `GlobalExceptionFilter` добавлены тексты для 429 и 503.
+> - Агрегированный Swagger: `/api/docs` (explorer по `/docs/<service>/openapi.json`).
+
 ### Что добавить
 1. `pnpm add @nestjs/throttler ioredis` (`@nestjs/axios` и `@nestjs/jwt` уже есть).
 2. **Таблица маршрутов** `routes.config.ts` (порядок важен, сравнение по префиксу):
