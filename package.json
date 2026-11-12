@@ -17,6 +17,10 @@
     "#booking-prisma": {
       "types": "./apps/booking-service/prisma/generated/index.d.ts",
       "default": "./apps/booking-service/prisma/generated/index.js"
+    },
+    "#notify-prisma": {
+      "types": "./apps/notification-service/prisma/generated/index.d.ts",
+      "default": "./apps/notification-service/prisma/generated/index.js"
     }
   },
   "scripts": {
@@ -53,7 +57,11 @@
     "prisma:generate:booking": "prisma generate --config apps/booking-service/prisma.config.ts",
     "migrate:booking": "prisma migrate dev --config apps/booking-service/prisma.config.ts",
     "migrate:deploy:booking": "prisma migrate deploy --config apps/booking-service/prisma.config.ts",
-    "studio:booking": "prisma studio --config apps/booking-service/prisma.config.ts --port 5563"
+    "studio:booking": "prisma studio --config apps/booking-service/prisma.config.ts --port 5563",
+    "prisma:generate:notify": "prisma generate --config apps/notification-service/prisma.config.ts",
+    "migrate:notify": "prisma migrate dev --config apps/notification-service/prisma.config.ts",
+    "migrate:deploy:notify": "prisma migrate deploy --config apps/notification-service/prisma.config.ts",
+    "studio:notify": "prisma studio --config apps/notification-service/prisma.config.ts --port 5564"
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "9.1.2",

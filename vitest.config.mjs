@@ -5,6 +5,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "#prisma": fileURLToPath(new URL("./prisma/generated", import.meta.url)),
+      "#notify-prisma": fileURLToPath(
+        new URL("./apps/notification-service/prisma/generated", import.meta.url),
+      ),
       "#booking-prisma": fileURLToPath(
         new URL("./apps/booking-service/prisma/generated", import.meta.url),
       ),

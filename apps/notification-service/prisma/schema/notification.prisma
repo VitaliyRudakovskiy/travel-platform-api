@@ -1,0 +1,47 @@
+enum NotificationType {
+  // stage III: booking.created events are notified too (the stage II enum had no such value)
+  booking_created
+  booking_confirmed
+  booking_cancelled
+  booking_completed
+  email_verification
+}
+
+enum NotificationChannel {
+  email
+  in_app
+}
+
+enum NotificationStatus {
+  pending
+  sent
+  failed
+}
+
+// userId / bookingId / offerOwnerId are external ids (auth_db, booking_db): no foreign keys across services.
+model Notification {
+  id           String              @id @default(uuid())
+  userId       String              @map("user_id")
+  type         NotificationType
+  channel      NotificationChannel
+  payload      Json
+  status       NotificationStatus  @default(pending)
+  errorMessage String?             @map("error_message")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  sentAt       DateTime?           @map("sent_at")
+  bookingId    String?             @map("booking_id")
+  // owner of the booked offer: Agents see in-app notifications for bookings of their offers
+  offerOwnerId String?             @map("offer_owner_id")
+  // id of the domain event (RabbitMQ message) this notification was created from; null for email verification
+  eventId      String?             @map("event_id")
+
+  // Idempotent consumer: a redelivered event can't create a second notification on the same channel.
+  // (PostgreSQL allows several NULL event ids, so email-verification rows are not affected.)
+  @@unique([eventId, channel])
+  @@index([userId])
+  @@index([bookingId])
+  @@index([offerOwnerId])
+  @@index([status])
+  @@index([type])
+  @@map("notifications")
+}
