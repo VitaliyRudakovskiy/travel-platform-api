@@ -1,3 +1,12 @@
+x-service-postgres: &service-postgres
+  image: postgres:17-trixie
+  restart: unless-stopped
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U postgres"]
+    interval: 5s
+    timeout: 3s
+    retries: 10
+
 services:
   postgres:
     image: postgres:17-trixie
@@ -29,6 +38,86 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  postgres-auth:
+    <<: *service-postgres
+    container_name: travel-auth-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+
+  postgres-catalog:
+    <<: *service-postgres
+    container_name: travel-catalog-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: catalog_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_catalog_data:/var/lib/postgresql/data
+
+  postgres-booking:
+    <<: *service-postgres
+    container_name: travel-booking-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: booking_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_booking_data:/var/lib/postgresql/data
+
+  postgres-notify:
+    <<: *service-postgres
+    container_name: travel-notify-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: notify_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_notify_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: travel-rabbitmq
+    restart: unless-stopped
+
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: travel-redis
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   migrate:
     profiles: ["app"]
@@ -74,3 +163,8 @@ services:
 
 volumes:
   postgres_data:
+  postgres_auth_data:
+  postgres_catalog_data:
+  postgres_booking_data:
+  postgres_notify_data:
+  rabbitmq_data:
