@@ -175,6 +175,17 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 
 ## Шаг 1. auth-service (Prisma, `auth_db`)
 
+> **✅ Сделано** (ветка `feature/stage3-auth-service`, работа от `main` вместо GitFlow — решение автора).
+> Отличия от первоначального плана:
+> - Passport — вариант (a): `LocalAuthGuard` сначала валидирует тело `loginSchema` (400), затем passport-local (401).
+> - `SessionsService.validateCredentials()` стал публичным (его вызывает `LocalStrategy`); `login()` / `loginWithTokens()`
+>   принимают уже проверенного пользователя.
+> - `libs/common` получил `UserRole` (const-объект), `AuthenticatedUser`, `GatewayAuthGuard`, `RolesGuard`, `@Roles`,
+>   `EmailVerifiedGuard`, `@CurrentUser`, `GATEWAY_HEADERS`.
+> - Сгенерированный клиент сервиса **не коммитится** (`apps/*/prisma/generated` в `.gitignore`); в отличие от монолита.
+> - `.env` / `.env.example` сервиса создаёт разработчик (файлы `.env*` закрыты для агента правилами доступа).
+> - Пути в `prisma.config.ts` Prisma считает от самого файла конфига; seed-команда выполняется из корня репозитория.
+
 ### Что добавить
 1. **Схема** `apps/auth-service/prisma/schema/`: `user.prisma`, `client-profile.prisma`, `user-session.prisma`,
    `email-verification.prisma`, `base.prisma` (generator → `apps/auth-service/prisma/generated`).

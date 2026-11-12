@@ -1,0 +1,24 @@
+enum UserRole {
+  Admin
+  Agent
+  User
+}
+
+// Relations to bookings, offers, favorites, notifications and idempotency keys are gone:
+// those tables live in other services' databases (stage III: database per service).
+// Other services keep `userId` as a plain external id without a foreign key.
+model User {
+  id                 String              @id @default(uuid())
+  username           String              @db.VarChar(50)
+  email              String              @unique @db.VarChar(70)
+  passwordHash       String
+  role               UserRole            @default(User)
+  isEmailVerified    Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  clientProfile      ClientProfile?
+  emailVerifications EmailVerification[]
+  sessions           UserSession[]
+
+  @@map("users")
+}

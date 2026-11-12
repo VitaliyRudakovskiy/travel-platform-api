@@ -35,3 +35,6 @@ prisma/*.db-journal
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
+
+# stage III: per-service Prisma clients are generated, not committed (pnpm prisma:generate:<service>)
+apps/*/prisma/generated
