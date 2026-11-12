@@ -24,13 +24,13 @@
     "baseUrl": "./",
     "paths": {
       "#prisma": ["prisma/generated"],
-      "@modules/*": ["src/modules/*"],
-      "@pipes/*": ["src/shared/pipes/*"],
-      "@services/*": ["src/shared/services/*"],
-      "@shared/*": ["src/shared/*"],
-      "@tests/*": ["src/tests/*"]
+      "@modules/*": ["apps/travel-platform-api/src/modules/*"],
+      "@pipes/*": ["apps/travel-platform-api/src/shared/pipes/*"],
+      "@services/*": ["apps/travel-platform-api/src/shared/services/*"],
+      "@shared/*": ["apps/travel-platform-api/src/shared/*"],
+      "@tests/*": ["apps/travel-platform-api/src/tests/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["apps/**/*"],
   "exclude": ["node_modules", "dist", "prisma"]
 }
