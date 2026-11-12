@@ -56,9 +56,10 @@
     "studio:booking": "prisma studio --config apps/booking-service/prisma.config.ts --port 5563"
   },
   "dependencies": {
+    "@golevelup/nestjs-rabbitmq": "9.1.2",
     "@grpc/grpc-js": "^1.14.7",
     "@grpc/proto-loader": "^0.8.1",
-    "@nestjs/axios": "^12.0.1",
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",

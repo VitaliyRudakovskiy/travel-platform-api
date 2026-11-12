@@ -3,6 +3,9 @@ import z from "zod";
 // Events published by booking-service through the Transactional Outbox (exchange `travel.events`,
 // routing key = event type) and consumed by notification-service (queue `travel.notifications`).
 // `eventId` = id of the OutboxEvent row: consumers use it to drop duplicates (delivery is at-least-once).
+// Topic exchange shared by publishers and consumers of domain events (RabbitMQ)
+export const TRAVEL_EVENTS_EXCHANGE = "travel.events";
+
 export const BookingEventType = {
   created: "booking.created",
   statusChanged: "booking.status_changed",
