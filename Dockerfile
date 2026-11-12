@@ -26,4 +26,4 @@ COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/prisma/generated ./prisma/generated
 USER node
 EXPOSE 4200
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/travel-platform-api/apps/travel-platform-api/src/main"]

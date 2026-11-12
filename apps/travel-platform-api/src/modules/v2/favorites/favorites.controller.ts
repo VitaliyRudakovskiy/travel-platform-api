@@ -1,0 +1,186 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
+import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
+import { FavoritesService } from "@modules/v1/favorites/favorites.service";
+import { FavoritesResponseDto } from "@modules/v1/favorites/schemas/favorite-response.schema";
+import { CurrentUser } from "@shared/decorators/current-user.decorator";
+import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
+import { PaginatedFavoritesResponseDto } from "@modules/v1/favorites/schemas/paginated-favorite-response.schema";
+import { ZodValidationPipe } from "@app/common";
+import {
+  type FavoriteQueryDto,
+  favoriteQuerySchema,
+} from "@modules/v1/favorites/schemas/favorite-query.schema";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import { PaginatedFavoritesResponse } from "@modules/v1/favorites/schemas/swagger/paginated-favorite-response";
+import { FavoritesResponse } from "@modules/v1/favorites/schemas/swagger/favorite-response";
+
+@ApiTags("Favorites")
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@Controller({ path: "favorites", version: "2" })
+export class FavoritesController {
+  constructor(private readonly favoritesService: FavoritesService) {}
+
+  @Get()
+  @ApiOperation({
+    summary: "Get user's favorites",
+    description: "Returns a paginated list of offers that the current user has favorited",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "List of favorites retrieved successfully",
+    type: PaginatedFavoritesResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Invalid query parameters",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 404,
+    description: "User not found",
+  })
+  async getFavorites(
+    @Query(new ZodValidationPipe(favoriteQuerySchema)) query: FavoriteQueryDto,
+    @CurrentUser() currentUser: UserResponseDto,
+  ): Promise<PaginatedFavoritesResponseDto> {
+    return this.favoritesService.getAll(currentUser.id, query);
+  }
+
+  @Get("check/:offerId")
+  @ApiOperation({
+    summary: "Check if offer is in favorites",
+    description:
+      "Returns a boolean indicating whether the specified offer is in the user's favorites",
+  })
+  @ApiParam({
+    name: "offerId",
+    description: "Offer UUID to check",
+    example: "123e4567-e89b-12d3-a456-426614174000",
+    format: "uuid",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Check result",
+    schema: {
+      type: "object",
+      properties: {
+        isFavorite: {
+          type: "boolean",
+          example: true,
+          description: "True if offer is in favorites",
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  async isFavorite(
+    @Param("offerId") offerId: string,
+    @CurrentUser() currentUser: UserResponseDto,
+  ): Promise<{ isFavorite: boolean }> {
+    const isFavorite = await this.favoritesService.isFavorite(offerId, currentUser.id);
+    return { isFavorite };
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: "Add offer to favorites",
+    description: "Adds an offer to the current user's favorites list",
+  })
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        offerId: {
+          type: "string",
+          format: "uuid",
+          example: "123e4567-e89b-12d3-a456-426614174000",
+          description: "Offer UUID to add to favorites",
+        },
+      },
+      required: ["offerId"],
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: "Offer added to favorites successfully",
+    type: FavoritesResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Invalid offerId format",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Offer not found or user not found",
+  })
+  @ApiResponse({
+    status: 409,
+    description: "Offer is already in favorites",
+  })
+  async addToFavorites(
+    @Body("offerId") offerId: string,
+    @CurrentUser() currentUser: UserResponseDto,
+  ): Promise<FavoritesResponseDto> {
+    return this.favoritesService.addToFavorites(offerId, currentUser.id);
+  }
+
+  @Delete(":offerId")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: "Remove offer from favorites",
+    description: "Removes an offer from the current user's favorites list",
+  })
+  @ApiParam({
+    name: "offerId",
+    description: "Offer UUID to remove from favorites",
+    example: "123e4567-e89b-12d3-a456-426614174000",
+    format: "uuid",
+  })
+  @ApiResponse({
+    status: 204,
+    description: "Offer removed from favorites successfully",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unauthorized - Authentication required",
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Offer not found in favorites",
+  })
+  async deleteFromFavorites(
+    @Param("offerId") offerId: string,
+    @CurrentUser() currentUser: UserResponseDto,
+  ): Promise<void> {
+    return this.favoritesService.removeFromFavorites(offerId, currentUser.id);
+  }
+}

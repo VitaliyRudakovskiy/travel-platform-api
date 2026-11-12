@@ -6,9 +6,9 @@ export default mergeConfig(
   baseConfig,
   defineConfig({
     test: {
-      include: ["src/tests/integration/**/*.int-spec.ts"],
-      globalSetup: ["src/tests/integration/setup/global-setup.ts"],
-      setupFiles: ["src/tests/integration/setup/env.ts"],
+      include: ["apps/travel-platform-api/src/tests/integration/**/*.int-spec.ts"],
+      globalSetup: ["apps/travel-platform-api/src/tests/integration/setup/global-setup.ts"],
+      setupFiles: ["apps/travel-platform-api/src/tests/integration/setup/env.ts"],
       // All files share one database: run them one after another to avoid cross-file interference.
       fileParallelism: false,
       testTimeout: 15_000,

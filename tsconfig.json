@@ -13,6 +13,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
+    "rootDir": "./",
     "outDir": "./dist",
     "incremental": true,
     "skipLibCheck": true,
@@ -23,14 +24,14 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": "./",
     "paths": {
-      "#prisma": ["prisma/generated"],
-      "@modules/*": ["src/modules/*"],
-      "@pipes/*": ["src/shared/pipes/*"],
-      "@services/*": ["src/shared/services/*"],
-      "@shared/*": ["src/shared/*"],
-      "@tests/*": ["src/tests/*"]
+      "@modules/*": ["apps/travel-platform-api/src/modules/*"],
+      "@services/*": ["apps/travel-platform-api/src/shared/services/*"],
+      "@shared/*": ["apps/travel-platform-api/src/shared/*"],
+      "@tests/*": ["apps/travel-platform-api/src/tests/*"],
+      "@app/common": ["libs/common/src"],
+      "@app/common/*": ["libs/common/src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["apps/**/*", "libs/**/*"],
   "exclude": ["node_modules", "dist", "prisma"]
 }

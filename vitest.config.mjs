@@ -5,11 +5,13 @@ export default defineConfig({
   resolve: {
     alias: {
       "#prisma": fileURLToPath(new URL("./prisma/generated", import.meta.url)),
-      "@modules": fileURLToPath(new URL("./src/modules", import.meta.url)),
-      "@pipes": fileURLToPath(new URL("./src/shared/pipes", import.meta.url)),
-      "@services": fileURLToPath(new URL("./src/shared/services", import.meta.url)),
-      "@shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
-      "@tests": fileURLToPath(new URL("./src/tests", import.meta.url)),
+      "@app/common": fileURLToPath(new URL("./libs/common/src/index.ts", import.meta.url)),
+      "@modules": fileURLToPath(new URL("./apps/travel-platform-api/src/modules", import.meta.url)),
+      "@services": fileURLToPath(
+        new URL("./apps/travel-platform-api/src/shared/services", import.meta.url),
+      ),
+      "@shared": fileURLToPath(new URL("./apps/travel-platform-api/src/shared", import.meta.url)),
+      "@tests": fileURLToPath(new URL("./apps/travel-platform-api/src/tests", import.meta.url)),
     },
   },
   test: {
@@ -20,8 +22,12 @@ export default defineConfig({
       reporter: ["text", "html"],
       // Spec (Stage II, 4.6) requires >= 60% coverage of the business logic layer:
       // services, the booking State pattern and the notifications worker.
-      include: ["src/**/*.service.ts", "src/**/states/**", "src/**/*.worker.ts"],
-      exclude: ["src/**/*.spec.ts"],
+      include: [
+        "apps/**/src/**/*.service.ts",
+        "apps/**/src/**/states/**",
+        "apps/**/src/**/*.worker.ts",
+      ],
+      exclude: ["apps/**/*.spec.ts"],
       thresholds: {
         statements: 60,
         branches: 60,

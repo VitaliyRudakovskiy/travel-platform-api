@@ -11,7 +11,7 @@ Use this skill when implementing a new feature or resource.
 
 Before writing code:
 
-1. Inspect `src/modules`.
+1. Inspect `apps/travel-platform-api/src/modules`.
 2. Find at least one existing feature with similar responsibilities.
 3. Read its:
    - module

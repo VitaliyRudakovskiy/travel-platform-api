@@ -1,8 +1,9 @@
 ---
 paths:
-  - "src/**/*.spec.ts"
-  - "src/**/*.test.ts"
-  - "src/tests/**/*.ts"
+  - "apps/**/*.spec.ts"
+  - "libs/**/*.spec.ts"
+  - "apps/**/*.int-spec.ts"
+  - "apps/*/src/tests/**/*.ts"
 ---
 
 # Testing Conventions
@@ -29,7 +30,7 @@ describe("UsersService", () => {
 
 ## NestJS testing
 
-Use `Test.createTestingModule()` for services and controllers, with the provider factories from `src/tests/providers`:
+Use `Test.createTestingModule()` for services and controllers, with the provider factories from `apps/travel-platform-api/src/tests/providers` (alias `@tests/providers/...`):
 
 ```ts
 providers: [UsersService, providePrisma()]
@@ -37,8 +38,8 @@ providers: [UsersService, providePrisma()]
 
 ## Mocks
 
-- Reusable mocks: `src/tests/mocks/`
-- Provider factories: `src/tests/providers/`
+- Reusable mocks: `apps/travel-platform-api/src/tests/mocks/`
+- Provider factories: `apps/travel-platform-api/src/tests/providers/`
 
 ```ts
 export const provideUsersService = () => ({

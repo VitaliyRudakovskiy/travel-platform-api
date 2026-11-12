@@ -9,11 +9,11 @@ description: Create a complete NestJS feature or resource following this project
 
 Before writing code:
 
-1. Inspect `src/modules` (both `v1/` and `v2/`).
+1. Inspect `apps/travel-platform-api/src/modules` (both `v1/` and `v2/`).
 2. Find at least one existing feature with similar responsibilities.
 3. Read its module, controller, service, models, Zod schemas, Swagger DTOs and tests.
 4. Inspect related Prisma models in `prisma/schema/*.prisma`.
-5. Inspect relevant shared infrastructure in `src/shared`.
+5. Inspect relevant shared infrastructure in `libs/common` (`@app/common`) and `apps/travel-platform-api/src/shared`.
 
 Do not implement the feature before understanding these patterns.
 
@@ -77,7 +77,7 @@ Add tests following `.claude/rules/testing.md`.
 - Services: Prisma mocks, verify relevant Prisma calls, success paths, expected exceptions, business rules.
 - Controllers: mock the service, verify arguments and returned values, test controller-level authorization.
 
-Add new reusable mocks to `src/tests/mocks/` and provider factories to `src/tests/providers/`.
+Add new reusable mocks to `apps/travel-platform-api/src/tests/mocks/` and provider factories to `apps/travel-platform-api/src/tests/providers/`.
 
 ## Step 9 — Verification
 

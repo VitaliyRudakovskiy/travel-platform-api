@@ -1,6 +1,7 @@
 ---
 paths:
-  - "src/**/*.ts"
+  - "apps/**/*.ts"
+  - "libs/**/*.ts"
 ---
 
 # NestJS Conventions
@@ -59,4 +60,8 @@ Use NestJS constructor dependency injection. Do not instantiate providers manual
 
 ## Imports
 
-Use the established aliases: `@shared/*`, `@services/*`, `@pipes/*`, `@modules/*`, `@tests/*`, `#prisma`. Do not introduce a new alias when an existing one fits.
+Use the established aliases. Do not introduce a new alias when an existing one fits.
+
+- `@app/common` — cross-app infrastructure in `libs/common` (`ZodValidationPipe`, `GlobalExceptionFilter`, `paginatedSchema`, `configureApp`). Import from the package root: `import { ZodValidationPipe } from "@app/common"`.
+- Monolith (`apps/travel-platform-api`): `@modules/*`, `@shared/*`, `@services/*`, `@tests/*`.
+- `#prisma` — the monolith's Prisma client. Prisma clients are resolved through `package.json` → `imports` **only**; never add them to `tsconfig.json` → `paths`. Nest CLI rewrites `paths` aliases into relative paths computed from the source file, which break at runtime for folders outside `dist` (`Cannot find module .../prisma/generated`).

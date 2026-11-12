@@ -2,28 +2,48 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Commands
+## Status: stage III in progress
 
-Package manager is **pnpm**. Node app is NestJS 11 + Prisma 7 (PostgreSQL via `@prisma/adapter-pg`).
+The repository is a **Nest monorepo** being decomposed into microservices. The plan, decisions (D1–D7) and per-step checks are in `docs/stage3-plan.md`; read it before working on stage III.
 
-```bash
-docker compose up -d          # infra only: Postgres 17 (postgres/postgres, db travel_platform, :5432) + Mailhog (SMTP :1025, UI :8025)
-docker compose --profile app up -d --build   # also `migrate` (prisma migrate deploy) + `api` containers
-pnpm start                    # nest start --watch (Swagger at /api/docs)
-pnpm build                    # nest build -> dist/
-pnpm lint / pnpm lint:fix     # oxlint (not ESLint)
-pnpm format / format:check    # oxfmt (not Prettier)
-pnpm test                     # unit tests: vitest run (all *.spec.ts), no DB needed
-pnpm test:int                 # integration tests: *.int-spec.ts, real AppModule + Postgres (needs docker compose up -d)
-pnpm vitest run src/modules/v1/bookings/bookings.service.spec.ts   # single file
-pnpm vitest run -t "throws NotFoundException"                      # by test name
-pnpm test:cov                 # fails below 60% coverage
-pnpm exec tsc --noEmit        # typecheck (no dedicated script)
-pnpm prisma:generate          # regenerate client into prisma/generated
-npx prisma migrate dev --name <name>   # new migration (the `migration` script hardcodes ANY_NAME)
+```
+apps/travel-platform-api/   # stage I–II monolith: all working code today; deleted at stage III step 9 (git tag stage-2)
+apps/api-gateway/           # :3000 ┐
+apps/auth-service/          # :3001 │ stage III services — empty skeletons (main.ts + empty module)
+apps/catalog-service/       # :3002 │ until their plan step moves the code in
+apps/booking-service/       # :3003 │
+apps/notification-service/  # :3004 ┘
+libs/common/                # @app/common — infra shared by all apps (filter, Zod pipe, paginatedSchema, configureApp)
 ```
 
-Env (`.env`, loaded via `dotenv/config`):
+Unless stated otherwise, everything below the Commands section describes the monolith, and `src/...` means `apps/travel-platform-api/src/...`.
+
+## Commands
+
+Package manager is **pnpm**. NestJS 11 + Prisma 7 (PostgreSQL via `@prisma/adapter-pg`).
+
+```bash
+docker compose up -d          # infra: monolith Postgres (:5432, db travel_platform), Mailhog (SMTP :1025, UI :8025),
+                              # service DBs auth_db :5433, catalog_db :5434, booking_db :5435, notify_db :5436
+                              # (all postgres/postgres), RabbitMQ (:5672, UI :15672 guest/guest), Redis (:6379)
+docker compose --profile app up -d --build   # also the monolith's `migrate` + `api` containers
+pnpm start                    # monolith, nest start --watch (Swagger at /api/docs)
+pnpm start:gateway | start:auth | start:catalog | start:booking | start:notification   # one service, watch mode
+pnpm build                    # nest build --all -> dist/apps/<app>/apps/<app>/src/main.js
+pnpm start:prod               # built monolith
+pnpm lint / pnpm lint:fix     # oxlint (not ESLint)
+pnpm format / format:check    # oxfmt (not Prettier)
+pnpm test                     # unit tests: vitest run (all *.spec.ts in apps/ and libs/), no DB needed
+pnpm test:int                 # monolith integration tests: *.int-spec.ts, real AppModule + Postgres (needs docker compose up -d)
+pnpm vitest run apps/travel-platform-api/src/modules/v1/bookings/bookings.service.spec.ts   # single file
+pnpm vitest run -t "throws NotFoundException"                                              # by test name
+pnpm test:cov                 # fails below 60% coverage
+pnpm exec tsc --noEmit        # typecheck (no dedicated script)
+pnpm prisma:generate          # regenerate the monolith client into prisma/generated
+npx prisma migrate dev --name <name>   # new monolith migration (the `migration` script hardcodes ANY_NAME)
+```
+
+Env (`.env`, loaded via `dotenv/config`; monolith):
 
 - Required: `DATABASE_URL`, `JWT_SECRET`.
 - Optional (default): `JWT_ACCESS_EXPIRES_IN` (`15m`), `JWT_REFRESH_EXPIRES_IN` (`7d`), `EMAIL_VERIFICATION_EXPIRES_IN` (`24h`), `SMTP_HOST` / `SMTP_PORT` (`localhost` / `1025`), `MAIL_FROM` (`no-reply@travel-platform.local`), `PORT` (`3000`), `TEST_DATABASE_URL` (`.../travel_platform_test`).
@@ -31,13 +51,18 @@ Env (`.env`, loaded via `dotenv/config`):
 
 Pre-commit hook runs `pnpm lint-staged` (oxfmt) and `pnpm oxlint .`.
 
+## Monorepo build
+
+- `nest-cli.json` has `webpack: false` (webpack breaks the generated Prisma client). Every `apps/<app>/tsconfig.app.json` sets `rootDir: "../.."`, so the output layout is always `dist/apps/<app>/apps/<app>/src/main.js` and `entryFile` is `apps/<app>/src/main`. Keep this when adding an app; otherwise the layout silently changes the first time the app imports from `libs/`.
+- Nest CLI rewrites `tsconfig.json` → `paths` aliases into relative paths computed from the **source** file. That works for `apps/` and `libs/` (compiled into `dist`) but breaks for anything outside `dist`. Therefore Prisma clients are resolved through `package.json` → `imports` **only** (`#prisma`; later `#auth-prisma`, `#booking-prisma`, `#notify-prisma`), never through `paths`. Vitest still needs each alias in `vitest.config.mjs`.
+
 ## Architecture
 
 Strict classic NestJS layering: **Controller → Service → PrismaService**. Do not add repositories, use-cases, CQRS, DDD layers, `class-validator`/`class-transformer`, or new import aliases unless explicitly asked. Controllers stay thin (routing, guards, `ZodValidationPipe`, Swagger, call service); services own business logic, Prisma access, mapping to response DTOs, and throwing Nest HTTP exceptions. Never touch Prisma from controllers or expose Prisma entities/types as API DTOs (e.g. `passwordHash` must never leave the service).
 
 ### API versioning (v1 vs v2)
 
-URI versioning with prefix `api/v`, default version `1`, configured in `src/configure-app.ts`. That file is shared by `main.ts` and the integration tests, so global app setup (filters, versioning, etc.) goes there, not into `main.ts`. Otherwise the tests run a different app, and every `/api/v2/...` route returns 404 in them. Features live in `src/modules/v1/*` and `src/modules/v2/*`.
+URI versioning with prefix `api/v`, default version `1`, configured in `configureApp` (`libs/common/src/configure-app.ts`). It is shared by `main.ts` and the integration tests, so global app setup (filters, versioning, etc.) goes there, not into `main.ts`. Otherwise the tests run a different app, and every `/api/v2/...` route returns 404 in them. Features live in `src/modules/v1/*` and `src/modules/v2/*`.
 
 - **v2 controllers reuse v1 services** (e.g. `@modules/v1/bookings/bookings.service`). v2-specific behavior is enabled through extra service parameters (e.g. `nativeStatus = true`, optional `idempotencyKey`), and v2 has its own response/query Zod schemas that controllers cast to. When changing a v1 service, check the v2 callers too; v2-only modules that do have services: `email-verifications`, `users/client-profiles.service.ts`, `notifications`, `analytics`.
 - **Auth differs per version:**
@@ -48,16 +73,16 @@ URI versioning with prefix `api/v`, default version `1`, configured in `src/conf
 
 ### Cross-cutting
 
-- **Validation:** Zod schemas in each feature's `schemas/` define request/response contracts; DTO types are `z.infer`. Use `@Body(new ZodValidationPipe(schema))` / `@Query(...)`.
+- **Validation:** Zod schemas in each feature's `schemas/` define request/response contracts; DTO types are `z.infer`. Use `@Body(new ZodValidationPipe(schema))` / `@Query(...)`; `ZodValidationPipe` comes from `@app/common`.
 - **Swagger:** separate hand-written classes in `schemas/swagger/` mirror the Zod schemas for docs; keep them in sync manually (no auto-generation).
-- **Errors:** `GlobalExceptionFilter` formats all errors as `{ statusCode, error, message, details, path, timestamp }`. Just throw Nest HTTP exceptions; put structured extras in the `errors` field of the exception body (becomes `details`).
+- **Errors:** `GlobalExceptionFilter` (`@app/common`) formats all errors as `{ statusCode, error, message, details, path, timestamp }`. Just throw Nest HTTP exceptions; put structured extras in the `errors` field of the exception body (becomes `details`).
 - **Booking status** transitions go through the State pattern in `src/modules/v1/bookings/states/booking-state.ts` (pending→confirmed|cancelled, confirmed→completed|cancelled, completed→cancelled; illegal → 409 in v2, 400 in v1).
 - **Notifications (Outbox pattern, `src/modules/v2/notifications/`):** a booking status change and its notification rows are written in **one transaction**: an `email`/`pending` row and an `in_app`/`sent` row. Registration and resend-verification also enqueue an `email_verification` email. Emails are never sent inside the HTTP request. `NotificationsWorker` (`@nestjs/schedule` `@Interval`, every 10 s, batches of 20, skips overlapping runs) sends them via `MailService` (nodemailer → Mailhog) and marks each `sent` or `failed`. `GET /api/v2/notifications` returns **in-app only**, because email payloads may contain verification tokens.
-- `src/shared/` is only for genuinely cross-feature infra (guards, pipes, decorators, filters, PrismaService).
+- **Shared code:** `libs/common` holds infra used by several apps and must not depend on any app (no app DTOs, no app Prisma client). The monolith's `src/shared/` holds its own cross-feature infra (auth, guards, decorators, PrismaService). Feature code goes in neither.
 
 ### Prisma
 
-- Multi-file schema in `prisma/schema/*.prisma`; config in `prisma.config.ts`. Client is generated to `prisma/generated` and imported via the `#prisma` alias (`import { PrismaClient, BookingStatus } from "#prisma"`).
+- Monolith: multi-file schema in `prisma/schema/*.prisma`; config in `prisma.config.ts` (both at the repo root). Client is generated to `prisma/generated` and imported via `#prisma` (`import { PrismaClient, BookingStatus } from "#prisma"`).
 - Never edit an already-applied migration; create a new one and regenerate the client.
 - When upgrading Prisma, keep `@prisma/client` and `@prisma/client-runtime-utils` on the same version: the generated client imports the latter directly.
 
@@ -75,12 +100,14 @@ URI versioning with prefix `api/v`, default version `1`, configured in `src/conf
 
 ### Aliases
 
-`@modules/*`, `@shared/*`, `@services/*` (shared/services), `@pipes/*` (shared/pipes), `@tests/*`, `#prisma` — defined in both `tsconfig.json` and `vitest.config.mjs`; keep them in sync if changed.
+- `@app/common` → `libs/common/src` (import from the root: `from "@app/common"`).
+- Monolith: `@modules/*`, `@shared/*`, `@services/*` (shared/services), `@tests/*` → `apps/travel-platform-api/src/...`.
+- Defined in both `tsconfig.json` and `vitest.config.mjs`; keep them in sync if changed. `#prisma` is in `package.json` → `imports` and `vitest.config.mjs` only (see Monorepo build).
 
 ## Detailed conventions
 
 - `.claude/rules/project.md` — architecture rules (always loaded)
-- `.claude/rules/nestjs.md` — NestJS conventions (loaded for `src/**/*.ts`)
-- `.claude/rules/testing.md` — Vitest conventions (loaded for specs and `src/tests/**`)
+- `.claude/rules/nestjs.md` — NestJS conventions (loaded for `apps/**/*.ts`, `libs/**/*.ts`)
+- `.claude/rules/testing.md` — Vitest conventions (loaded for specs and `apps/*/src/tests/**`)
 - `.claude/skills/create-feature/` — step-by-step checklist for adding a new feature (`/create-feature`)
 - `.cursor/rules/*.mdc` and `.cursor/skills/create-feature/` mirror the files above for Cursor. When you change a rule or the skill, change both copies.
