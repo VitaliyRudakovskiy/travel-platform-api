@@ -10,9 +10,11 @@ import { ProxyController } from "./proxy/proxy.controller";
 import { PROXY_TIMEOUT_MS, ProxyService } from "./proxy/proxy.service";
 import { RedisModule } from "./redis/redis.module";
 import { OffersThrottlerGuard } from "./throttle/offers-throttler.guard";
+import { HealthModule } from "./modules/health/health.module";
 
 @Module({
   imports: [
+    HealthModule,
     // Only this service's env file; variables already set in the environment (Docker) take precedence.
     ConfigModule.forRoot({ isGlobal: true, envFilePath: "apps/api-gateway/.env" }),
     HttpModule.register({ timeout: PROXY_TIMEOUT_MS }),

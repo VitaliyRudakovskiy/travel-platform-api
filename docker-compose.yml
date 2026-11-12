@@ -119,8 +119,179 @@ services:
       timeout: 3s
       retries: 10
 
-  migrate:
+  # ---------------------------------------------------------------------------------------------
+  # Stage III microservices: `docker compose --profile app up -d --build`
+  # Only the gateway (3000) is published; services talk to each other over the compose network.
+  # Ports of the services for direct debugging: add `-f docker-compose.yml -f docker-compose.debug.yml`.
+  # ---------------------------------------------------------------------------------------------
+
+  # One-shot jobs (exit 0) from the `build` target, which has the Prisma / TypeORM CLIs and tsx.
+  # Seeds are idempotent, so `up` can be repeated.
+  auth-migrate:
     profiles: ["app"]
+    build: { context: ., dockerfile: apps/auth-service/Dockerfile, target: build }
+    container_name: travel-auth-migrate
+    command: ["sh", "-c", "pnpm migrate:deploy:auth && pnpm seed:auth"]
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-auth:5432/auth_db
+    depends_on:
+      postgres-auth: { condition: service_healthy }
+
+  catalog-migrate:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/catalog-service/Dockerfile, target: build }
+    container_name: travel-catalog-migrate
+    command: ["sh", "-c", "pnpm migration:run:catalog && pnpm seed:catalog"]
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-catalog:5432/catalog_db
+    depends_on:
+      postgres-catalog: { condition: service_healthy }
+
+  booking-migrate:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/booking-service/Dockerfile, target: build }
+    container_name: travel-booking-migrate
+    command: ["pnpm", "migrate:deploy:booking"]
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-booking:5432/booking_db
+    depends_on:
+      postgres-booking: { condition: service_healthy }
+
+  notify-migrate:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/notification-service/Dockerfile, target: build }
+    container_name: travel-notify-migrate
+    command: ["pnpm", "migrate:deploy:notify"]
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-notify:5432/notify_db
+    depends_on:
+      postgres-notify: { condition: service_healthy }
+
+  auth-service:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/auth-service/Dockerfile }
+    container_name: travel-auth-service
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-auth:5432/auth_db
+      # Shared with the gateway (it verifies the tokens auth-service signs); read from the root .env
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in the root .env}
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      EMAIL_VERIFICATION_EXPIRES_IN: 24h
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
+      PORT: "3001"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # No dependency on notification-service: verification emails are best effort (a failure is only logged)
+    depends_on:
+      postgres-auth: { condition: service_healthy }
+      auth-migrate: { condition: service_completed_successfully }
+
+  catalog-service:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/catalog-service/Dockerfile }
+    container_name: travel-catalog-service
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-catalog:5432/catalog_db
+      GRPC_URL: 0.0.0.0:50052
+      PORT: "3002"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3002/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      postgres-catalog: { condition: service_healthy }
+      catalog-migrate: { condition: service_completed_successfully }
+
+  booking-service:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/booking-service/Dockerfile }
+    container_name: travel-booking-service
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-booking:5432/booking_db
+      CATALOG_HTTP_URL: http://catalog-service:3002
+      CATALOG_GRPC_URL: catalog-service:50052
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      PORT: "3003"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3003/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      postgres-booking: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      booking-migrate: { condition: service_completed_successfully }
+      catalog-service: { condition: service_healthy }
+
+  notification-service:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/notification-service/Dockerfile }
+    container_name: travel-notification-service
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-notify:5432/notify_db
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      AUTH_SERVICE_URL: http://auth-service:3001
+      SMTP_HOST: mailhog
+      SMTP_PORT: "1025"
+      PORT: "3004"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3004/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      postgres-notify: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      notify-migrate: { condition: service_completed_successfully }
+      mailhog: { condition: service_started }
+
+  api-gateway:
+    profiles: ["app"]
+    build: { context: ., dockerfile: apps/api-gateway/Dockerfile }
+    container_name: travel-api-gateway
+    restart: unless-stopped
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in the root .env}
+      REDIS_URL: redis://redis:6379
+      AUTH_SERVICE_URL: http://auth-service:3001
+      CATALOG_SERVICE_URL: http://catalog-service:3002
+      BOOKING_SERVICE_URL: http://booking-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # spec 4.6: health-checks in depends_on with condition service_healthy
+    depends_on:
+      redis: { condition: service_healthy }
+      auth-service: { condition: service_healthy }
+      catalog-service: { condition: service_healthy }
+      booking-service: { condition: service_healthy }
+      notification-service: { condition: service_healthy }
+
+  # ---------------------------------------------------------------------------------------------
+  # Stage I–II monolith (kept until stage III step 9): `docker compose --profile monolith up -d --build`
+  # ---------------------------------------------------------------------------------------------
+  migrate:
+    profiles: ["monolith"]
     build:
       context: .
       target: build
@@ -135,7 +306,7 @@ services:
         condition: service_healthy
 
   api:
-    profiles: ["app"]
+    profiles: ["monolith"]
     build:
       context: .
       target: runtime

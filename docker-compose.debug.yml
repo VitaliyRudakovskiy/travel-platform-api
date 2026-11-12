@@ -1,0 +1,12 @@
+# Debug overlay: publishes the services' own ports, which are internal in docker-compose.yml.
+#   docker compose -f docker-compose.yml -f docker-compose.debug.yml --profile app up -d
+# Lets you call a service directly (e.g. /internal/v1/..., /api/docs of one service, gRPC on 50052).
+services:
+  auth-service:
+    ports: ["3001:3001"]
+  catalog-service:
+    ports: ["3002:3002", "50052:50052"]
+  booking-service:
+    ports: ["3003:3003"]
+  notification-service:
+    ports: ["3004:3004"]
