@@ -14,7 +14,8 @@ const STATUS_TEXT: Record<number, string> = {
 
 interface ExceptionBody {
   message?: string | string[];
-  error?: string;
+  // usually a string; @nestjs/terminus puts the failed checks here as an object
+  error?: unknown;
   errors?: unknown;
 }
 
@@ -42,8 +43,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = body;
       } else {
         message = body.message ?? exception.message;
-        error = body.error;
-        details = body.errors ?? null;
+        if (typeof body.error === "string") {
+          error = body.error;
+          details = body.errors ?? null;
+        } else {
+          // e.g. a failed health check: { status, info, error, details } goes to `details`,
+          // `error` stays the status text so the format is the same for every response
+          details = body.errors ?? (body.error ? body : null);
+        }
       }
     }
 

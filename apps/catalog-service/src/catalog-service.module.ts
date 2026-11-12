@@ -5,9 +5,11 @@ import { typeOrmOptions } from "./database/typeorm.options";
 import { InternalOffersModule } from "./modules/internal/offers/internal-offers.module";
 import { V1Module } from "./modules/v1/v1.module";
 import { V2Module } from "./modules/v2/v2.module";
+import { HealthModule } from "./modules/health/health.module";
 
 @Module({
   imports: [
+    HealthModule,
     // Only this service's env file; variables already set in the environment (Docker) take precedence.
     ConfigModule.forRoot({ isGlobal: true, envFilePath: "apps/catalog-service/.env" }),
     TypeOrmModule.forRootAsync({

@@ -34,5 +34,7 @@ import { NOTIFICATIONS_DLQ, NOTIFICATIONS_DLX } from "./events.constants";
     NotificationsModule,
   ],
   providers: [BookingEventsConsumer],
+  // re-exported for the RabbitMQ health check (RabbitMQModule is not global)
+  exports: [RabbitMQModule],
 })
 export class EventsModule {}

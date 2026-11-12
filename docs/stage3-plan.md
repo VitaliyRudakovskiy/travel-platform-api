@@ -741,6 +741,16 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 
 ## Шаг 7. Health-checks и полный docker-compose
 
+> **✅ Сделано** (ветка `feature/stage3-health-docker`). Отличия от первоначального плана:
+> - Миграции и seed — одноразовые контейнеры `auth/catalog/booking/notify-migrate` из стадии `build`
+>   (Prisma CLI и tsx — dev-зависимости, их нет в runtime-образе).
+> - Монолит перенесён в профиль `monolith`; `--profile app` поднимает микросервисы.
+> - `.dockerignore`: `**/.env` (шаблон `.env` ловил только корень — `apps/<svc>/.env` попали бы в образы).
+> - `GlobalExceptionFilter`: объект в `error` (результат Terminus) уходит в `details`, `error` остаётся строкой.
+> - Образы ~900 МБ (один package.json на все приложения) — записать в README.
+> - Проверено: `up` с нуля → все healthy, gateway последним (~9 с); без RabbitMQ → 503, booking/notification/gateway
+>   `unhealthy` (~45 с), auth `healthy`; после старта брокера всё восстановилось само (~21 с).
+
 ### Что добавить
 1. **`/health/ready` в каждом сервисе** (`@nestjs/terminus`; при ошибке он сам отвечает 503):
    - auth / booking / notification: `PrismaHealthIndicator.pingCheck("database", prisma)`;

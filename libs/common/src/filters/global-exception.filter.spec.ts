@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   NotFoundException,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { describe, expect, it, vi } from "vitest";
@@ -68,6 +69,26 @@ describe("GlobalExceptionFilter", () => {
 
     expect(response.status).toHaveBeenCalledWith(status);
     expect(json).toHaveBeenCalledWith(expect.objectContaining({ statusCode: status, error: name }));
+  });
+
+  it("keeps error a string and moves an object error (failed health check) to details", () => {
+    const { host, json } = mockHost();
+    const healthResult = {
+      status: "error",
+      info: {},
+      error: { rabbitmq: { status: "down" } },
+      details: { rabbitmq: { status: "down" } },
+    };
+
+    filter.catch(new ServiceUnavailableException(healthResult), host);
+
+    expect(json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        statusCode: 503,
+        error: "Service Unavailable",
+        details: healthResult,
+      }),
+    );
   });
 
   it("returns generic 500 for unknown exceptions", () => {

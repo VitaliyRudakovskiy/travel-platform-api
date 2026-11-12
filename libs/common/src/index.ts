@@ -11,3 +11,5 @@ export * from "./auth/gateway-headers";
 export * from "./auth/roles.decorator";
 export * from "./auth/roles.guard";
 export * from "./auth/user-role";
+
+export * from "./health/rabbitmq.health";

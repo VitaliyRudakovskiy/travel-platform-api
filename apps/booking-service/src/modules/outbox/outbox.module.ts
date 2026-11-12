@@ -22,5 +22,7 @@ import { OutboxWorker } from "./outbox.worker";
     }),
   ],
   providers: [OutboxService, OutboxWorker, PrismaService],
+  // re-exported for the RabbitMQ health check (RabbitMQModule is not global)
+  exports: [RabbitMQModule],
 })
 export class OutboxModule {}
