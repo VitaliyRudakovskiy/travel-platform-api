@@ -18,7 +18,7 @@ import { type ProfileResponseDto } from "./schemas/profile-response.schema";
 import { type UpdateProfileDto, updateProfileSchema } from "./schemas/update-profile.schema";
 import { ProfileResponse } from "./schemas/swagger/profile-response";
 import { UpdateProfile } from "./schemas/swagger/update-profile";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { type CreateUserDto, createUserSchema } from "@modules/v1/users/schemas/create-user.schema";
 import { UserRole } from "#prisma";
 import { type AuthenticatedUser } from "@shared/auth/authenticated-user";

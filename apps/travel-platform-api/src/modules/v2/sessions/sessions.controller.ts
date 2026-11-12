@@ -2,7 +2,7 @@ import { type LoginDto, loginSchema } from "@modules/v1/users/schemas/login.sche
 import { SessionsService } from "@modules/v1/sessions/sessions.service";
 import { Body, Controller, Delete, HttpCode, HttpStatus, Post, UsePipes } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { LoginClass } from "@modules/v1/sessions/schemas/swagger/login-class";
 import { type RefreshTokenDto, refreshTokenSchema } from "./schemas/refresh-token.schema";
 import {

@@ -16,7 +16,7 @@ import { FavoritesResponseDto } from "@modules/v1/favorites/schemas/favorite-res
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { PaginatedFavoritesResponseDto } from "@modules/v1/favorites/schemas/paginated-favorite-response.schema";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import {
   type FavoriteQueryDto,
   favoriteQuerySchema,

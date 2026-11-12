@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { EmailVerificationsService } from "./email-verifications.service";
 import { confirmEmailSchema, type ConfirmEmailDto } from "./schemas/confirm-email.schema";
 import { ConfirmEmail } from "./schemas/swagger/confirm-email";

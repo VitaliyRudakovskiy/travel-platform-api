@@ -105,30 +105,40 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
    git checkout -b feature/stage3-monorepo
    ```
    Каждый следующий шаг делается в своей ветке `feature/stage3-<шаг>` и вливается в `develop`, в конце `develop` → `main`.
-2. **Проверка сообщений коммитов** (ТЗ: «Husky … проверка коммитов»): `pnpm add -D @commitlint/cli @commitlint/config-conventional`,
-   файл `commitlint.config.mjs` (`export default { extends: ["@commitlint/config-conventional"] }`),
-   хук `.husky/commit-msg`: `pnpm commitlint --edit "$1"`.
-3. **Перевод в Nest monorepo:**
+2. ~~Проверка сообщений коммитов (commitlint)~~ — **пропущено по решению автора**.
+3. **Перевод в Nest monorepo** (✅ сделано):
    ```bash
    pnpm nest generate app auth-service      # первый вызов переносит src/ → apps/travel-platform-api/
    pnpm nest generate app catalog-service
    pnpm nest generate app booking-service
    pnpm nest generate app notification-service
    pnpm nest generate app api-gateway
-   pnpm nest generate library common
-   pnpm nest generate library contracts
    ```
-4. **`libs/common`.** Перенести из `src/shared`: `global-exception.filter.ts`, `zod-validation.pipe.ts`, `roles.guard.ts` +
-   `@Roles()`, `email-verified.guard.ts`, `@CurrentUser()`, `@IdempotencyKey()`, `configure-app.ts`. Добавить
-   `GatewayAuthGuard` (см. «Схема аутентификации») и тип `UserRole` как TS-union `"Admin" | "Agent" | "User"`:
-   у каждого сервиса свой Prisma-клиент, поэтому enum из `#prisma` в общей библиотеке использовать нельзя.
+   Шаблоны (hello-world контроллер, Jest-спеки, `test/jest-e2e.json`) удалены. В каждом сервисе остались `main.ts`
+   (фиксированный порт) и пустой модуль. `libs/contracts` создаётся на шаге 2, когда появится `catalog.proto`.
+4. **`libs/common`** (✅ сделано). `nest generate library` без TTY не может спросить префикс, поэтому библиотека
+   создана вручную: `libs/common/src/index.ts`, `tsconfig.lib.json`, проект в `nest-cli.json`, алиас `@app/common`.
+   Из монолита перенесено только то, что не зависит от Prisma и DTO монолита: `GlobalExceptionFilter`,
+   `ZodValidationPipe`, `paginatedSchema`, `configureApp`. Монолит импортирует их из `@app/common`.
+   `RolesGuard`, `@Roles()`, `EmailVerifiedGuard`, `@CurrentUser()` и новый `GatewayAuthGuard` создаются в
+   `libs/common` **на шаге 1**: они завязаны на `AuthenticatedUser`, который использует `UserResponseDto` и `UserRole`
+   из `#prisma` монолита. В библиотеке нужен TS-тип `UserRole = "Admin" | "Agent" | "User"`, потому что у каждого
+   сервиса свой Prisma-клиент.
 
 ### Как настроить
 - `nest-cli.json`: у всех проектов `"compilerOptions": { "webpack": false, "tsConfigPath": "apps/<name>/tsconfig.app.json" }`.
   Webpack в monorepo mode включён по умолчанию и плохо работает со сгенерированным клиентом Prisma и `@grpc/grpc-js`.
-- Алиасы `@app/common`, `@app/contracts` (их создаёт `nest generate library`) продублировать в `vitest.config.mjs`.
-  Плюс по алиасу на Prisma-клиент каждого сервиса: `#auth-prisma`, `#booking-prisma`, `#notify-prisma`
-  (в `package.json` → `imports`, как сейчас сделан `#prisma`).
+- **`rootDir: "../.."` во всех `tsconfig.app.json` и `entryFile: "apps/<app>/src/main"` в `nest-cli.json`.** Без webpack
+  `tsc` кладёт файлы в `dist` с полной структурой папок, как только приложение импортирует что-то из `libs/`.
+  Явный `rootDir` делает структуру `dist/apps/<app>/apps/<app>/src/main.js` одинаковой у всех приложений,
+  независимо от того, используют ли они библиотеки. Корневой `tsconfig.json` тоже получил `rootDir: "./"`.
+- Алиасы `@app/common` (и позже `@app/contracts`) продублировать в `vitest.config.mjs`.
+- **Prisma-клиенты сервисов подключать ТОЛЬКО через `package.json` → `imports`** (`#auth-prisma`, `#booking-prisma`,
+  `#notify-prisma`, как `#prisma`), **без записи в `tsconfig.json` → `paths`**. Nest CLI переписывает алиасы из
+  `paths` в относительные пути, считая их от исходного файла. Для папок вне `dist` (а `prisma/generated` именно
+  такая) путь получается неверным, и приложение падает с `Cannot find module`. Именно так сломался `#prisma`
+  после переноса монолита. Исправлено на шаге 0.4: в JS остаётся `require("#prisma")`, и Node разрешает его
+  через `imports`. Для Vitest алиас всё равно нужен в `vitest.config.mjs`.
 - Скрипты в `package.json`:
   ```json
   "start:auth": "nest start auth-service --watch",
@@ -569,7 +579,7 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 - **Проверка идемпотентности без кода:** в RabbitMQ UI → Exchanges → `travel.events` → **Publish message**, routing key
   `booking.created`, payload скопировать из Studio (тот же `eventId`). Опубликовать дважды → в `notifications`
   **не появилось** новых строк.
-- **Ошибка доставки:** `docker stop travel-mailhog` → бронь → email-уведомление получает `failed` и `errorMessage`.
+- **Ошибка доставки:** `docker stop travel-platform-mailhog` → бронь → email-уведомление получает `failed` и `errorMessage`.
 - **Bruno** напрямую `http://localhost:3004`: `GET /api/v2/notifications?type=booking_created` с заголовками User →
   свои; Agent (`X-User-Id` = владелец оффера) → уведомления по его офферам; Admin → все.
 
@@ -777,7 +787,6 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 | `ioredis` | gateway | кэш claims |
 | `@nestjs/throttler` | gateway | rate limiting |
 | `passport-local` (+ types) | auth | вход через Passport |
-| `@commitlint/cli`, `@commitlint/config-conventional` | корень | проверка сообщений коммитов |
 
 ## Где что смотреть (шпаргалка)
 

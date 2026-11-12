@@ -4,7 +4,7 @@ import { UserRole } from "#prisma";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import { RolesGuard } from "@shared/guards/roles.guard";
 import { Roles } from "@shared/decorators/roles.decorator";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { AnalyticsService } from "./analytics.service";
 import {
   type BookingAnalyticsQueryDto,

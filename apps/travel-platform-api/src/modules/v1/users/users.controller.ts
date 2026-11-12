@@ -11,7 +11,7 @@ import {
   Version,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { type CreateUserDto, createUserSchema } from "./schemas/create-user.schema.js";
 import { AuthGuard } from "@shared/guards/auth.guard";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";

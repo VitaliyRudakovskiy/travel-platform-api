@@ -1,7 +1,7 @@
 import { type INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../../../app.module";
-import { configureApp } from "../../../configure-app";
+import { configureApp } from "@app/common";
 import { MailService } from "@modules/v2/notifications/mail.service";
 import { NotificationsWorker } from "@modules/v2/notifications/notifications.worker";
 import { mailServiceMock } from "@tests/mocks/mail-service.mock";

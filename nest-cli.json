@@ -13,7 +13,7 @@
     "travel-platform-api": {
       "type": "application",
       "root": "apps/travel-platform-api",
-      "entryFile": "main",
+      "entryFile": "apps/travel-platform-api/src/main",
       "sourceRoot": "apps/travel-platform-api/src",
       "compilerOptions": {
         "tsConfigPath": "apps/travel-platform-api/tsconfig.app.json"
@@ -22,7 +22,7 @@
     "api-gateway": {
       "type": "application",
       "root": "apps/api-gateway",
-      "entryFile": "main",
+      "entryFile": "apps/api-gateway/src/main",
       "sourceRoot": "apps/api-gateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
@@ -31,7 +31,7 @@
     "auth-service": {
       "type": "application",
       "root": "apps/auth-service",
-      "entryFile": "main",
+      "entryFile": "apps/auth-service/src/main",
       "sourceRoot": "apps/auth-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/auth-service/tsconfig.app.json"
@@ -40,7 +40,7 @@
     "catalog-service": {
       "type": "application",
       "root": "apps/catalog-service",
-      "entryFile": "main",
+      "entryFile": "apps/catalog-service/src/main",
       "sourceRoot": "apps/catalog-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/catalog-service/tsconfig.app.json"
@@ -49,7 +49,7 @@
     "booking-service": {
       "type": "application",
       "root": "apps/booking-service",
-      "entryFile": "main",
+      "entryFile": "apps/booking-service/src/main",
       "sourceRoot": "apps/booking-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/booking-service/tsconfig.app.json"
@@ -58,10 +58,19 @@
     "notification-service": {
       "type": "application",
       "root": "apps/notification-service",
-      "entryFile": "main",
+      "entryFile": "apps/notification-service/src/main",
       "sourceRoot": "apps/notification-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/notification-service/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     }
   }

@@ -15,7 +15,7 @@ import {
 import { OffersService } from "./offers.service";
 import { OfferResponseDto } from "./schemas/offer-response.schema";
 import { createOfferSchema, type CreateOfferDto } from "./schemas/create-offer.schema";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { AuthGuard } from "@shared/guards/auth.guard";

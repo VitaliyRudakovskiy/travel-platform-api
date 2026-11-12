@@ -4,7 +4,7 @@ import { NotificationStatus, NotificationType } from "#prisma";
 import { JwtAuthGuard } from "@shared/guards/jwt-auth.guard";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { NotificationsService } from "./notifications.service";
 import {
   type NotificationQueryDto,

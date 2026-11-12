@@ -15,7 +15,7 @@ import { type CreateBookingDto, createBookingSchema } from "./schemas/create-boo
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type UserResponseDto } from "@modules/v1/users/schemas/user-response.schema";
 import { BookingResponseDto } from "./schemas/booking-response.schema";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { type PaginatedBookingResponseDto } from "./schemas/paginated-booking-response.schema";
 import { type BookingQueryDto, bookingQuerySchema } from "./schemas/booking-query.schema";
 import {

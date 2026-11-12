@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { paginatedSchema } from "@shared/schemas/paginated-response.schema";
+import { paginatedSchema } from "@app/common";
 import { v2BookingResponseSchema } from "./booking-response.schema";
 
 export const v2PaginatedBookingResponseSchema = paginatedSchema(v2BookingResponseSchema);

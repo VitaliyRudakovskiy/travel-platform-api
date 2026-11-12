@@ -3,7 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { SwaggerModule } from "@nestjs/swagger";
 import { swaggerConfig } from "./swagger.config";
-import { configureApp } from "./configure-app";
+import { configureApp } from "@app/common";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

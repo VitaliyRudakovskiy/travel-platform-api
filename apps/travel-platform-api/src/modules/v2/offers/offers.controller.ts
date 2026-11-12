@@ -17,7 +17,7 @@ import {
   createOfferSchema,
   type CreateOfferDto,
 } from "@modules/v1/offers/schemas/create-offer.schema";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
 import { UserRole } from "#prisma";

@@ -17,7 +17,7 @@ import {
   createDestinationSchema,
   type CreateDestinationDto,
 } from "@modules/v1/destinations/schemas/create-destination.schema";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { DestinationResponseDto } from "@modules/v1/destinations/schemas/destination-response.schema";
 import {
   udpateDestinationSchema,

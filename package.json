@@ -14,7 +14,7 @@
   "scripts": {
     "start": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/apps/travel-platform-api/main",
+    "start:prod": "node dist/apps/travel-platform-api/apps/travel-platform-api/src/main",
     "start:gateway": "nest start api-gateway --watch",
     "start:auth": "nest start auth-service --watch",
     "start:catalog": "nest start catalog-service --watch",

@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import { idempotencyKeySchema } from "../schemas/idempotency-key.schema";
 
 const extractIdempotencyKey = createParamDecorator(

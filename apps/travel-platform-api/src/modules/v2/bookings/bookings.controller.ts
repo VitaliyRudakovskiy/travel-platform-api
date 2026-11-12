@@ -8,7 +8,7 @@ import {
 } from "@modules/v1/bookings/schemas/create-booking.schema";
 import { CurrentUser } from "@shared/decorators/current-user.decorator";
 import { type AuthenticatedUser } from "@shared/auth/authenticated-user";
-import { ZodValidationPipe } from "@shared/pipes/zod-validation.pipe";
+import { ZodValidationPipe } from "@app/common";
 import {
   ApiBearerAuth,
   ApiBody,
