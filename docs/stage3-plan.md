@@ -565,6 +565,15 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 
 ## Шаг 5. notification-service (Prisma, `notify_db`)
 
+> **✅ Сделано** (ветка `feature/stage3-notification-service`). Отличия от первоначального плана:
+> - Адрес получателя берётся у auth-service **воркером в момент отправки**, а не потребителем: потребитель не зависит от
+>   других сервисов, адрес клиента не хранится в уведомлениях (видимых Agent). auth недоступен → письмо ждёт (`deferred`).
+> - Dead-letter: `travel.notifications.dlx` (fanout) → `travel.notifications.dlq`; любая ошибка обработчика → NACK без requeue.
+> - `prefetchCount: 1`; контракты `UserIdentity` и тела email-verification перенесены в `libs/contracts`.
+> - `errorMessage` разворачивает `AggregateError` (Node при `localhost` пробует ::1 и 127.0.0.1, message пустой).
+> - Проверено вживую со всеми 4 сервисами: бронь/подтверждение → письма в Mailhog; 2 повтора события → 0 новых строк;
+>   битое сообщение → DLQ (`x-death: rejected`); регистрация → письмо с токеном → `POST /email-verifications` → 204.
+
 ### Что добавить
 1. **Схема:** `Notification` как на этапе II, плюс:
    - `eventId String? @map("event_id")`, `offerOwnerId String? @map("offer_owner_id")`, `bookingId String?` (без FK);
