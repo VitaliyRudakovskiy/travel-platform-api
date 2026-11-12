@@ -13,6 +13,10 @@
     "#auth-prisma": {
       "types": "./apps/auth-service/prisma/generated/index.d.ts",
       "default": "./apps/auth-service/prisma/generated/index.js"
+    },
+    "#booking-prisma": {
+      "types": "./apps/booking-service/prisma/generated/index.d.ts",
+      "default": "./apps/booking-service/prisma/generated/index.js"
     }
   },
   "scripts": {
@@ -45,7 +49,11 @@
     "migration:generate:catalog": "tsx ./node_modules/typeorm/cli.js migration:generate -d apps/catalog-service/src/database/data-source.ts",
     "migration:run:catalog": "tsx ./node_modules/typeorm/cli.js migration:run -d apps/catalog-service/src/database/data-source.ts",
     "migration:revert:catalog": "tsx ./node_modules/typeorm/cli.js migration:revert -d apps/catalog-service/src/database/data-source.ts",
-    "seed:catalog": "tsx apps/catalog-service/src/database/seed.ts"
+    "seed:catalog": "tsx apps/catalog-service/src/database/seed.ts",
+    "prisma:generate:booking": "prisma generate --config apps/booking-service/prisma.config.ts",
+    "migrate:booking": "prisma migrate dev --config apps/booking-service/prisma.config.ts",
+    "migrate:deploy:booking": "prisma migrate deploy --config apps/booking-service/prisma.config.ts",
+    "studio:booking": "prisma studio --config apps/booking-service/prisma.config.ts --port 5563"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.7",

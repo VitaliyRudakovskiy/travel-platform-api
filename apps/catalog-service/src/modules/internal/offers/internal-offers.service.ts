@@ -162,6 +162,7 @@ export class InternalOffersService {
       availableFrom: offer.availableFrom.toISOString(),
       availableTo: offer.availableTo.toISOString(),
       deleted: offer.deletedAt !== null,
+      destinationCountryCode: offer.destination?.countryCode ?? "",
     };
   }
 }

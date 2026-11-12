@@ -1,0 +1,33 @@
+enum BookingStatus {
+  pending
+  confirmed
+  completed
+  cancelled
+}
+
+// Users live in auth_db, offers in catalog_db (other services): userId, offerId and offerOwnerId are plain
+// external ids without foreign keys. offerOwnerId is captured at creation (an offer never changes owner) so
+// that Agent scoping and booking events don't need a call to catalog-service.
+model Booking {
+  id               String           @id @default(uuid())
+  userId           String           @map("user_id")
+  offerId          String           @map("offer_id")
+  offerOwnerId     String           @map("offer_owner_id")
+  startDate        DateTime         @map("start_date")
+  endDate          DateTime         @map("end_date")
+  guestsCount      Int              @map("guests_count")
+  totalPrice       Decimal          @map("total_price") @db.Decimal(10, 2)
+  status           BookingStatus    @default(pending)
+  // The slot reserved in catalog-service was given back (cancelled / completed); guards against a double -1
+  capacityReleased Boolean          @default(false) @map("capacity_released")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  idempotencyKeys  IdempotencyKey[]
+
+  @@index([userId])
+  @@index([offerId])
+  @@index([offerOwnerId])
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("bookings")
+}

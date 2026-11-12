@@ -38,6 +38,7 @@ message OfferInfo {
   string available_from = 12;
   string available_to = 13;
   bool deleted = 14;
+  string destination_country_code = 15;
 }
 
 message OffersInfo {

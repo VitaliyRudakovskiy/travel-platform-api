@@ -160,7 +160,7 @@ describe("InternalOffersService", () => {
     it("maps an offer to OfferInfo with the price as a decimal string", async () => {
       offersRepository.findOne.mockResolvedValue({
         ...offerMock,
-        destination: { name: "Paris" },
+        destination: { name: "Paris", countryCode: "FR" },
       });
 
       const result = await service.getOffer(offerMock.id);
@@ -171,6 +171,7 @@ describe("InternalOffersService", () => {
           ownerId: offerMock.ownerId,
           price: "150.50",
           destinationName: "Paris",
+          destinationCountryCode: "FR",
           availableFrom: "2026-01-01T00:00:00.000Z",
           deleted: false,
         }),

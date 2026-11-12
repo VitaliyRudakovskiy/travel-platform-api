@@ -22,6 +22,7 @@ export type OfferInfo = {
   availableFrom: string;
   availableTo: string;
   deleted: boolean;
+  destinationCountryCode: string;
 };
 
 export type GetOfferRequest = { id: string };
