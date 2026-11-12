@@ -8,13 +8,22 @@ The repository is a **Nest monorepo** being decomposed into microservices. The p
 
 ```
 apps/travel-platform-api/   # stage I–II monolith: all working code today; deleted at stage III step 9 (git tag stage-2)
-apps/api-gateway/           # :3000 ┐
-apps/auth-service/          # :3001 │ stage III services — empty skeletons (main.ts + empty module)
+apps/api-gateway/           # :3000 ┐ stage III services; empty skeletons (main.ts + empty module)
+apps/auth-service/          # :3001 │ ← DONE (step 1): users, sessions, email verification, profiles; auth_db
 apps/catalog-service/       # :3002 │ until their plan step moves the code in
 apps/booking-service/       # :3003 │
 apps/notification-service/  # :3004 ┘
-libs/common/                # @app/common — infra shared by all apps (filter, Zod pipe, paginatedSchema, configureApp)
+libs/common/                # @app/common — infra shared by all apps (filter, Zod pipe, paginatedSchema, configureApp,
+                            #   GatewayAuthGuard, RolesGuard/@Roles, EmailVerifiedGuard, @CurrentUser, UserRole)
 ```
+
+### Stage III services (how they differ from the monolith)
+
+- **Code is copied from the monolith, not moved**; the monolith stays as the reference until step 9. Inside a service never import the monolith aliases (`@modules`, `@shared`, `@services`, `@tests`, `#prisma`): use relative paths, `@app/common`, and the service's own Prisma alias (`#auth-prisma`, …).
+- **Auth:** services trust the headers set by the API Gateway. `GatewayAuthGuard` builds `request.user` (`AuthenticatedUser = { id, role, isEmailVerified }`) from `X-User-Id`, `X-User-Role`, `X-Email-Verified`: no `X-User-Id` → 401; `X-User-Id` without a valid role → 404 "User not found" (v1 `AuthGuard` contract). `RolesGuard` / `EmailVerifiedGuard` / `@CurrentUser()` from `@app/common` work on top of it. Until the gateway exists (step 6), send these headers manually.
+- **Env:** each service reads only `apps/<service>/.env` via `ConfigModule.forRoot({ envFilePath })`. Never add `import "dotenv/config"` to a service `main.ts`: it loads the monolith's root `.env`, whose `DATABASE_URL` would win.
+- **Internal API** (`/internal/v1/...`, service-to-service only): controllers use `version: VERSION_NEUTRAL` (otherwise the path gets the `/api/v1` prefix) and `@ApiExcludeController()`. HTTP clients use `@nestjs/axios` with a 5 s timeout.
+- **auth-service specifics:** issues JWTs (`{ sub, role }`) but does not validate them (gateway's job). Login (`POST /api/v{1,2}/sessions`) goes through passport-local: `LocalAuthGuard` validates the body with `loginSchema` first, because guards run before pipes and a plain `AuthGuard("local")` would turn a 400 into a 401. Verification emails are handed to notification-service over HTTP after the commit; a failure is only logged. `GET /internal/v1/users/:id` → `{ id, email, role, isEmailVerified }`.
 
 Unless stated otherwise, everything below the Commands section describes the monolith, and `src/...` means `apps/travel-platform-api/src/...`.
 
@@ -39,8 +48,14 @@ pnpm vitest run apps/travel-platform-api/src/modules/v1/bookings/bookings.servic
 pnpm vitest run -t "throws NotFoundException"                                              # by test name
 pnpm test:cov                 # fails below 60% coverage
 pnpm exec tsc --noEmit        # typecheck (no dedicated script)
-pnpm prisma:generate          # regenerate the monolith client into prisma/generated
+pnpm prisma:generate          # regenerate the monolith client into prisma/generated (committed)
 npx prisma migrate dev --name <name>   # new monolith migration (the `migration` script hardcodes ANY_NAME)
+
+# auth-service (needs apps/auth-service/.env; Prisma config apps/auth-service/prisma.config.ts)
+pnpm prisma:generate:auth     # client -> apps/auth-service/prisma/generated (gitignored: run after clone / schema change)
+pnpm migrate:auth --name <name>   # prisma migrate dev against auth_db
+pnpm seed:auth                # admin/agent/user @travel.local, password Password123!, fixed ids 00000000-0000-4000-8000-00000000000{1,2,3}
+pnpm studio:auth              # Prisma Studio on :5561
 ```
 
 Env (`.env`, loaded via `dotenv/config`; monolith):

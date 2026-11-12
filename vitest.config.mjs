@@ -5,6 +5,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "#prisma": fileURLToPath(new URL("./prisma/generated", import.meta.url)),
+      "#auth-prisma": fileURLToPath(
+        new URL("./apps/auth-service/prisma/generated", import.meta.url),
+      ),
       "@app/common": fileURLToPath(new URL("./libs/common/src/index.ts", import.meta.url)),
       "@modules": fileURLToPath(new URL("./apps/travel-platform-api/src/modules", import.meta.url)),
       "@services": fileURLToPath(
