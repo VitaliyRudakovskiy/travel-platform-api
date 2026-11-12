@@ -245,6 +245,16 @@ docker-compose.debug.yml  ← публикует порты сервисов н�
 
 ## Шаг 2. catalog-service (TypeORM, `catalog_db`) + internal + gRPC-сервер
 
+> **✅ Сделано** (ветка `feature/stage3-catalog-service`). Отличия от первоначального плана:
+> - Версии: `typeorm@0.3` + `@nestjs/typeorm@11`, `@nestjs/microservices` зафиксирован на `11.1.29` (11.2/12.x несовместимы с core 11.1).
+> - CLI миграций через `tsx` (без `ts-node`); таблица истории `typeorm_migrations`; `uuidExtension: "pgcrypto"`.
+> - Контракты вынесены в `libs/contracts` уже сейчас: `catalog.proto`, типы gRPC, Zod-схемы availability/capacity.
+> - availability: 200 + `reason` (`OFFER_NOT_ACTIVE`, `INVALID_DATES`, `DATES_OUT_OF_RANGE`, `GUESTS_EXCEEDED`, `NO_CAPACITY`)
+>   для маппинга в 404/400/409 на шаге 3; неизвестный оффер → 404.
+> - Ответ оффера больше не содержит `user` (пользователи в auth_db); `destination` сохранён.
+> - Soft-deleted офферы больше не попадают в `GET /offers?status=archived` (в монолите попадали).
+> - Найдено вживую: `returning()` TypeORM принимает имена свойств, а не колонок (иначе пустой RETURNING → 500).
+
 ### Что добавить
 1. **Зависимости:** `pnpm add @nestjs/typeorm typeorm @nestjs/microservices @grpc/grpc-js @grpc/proto-loader`
    (`pg` уже стоит). Для CLI миграций: `pnpm add -D ts-node`.

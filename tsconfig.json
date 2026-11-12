@@ -29,7 +29,9 @@
       "@shared/*": ["apps/travel-platform-api/src/shared/*"],
       "@tests/*": ["apps/travel-platform-api/src/tests/*"],
       "@app/common": ["libs/common/src"],
-      "@app/common/*": ["libs/common/src/*"]
+      "@app/common/*": ["libs/common/src/*"],
+      "@app/contracts": ["libs/contracts/src"],
+      "@app/contracts/*": ["libs/contracts/src/*"]
     }
   },
   "include": ["apps/**/*", "libs/**/*"],

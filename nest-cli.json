@@ -43,7 +43,13 @@
       "entryFile": "apps/catalog-service/src/main",
       "sourceRoot": "apps/catalog-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/catalog-service/tsconfig.app.json"
+        "tsConfigPath": "apps/catalog-service/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "../../../libs/contracts/proto/*.proto",
+            "outDir": "dist/apps/catalog-service/libs/contracts/proto"
+          }
+        ]
       }
     },
     "booking-service": {
@@ -71,6 +77,15 @@
       "sourceRoot": "libs/common/src",
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "contracts": {
+      "type": "library",
+      "root": "libs/contracts",
+      "entryFile": "index",
+      "sourceRoot": "libs/contracts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contracts/tsconfig.lib.json"
       }
     }
   }

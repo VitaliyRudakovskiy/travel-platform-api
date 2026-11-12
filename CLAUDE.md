@@ -10,11 +10,12 @@ The repository is a **Nest monorepo** being decomposed into microservices. The p
 apps/travel-platform-api/   # stage I–II monolith: all working code today; deleted at stage III step 9 (git tag stage-2)
 apps/api-gateway/           # :3000 ┐ stage III services; empty skeletons (main.ts + empty module)
 apps/auth-service/          # :3001 │ ← DONE (step 1): users, sessions, email verification, profiles; auth_db
-apps/catalog-service/       # :3002 │ until their plan step moves the code in
+apps/catalog-service/       # :3002 │ ← DONE (step 2): destinations, offers (TypeORM), catalog_db; gRPC :50052
 apps/booking-service/       # :3003 │
 apps/notification-service/  # :3004 ┘
 libs/common/                # @app/common — infra shared by all apps (filter, Zod pipe, paginatedSchema, configureApp,
                             #   GatewayAuthGuard, RolesGuard/@Roles, EmailVerifiedGuard, @CurrentUser, UserRole)
+libs/contracts/             # @app/contracts — service-to-service contracts: catalog.proto + gRPC types, availability/capacity Zod schemas
 ```
 
 ### Stage III services (how they differ from the monolith)
@@ -24,6 +25,8 @@ libs/common/                # @app/common — infra shared by all apps (filter, 
 - **Env:** each service reads only `apps/<service>/.env` via `ConfigModule.forRoot({ envFilePath })`. Never add `import "dotenv/config"` to a service `main.ts`: it loads the monolith's root `.env`, whose `DATABASE_URL` would win.
 - **Internal API** (`/internal/v1/...`, service-to-service only): controllers use `version: VERSION_NEUTRAL` (otherwise the path gets the `/api/v1` prefix) and `@ApiExcludeController()`. HTTP clients use `@nestjs/axios` with a 5 s timeout.
 - **auth-service specifics:** issues JWTs (`{ sub, role }`) but does not validate them (gateway's job). Login (`POST /api/v{1,2}/sessions`) goes through passport-local: `LocalAuthGuard` validates the body with `loginSchema` first, because guards run before pipes and a plain `AuthGuard("local")` would turn a 400 into a 401. Verification emails are handed to notification-service over HTTP after the commit; a failure is only logged. `GET /internal/v1/users/:id` → `{ id, email, role, isEmailVerified }`.
+- **catalog-service specifics (TypeORM, not Prisma):** entities in `modules/v1/*/entities`, one options factory `src/database/typeorm.options.ts` for the app and the CLI (`data-source.ts`); `synchronize: false`, migrations only, applied on startup (`migrationsRun`), `uuidExtension: "pgcrypto"` (`gen_random_uuid()`). Enums are const objects in `modules/v1/offers/models/offer.enums.ts`. Gotchas: NUMERIC comes back as a string from `pg` → `decimalTransformer`; `QueryBuilder.returning([...])` takes entity **property** names while `result.raw` rows have **column** names (column names silently return nothing); soft delete via `@DeleteDateColumn` hides rows from every `find*` (use `withDeleted` when needed). Offers no longer embed `user` (users are in auth_db). Internal API: `GET /internal/v1/offers/:id/availability` → `{ available, remainingCapacity, reason?, message? }` (200 even when unavailable; `reason` lets booking-service map to 404/400/409), `PATCH /internal/v1/offers/:id/capacity { reservedDelta: 1 | -1 }` = one atomic conditional UPDATE of `reserved_capacity` (+ DB CHECK), 409 at the bounds. gRPC (hybrid app, `connectMicroservice`): `GetOffer`, `GetOffersByIds`, `ListOfferIdsByOwner`; the `.proto` is copied to `dist` by `assets` in `nest-cli.json`.
+- **Dependency pins:** Nest packages must stay on the same version line as `@nestjs/core` (11.1.x): `@nestjs/microservices` is pinned to an exact version (11.2.x imports files missing from core 11.1). Use `typeorm@0.3` with `@nestjs/typeorm@11`.
 
 Unless stated otherwise, everything below the Commands section describes the monolith, and `src/...` means `apps/travel-platform-api/src/...`.
 
