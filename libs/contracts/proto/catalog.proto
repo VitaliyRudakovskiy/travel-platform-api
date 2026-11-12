@@ -1,0 +1,49 @@
+// Internal gRPC API of catalog-service (stage III): read access to offers for booking-service.
+// Reservations (availability / capacity) stay on HTTP /internal/v1 as the spec (3.3–3.4) describes.
+syntax = "proto3";
+
+package catalog;
+
+service CatalogService {
+  rpc GetOffer (GetOfferRequest) returns (OfferInfo);
+  rpc GetOffersByIds (GetOffersByIdsRequest) returns (OffersInfo);
+  rpc ListOfferIdsByOwner (ListOfferIdsByOwnerRequest) returns (OfferIds);
+}
+
+message GetOfferRequest {
+  string id = 1;
+}
+
+message GetOffersByIdsRequest {
+  repeated string ids = 1;
+}
+
+message ListOfferIdsByOwnerRequest {
+  string owner_id = 1;
+}
+
+message OfferInfo {
+  string id = 1;
+  string owner_id = 2;
+  string title = 3;
+  string type = 4;
+  // decimal as a string: protobuf has no exact decimal type, double would lose cents
+  string price = 5;
+  string currency = 6;
+  string destination_id = 7;
+  string destination_name = 8;
+  string status = 9;
+  int32 max_guests = 10;
+  int32 max_concurrent_bookings = 11;
+  string available_from = 12;
+  string available_to = 13;
+  bool deleted = 14;
+}
+
+message OffersInfo {
+  repeated OfferInfo offers = 1;
+}
+
+message OfferIds {
+  repeated string ids = 1;
+}

@@ -9,6 +9,7 @@ export default defineConfig({
         new URL("./apps/auth-service/prisma/generated", import.meta.url),
       ),
       "@app/common": fileURLToPath(new URL("./libs/common/src/index.ts", import.meta.url)),
+      "@app/contracts": fileURLToPath(new URL("./libs/contracts/src/index.ts", import.meta.url)),
       "@modules": fileURLToPath(new URL("./apps/travel-platform-api/src/modules", import.meta.url)),
       "@services": fileURLToPath(
         new URL("./apps/travel-platform-api/src/shared/services", import.meta.url),
