@@ -33,7 +33,7 @@ describe("UsersService", () => {
 Use `Test.createTestingModule()` for services and controllers, with the provider factories from `apps/travel-platform-api/src/tests/providers` (alias `@tests/providers/...`):
 
 ```ts
-providers: [UsersService, providePrisma()]
+providers: [UsersService, providePrisma()];
 ```
 
 ## Mocks
