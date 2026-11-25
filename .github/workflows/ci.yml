@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to the same branch / PR cancels the run that is still in progress
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "24" # same as the Dockerfiles
+  PNPM_VERSION: "10.33.0"
+  HUSKY: "0" # no git hooks on CI machines
+
+jobs:
+  # Lint, format, types, unit tests with the 60% coverage threshold (spec 4.6), build of every app
+  quality:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The service Prisma clients are gitignored (only the monolith client is committed)
+      - name: Generate Prisma clients
+        run: |
+          pnpm prisma:generate:auth
+          pnpm prisma:generate:booking
+          pnpm prisma:generate:notify
+
+      - name: Lint (oxlint)
+        run: pnpm lint
+
+      - name: Format check (oxfmt)
+        run: pnpm format:check
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      - name: Unit tests + coverage
+        run: pnpm test:cov
+
+      - name: Build all apps
+        run: pnpm build
+
+  # Integration tests against a real PostgreSQL (the suite creates and migrates travel_platform_test itself)
+  integration:
+    name: Integration tests
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      # the suite refuses any database whose name does not end with _test
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/travel_platform_test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Integration tests
+        run: pnpm test:int
+
+  # Docker images of the stage III apps: built (not pushed) only after a merge into main
+  docker:
+    name: Docker image (${{ matrix.app }})
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [api-gateway, auth-service, catalog-service, booking-service, notification-service]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build ${{ matrix.app }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/${{ matrix.app }}/Dockerfile
+          push: false
+          tags: travel-platform/${{ matrix.app }}:${{ github.sha }}
+          # layer cache in the GitHub Actions cache: the pnpm install layers are reused between runs
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
