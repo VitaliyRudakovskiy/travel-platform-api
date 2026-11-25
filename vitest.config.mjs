@@ -29,7 +29,9 @@ export default defineConfig({
     environment: "node",
     coverage: {
       provider: "v8",
-      reporter: ["text", "html"],
+      // json-summary + json are read by the CI coverage report (job summary + PR comment)
+      reporter: ["text", "json-summary", "json"],
+      reportOnFailure: true,
       // Spec (Stage II, 4.6) requires >= 60% coverage of the business logic layer:
       // services, the booking State pattern and the notifications worker.
       include: [

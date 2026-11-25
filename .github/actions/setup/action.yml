@@ -1,0 +1,33 @@
+name: Setup
+description: pnpm + Node (with the pnpm store cache), install dependencies, optionally generate the service Prisma clients
+
+inputs:
+  prisma-clients:
+    description: Generate the gitignored Prisma clients of auth/booking/notification services
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10.33.0
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "24" # same as the Dockerfiles
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    # Only the monolith client (prisma/generated) is committed
+    - name: Generate Prisma clients
+      if: inputs.prisma-clients == 'true'
+      shell: bash
+      run: |
+        pnpm prisma:generate:auth
+        pnpm prisma:generate:booking
+        pnpm prisma:generate:notify
